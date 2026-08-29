@@ -1,0 +1,1 @@
+Use these images when someone clicks onto [http://localhost:3000/panorama](http://localhost:3000/panorama) URL. They're ijmside spain folder under photos under data. Order is 1.png, 2.png, sandbox fal.png and 4.png

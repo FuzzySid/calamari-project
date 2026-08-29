@@ -27,26 +27,8 @@ import json
 import os
 import re
 import sys
-import urllib.request
 
-CALA_MCP_URL = "https://api.cala.ai/mcp/"
-
-
-def load_dotenv(path: str) -> None:
-    """Minimal .env loader: sets os.environ for KEY=VALUE lines not already set."""
-    if not os.path.isfile(path):
-        return
-    with open(path, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            key, _, value = line.partition("=")
-            key = key.strip()
-            value = value.strip().strip('"').strip("'")
-            if key and key not in os.environ:
-                os.environ[key] = value
-
+from cala_client import call_knowledge_search, context_by_id, load_dotenv, resolve_source
 
 # A parenthesized date/era range, e.g. "(c. 50,000 BC - 1,100 BC)" or "(711-1492)".
 PARENTHESIZED_TIMELINE_PATTERN = re.compile(
@@ -58,51 +40,6 @@ PARENTHESIZED_TIMELINE_PATTERN = re.compile(
 INLINE_YEAR_RANGE_PATTERN = re.compile(r"\b(\d{3,4}(?:\s*[-‐-―]\s*\d{3,4})?)\b")
 
 YEAR_PATTERN = re.compile(r"\d{3,4}")
-
-
-def call_cala_knowledge_search(query: str, api_key: str) -> dict:
-    """Calls the Cala MCP server's knowledge_search tool over HTTP."""
-    payload = {
-        "jsonrpc": "2.0",
-        "id": 1,
-        "method": "tools/call",
-        "params": {
-            "name": "knowledge_search",
-            "arguments": {
-                "input": query,
-                "explainability": True,
-                "return_entities": True,
-            },
-        },
-    }
-
-    req = urllib.request.Request(
-        CALA_MCP_URL,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-            "Accept": "application/json, text/event-stream",
-            "X-API-KEY": api_key,
-        },
-        method="POST",
-    )
-
-    with urllib.request.urlopen(req, timeout=60) as resp:
-        body = resp.read().decode("utf-8")
-
-    # Cala's MCP endpoint may respond as SSE ("event: message\ndata: {...}") or plain JSON.
-    if body.lstrip().startswith("event:"):
-        data_lines = [
-            line[len("data:"):].strip()
-            for line in body.splitlines()
-            if line.startswith("data:")
-        ]
-        body = data_lines[-1] if data_lines else body
-
-    result = json.loads(body)
-    if "error" in result:
-        raise RuntimeError(f"Cala MCP error: {result['error']}")
-    return result["result"]
 
 
 def extract_timeline(text: str) -> str:
@@ -129,23 +66,6 @@ def earliest_year(timeline: str) -> int:
     return year
 
 
-def resolve_source(references: list, context_by_id: dict) -> tuple:
-    """Resolves (title, url) for a claim via Cala's provenance chain: the first cited
-    context's source document name/url (falling back to its publisher name/url)."""
-    for ref_id in references:
-        context = context_by_id.get(ref_id)
-        if not context:
-            continue
-        for origin in context.get("origins") or []:
-            document = origin.get("document") or {}
-            if document.get("name"):
-                return document.get("name"), document.get("url", "")
-            source = origin.get("source") or {}
-            if source.get("name"):
-                return source.get("name"), source.get("url", "")
-    return "", ""
-
-
 def resolve_entities(text: str, all_entities: list) -> list:
     """Returns the subset of Cala's returned entities that are mentioned in this
     specific event's text, as [{name, entity_type}, ...]."""
@@ -162,26 +82,17 @@ def resolve_entities(text: str, all_entities: list) -> list:
     return matches
 
 
-def build_records(mcp_result: dict) -> list:
+def build_records(tool_output: dict) -> list:
     """Turns Cala's explainability entries into event/timeline/title/source_url/entities
     records, sorted chronologically (earliest year first; undated events first)."""
-    content_blocks = mcp_result.get("content", [])
-    tool_output = None
-    for block in content_blocks:
-        if block.get("type") == "text":
-            tool_output = json.loads(block["text"])
-            break
-    if tool_output is None:
-        raise RuntimeError("No text content block found in Cala MCP response")
-
-    context_by_id = {ctx["id"]: ctx for ctx in tool_output.get("context", []) if "id" in ctx}
+    context_index = context_by_id(tool_output)
     all_entities = tool_output.get("entities") or []
 
     records = []
     for item in tool_output.get("explainability", []):
         event_text = item.get("content", "")
         references = item.get("references", [])
-        title, source_url = resolve_source(references, context_by_id)
+        title, source_url = resolve_source(references, context_index)
         timeline = extract_timeline(event_text)
         records.append(
             {
@@ -223,8 +134,8 @@ def main():
         sys.exit(1)
 
     try:
-        mcp_result = call_cala_knowledge_search(args.query, api_key)
-        records = build_records(mcp_result)
+        tool_output = call_knowledge_search(args.query, api_key)
+        records = build_records(tool_output)
     except Exception as exc:
         print(f"Error running Cala knowledge search: {exc}", file=sys.stderr)
         sys.exit(1)

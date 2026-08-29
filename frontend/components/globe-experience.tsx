@@ -136,6 +136,47 @@ export function GlobeExperience() {
   const selectedCode = selectedCountry ? getCountryCode(selectedCountry) : null;
   const hasStory = selectedCode === storyCountry?.code;
 
+  const getPolygonCapColor = useCallback(
+    (feature: object) => {
+      const code = getCountryCode(feature as CountryFeature);
+      if (code === selectedCode) return "rgba(224, 192, 119, 0.68)";
+      if (code === hoveredCountryCode) return "rgba(224, 192, 119, 0.38)";
+      return "rgba(255, 255, 255, 0.006)";
+    },
+    [hoveredCountryCode, selectedCode]
+  );
+
+  const getPolygonStrokeColor = useCallback(
+    (feature: object) => {
+      const code = getCountryCode(feature as CountryFeature);
+      if (code === selectedCode) return "rgba(245, 220, 160, 0.95)";
+      if (code === hoveredCountryCode) return "rgba(245, 220, 160, 0.8)";
+      return "rgba(255, 255, 255, 0.08)";
+    },
+    [hoveredCountryCode, selectedCode]
+  );
+
+  const getLabelSize = useCallback(
+    (label: object) => {
+      const countryLabel = label as CountryLabel;
+      return countryLabel.size * (countryLabel.iso_a3 === selectedCode ? 1.12 : 0.82);
+    },
+    [selectedCode]
+  );
+
+  const getLabelDotRadius = useCallback(
+    (label: object) => ((label as CountryLabel).iso_a3 === selectedCode ? 0.22 : 0.1),
+    [selectedCode]
+  );
+
+  const getLabelColor = useCallback(
+    (label: object) =>
+      (label as CountryLabel).iso_a3 === selectedCode
+        ? "rgba(255, 245, 220, 1)"
+        : "rgba(255, 255, 255, 0.42)",
+    [selectedCode]
+  );
+
   useEffect(() => {
     function syncViewport() {
       setViewport({ width: window.innerWidth, height: window.innerHeight });
@@ -211,53 +252,19 @@ export function GlobeExperience() {
             bumpImageUrl: "//unpkg.com/three-globe/example/img/earth-topology.png",
             backgroundColor: "rgba(0,0,0,0)",
             polygonsData: countries,
-            polygonAltitude: (feature: object) => {
-              const code = getCountryCode(feature as CountryFeature);
-              if (code === selectedCode) return 0.028;
-              if (code === hoveredCountryCode) return 0.016;
-              return 0.002;
-            },
-            polygonCapColor: (feature: object) => {
-              const code = getCountryCode(feature as CountryFeature);
-              if (code === selectedCode) return "rgba(224, 192, 119, 0.68)";
-              if (code === hoveredCountryCode) return "rgba(224, 192, 119, 0.38)";
-              return "rgba(255, 255, 255, 0.006)";
-            },
-            polygonSideColor: (feature: object) => {
-              const code = getCountryCode(feature as CountryFeature);
-              return code === selectedCode || code === hoveredCountryCode
-                ? "rgba(212, 177, 106, 0.28)"
-                : "rgba(255, 255, 255, 0.02)";
-            },
-            polygonStrokeColor: (feature: object) => {
-              const code = getCountryCode(feature as CountryFeature);
-              if (code === selectedCode) return "rgba(245, 220, 160, 0.95)";
-              if (code === hoveredCountryCode) return "rgba(245, 220, 160, 0.8)";
-              return "rgba(255, 255, 255, 0.08)";
-            },
-            polygonsTransitionDuration: 260,
+            polygonAltitude: 0.002,
+            polygonCapColor: getPolygonCapColor,
+            polygonSideColor: "rgba(255, 255, 255, 0.015)",
+            polygonStrokeColor: getPolygonStrokeColor,
+            polygonsTransitionDuration: 0,
             labelsData: countryLabels,
             labelLat: (label: object) => (label as CountryLabel).lat,
             labelLng: (label: object) => (label as CountryLabel).lng,
             labelText: (label: object) => (label as CountryLabel).name,
-            labelSize: (label: object) => {
-              const countryLabel = label as CountryLabel;
-              return countryLabel.size *
-                (countryLabel.iso_a3 === hoveredCountryCode || countryLabel.iso_a3 === selectedCode
-                  ? 1.12
-                  : 0.82);
-            },
-            labelDotRadius: (label: object) => {
-              const code = (label as CountryLabel).iso_a3;
-              return code === hoveredCountryCode || code === selectedCode ? 0.22 : 0.1;
-            },
+            labelSize: getLabelSize,
+            labelDotRadius: getLabelDotRadius,
             labelAltitude: 0.045,
-            labelColor: (label: object) => {
-              const code = (label as CountryLabel).iso_a3;
-              return code === hoveredCountryCode || code === selectedCode
-                ? "rgba(255, 245, 220, 1)"
-                : "rgba(255, 255, 255, 0.42)";
-            },
+            labelColor: getLabelColor,
             labelResolution: 4,
             onPolygonClick: (feature: object) => selectCountry(feature as CountryFeature),
             onPolygonHover: (feature: object | null) =>

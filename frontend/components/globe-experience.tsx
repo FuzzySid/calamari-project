@@ -20,6 +20,7 @@ type CountryFeature = {
     NAME?: string;
     ADMIN?: string;
     ISO_A3?: string;
+    ADM0_A3?: string;
   };
   geometry: {
     type: "Polygon" | "MultiPolygon";
@@ -31,13 +32,21 @@ type CountryLabel = {
   lat: number;
   lng: number;
   name: string;
-  iso_a3: string;
+  code: string;
   size: number;
+};
+
+type CountryEntry = {
+  feature: CountryFeature;
+  code: string;
+  name: string;
+  center: { lat: number; lng: number };
+  rings: GeoCoordinate[][];
+  focusAltitude: number;
 };
 
 const GlobeCanvas = dynamic(() => import("@/components/globe-canvas"), { ssr: false });
 const storyCountry = getCountryByCode("ESP");
-const getHoverPathColor = () => "#f5dca0";
 const storyPeriods: Period[] =
   storyCountry?.moments.map((moment) => ({
     id: moment.id,
@@ -60,7 +69,12 @@ function getCountryName(feature: CountryFeature) {
 }
 
 function getCountryCode(feature: CountryFeature) {
-  return feature.properties.iso_a3 ?? feature.properties.ISO_A3 ?? "UNK";
+  const iso = feature.properties.iso_a3 ?? feature.properties.ISO_A3;
+  // Natural Earth marks disputed/complex sovereignty with "-99"; ADM0_A3 stays unique.
+  if (!iso || iso === "-99") {
+    return feature.properties.ADM0_A3 ?? getCountryName(feature);
+  }
+  return iso;
 }
 
 function getRingArea(ring: GeoCoordinate[]) {
@@ -75,13 +89,14 @@ function getRingArea(ring: GeoCoordinate[]) {
   return area / 2;
 }
 
-function getLargestRing(feature: CountryFeature) {
-  const polygons =
-    feature.geometry.type === "Polygon"
-      ? [feature.geometry.coordinates as PolygonCoordinates]
-      : (feature.geometry.coordinates as MultiPolygonCoordinates);
+function getPolygons(feature: CountryFeature) {
+  return feature.geometry.type === "Polygon"
+    ? [feature.geometry.coordinates as PolygonCoordinates]
+    : (feature.geometry.coordinates as MultiPolygonCoordinates);
+}
 
-  return polygons.reduce<GeoCoordinate[]>((largestRing, polygon) => {
+function getLargestRing(feature: CountryFeature) {
+  return getPolygons(feature).reduce<GeoCoordinate[]>((largestRing, polygon) => {
     const outerRing = polygon[0] ?? [];
 
     if (outerRing.length === 0) return largestRing;
@@ -119,78 +134,150 @@ function getCountryCenter(feature: CountryFeature) {
   return { lng: centroidX / (6 * area), lat: centroidY / (6 * area) };
 }
 
-const countryLabels: CountryLabel[] = countries.map((feature) => {
-  const { lat, lng } = getCountryCenter(feature);
-  const name = getCountryName(feature);
-  const nameLength = name.length;
+function getFocusAltitude(rings: GeoCoordinate[][]) {
+  let minLat = 90;
+  let maxLat = -90;
+  let minLng = 180;
+  let maxLng = -180;
+  let crossesAntimeridian = false;
+
+  for (const ring of rings) {
+    for (const [lat, lng] of ring) {
+      if (lat < minLat) minLat = lat;
+      if (lat > maxLat) maxLat = lat;
+      if (lng < minLng) minLng = lng;
+      if (lng > maxLng) maxLng = lng;
+    }
+  }
+
+  let lngSpan = maxLng - minLng;
+  if (lngSpan > 180) {
+    // remeasure with longitudes wrapped to [0, 360) for antimeridian countries
+    crossesAntimeridian = true;
+    let wrappedMin = 360;
+    let wrappedMax = 0;
+    for (const ring of rings) {
+      for (const [, lng] of ring) {
+        const wrapped = lng < 0 ? lng + 360 : lng;
+        if (wrapped < wrappedMin) wrappedMin = wrapped;
+        if (wrapped > wrappedMax) wrappedMax = wrapped;
+      }
+    }
+    lngSpan = Math.min(lngSpan, wrappedMax - wrappedMin);
+  }
+
+  const centerLat = (minLat + maxLat) / 2;
+  const extent = Math.max(
+    maxLat - minLat,
+    lngSpan * Math.cos((centerLat * Math.PI) / 180),
+    crossesAntimeridian ? 30 : 4
+  );
+
+  return Math.min(2.2, Math.max(0.5, 0.45 + extent * 0.03));
+}
+
+const countryEntries: CountryEntry[] = countries.map((feature) => {
+  const rings = getPolygons(feature)
+    .map((polygon) => polygon[0] ?? [])
+    .filter((ring) => ring.length >= 3)
+    .map((ring) => ring.map(([lng, lat]) => [lat, lng] as GeoCoordinate));
 
   return {
-    lat,
-    lng,
-    name,
-    iso_a3: getCountryCode(feature),
+    feature,
+    code: getCountryCode(feature),
+    name: getCountryName(feature),
+    center: getCountryCenter(feature),
+    rings,
+    focusAltitude: getFocusAltitude(rings)
+  };
+});
+const entryByFeature = new Map(countryEntries.map((entry) => [entry.feature, entry]));
+const entryByCode = new Map(countryEntries.map((entry) => [entry.code, entry]));
+const EMPTY_PATHS: GeoCoordinate[][] = [];
+
+const countryLabels: CountryLabel[] = countryEntries.map((entry) => {
+  const nameLength = entry.name.length;
+
+  return {
+    lat: entry.center.lat,
+    lng: entry.center.lng,
+    name: entry.name,
+    code: entry.code,
     size: nameLength > 18 ? 0.54 : nameLength > 12 ? 0.68 : nameLength > 8 ? 0.8 : 0.92
   };
 });
 
+const labelByCode = new Map(countryLabels.map((label) => [label.code, label]));
+const EMPTY_LABELS: CountryLabel[] = [];
+
+const getHoverPathColor = () => "#f5dca0";
+const getLabelLat = (label: object) => (label as CountryLabel).lat;
+const getLabelLng = (label: object) => (label as CountryLabel).lng;
+const getLabelText = (label: object) => (label as CountryLabel).name;
+
 export function GlobeExperience() {
   const router = useRouter();
   const globeRef = useRef<GlobeMethods | null>(null);
-  const [selectedCountry, setSelectedCountry] = useState<CountryFeature | null>(null);
-  const [hoveredCountryCode, setHoveredCountryCode] = useState<string | null>(null);
+  const polygonHoverRef = useRef<string | null>(null);
+  const labelHoverRef = useRef<string | null>(null);
+  const departingRef = useRef(false);
+  const [selectedCode, setSelectedCode] = useState<string | null>(null);
+  const [hoveredCode, setHoveredCode] = useState<string | null>(null);
   const [departingMoment, setDepartingMoment] = useState<string | null>(null);
   const [isGlobeReady, setIsGlobeReady] = useState(false);
   const [viewport, setViewport] = useState({ width: 1200, height: 800 });
 
-  const selectedCode = selectedCountry ? getCountryCode(selectedCountry) : null;
-  const drumHeight = Math.max(390, Math.min(546, viewport.height - 280));
+  const drumHeight = Math.max(390, Math.min(702, viewport.height - 150));
   const hasStory = selectedCode === storyCountry?.code;
-  const hoveredBoundary = useMemo(() => {
-    const feature = countries.find(
-      (country) => getCountryCode(country) === hoveredCountryCode
-    );
 
-    return feature
-      ? getLargestRing(feature).map(([lng, lat]) => [lat, lng] as GeoCoordinate)
-      : [];
-  }, [hoveredCountryCode]);
+  const hoveredPaths = useMemo(
+    () => (hoveredCode ? entryByCode.get(hoveredCode)?.rings ?? EMPTY_PATHS : EMPTY_PATHS),
+    [hoveredCode]
+  );
+
+  const visibleLabels = useMemo(() => {
+    const selected = selectedCode ? labelByCode.get(selectedCode) : undefined;
+    const hovered = hoveredCode ? labelByCode.get(hoveredCode) : undefined;
+    const labels: CountryLabel[] = [];
+    if (selected) labels.push(selected);
+    if (hovered && hovered !== selected) labels.push(hovered);
+    return labels.length ? labels : EMPTY_LABELS;
+  }, [hoveredCode, selectedCode]);
 
   const getPolygonCapColor = useCallback(
-    (feature: object) => {
-      const code = getCountryCode(feature as CountryFeature);
-      if (code === selectedCode) return "rgba(224, 192, 119, 0.68)";
-      return "rgba(255, 255, 255, 0.006)";
-    },
+    (feature: object) =>
+      entryByFeature.get(feature as CountryFeature)?.code === selectedCode
+        ? "rgba(224, 192, 119, 0.68)"
+        : "rgba(255, 255, 255, 0.006)",
     [selectedCode]
   );
 
   const getPolygonStrokeColor = useCallback(
-    (feature: object) => {
-      const code = getCountryCode(feature as CountryFeature);
-      if (code === selectedCode) return "rgba(245, 220, 160, 0.95)";
-      return "rgba(255, 255, 255, 0.08)";
-    },
+    (feature: object) =>
+      entryByFeature.get(feature as CountryFeature)?.code === selectedCode
+        ? "rgba(245, 220, 160, 0.95)"
+        : "rgba(255, 255, 255, 0.08)",
     [selectedCode]
   );
 
   const getLabelSize = useCallback(
     (label: object) => {
       const countryLabel = label as CountryLabel;
-      return countryLabel.size * (countryLabel.iso_a3 === selectedCode ? 1.12 : 0.82);
+      return countryLabel.size * (countryLabel.code === selectedCode ? 1.12 : 1);
     },
     [selectedCode]
   );
 
   const getLabelDotRadius = useCallback(
-    (label: object) => ((label as CountryLabel).iso_a3 === selectedCode ? 0.22 : 0.1),
+    (label: object) => ((label as CountryLabel).code === selectedCode ? 0.22 : 0.1),
     [selectedCode]
   );
 
   const getLabelColor = useCallback(
     (label: object) =>
-      (label as CountryLabel).iso_a3 === selectedCode
+      (label as CountryLabel).code === selectedCode
         ? "rgba(255, 245, 220, 1)"
-        : "rgba(255, 255, 255, 0.42)",
+        : "rgba(245, 220, 160, 0.92)",
     [selectedCode]
   );
 
@@ -210,106 +297,163 @@ export function GlobeExperience() {
     const controls = globe.controls();
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.28;
+    // "start" only fires on user gestures (drag/zoom), never from autoRotate itself.
+    controls.addEventListener("start", () => {
+      controls.autoRotate = false;
+    });
   }, []);
 
-  function selectCountry(target: CountryFeature) {
-    if (departingMoment) return;
+  const syncHover = useCallback(() => {
+    setHoveredCode(labelHoverRef.current ?? polygonHoverRef.current);
+  }, []);
 
-    setSelectedCountry(target);
-    setHoveredCountryCode(null);
+  const handlePolygonHover = useCallback(
+    (feature: object | null) => {
+      polygonHoverRef.current = feature
+        ? entryByFeature.get(feature as CountryFeature)?.code ?? null
+        : null;
+      syncHover();
+    },
+    [syncHover]
+  );
+
+  const handleLabelHover = useCallback(
+    (label: object | null) => {
+      labelHoverRef.current = label ? (label as CountryLabel).code : null;
+      syncHover();
+    },
+    [syncHover]
+  );
+
+  const selectCountry = useCallback((entry: CountryEntry | undefined) => {
+    if (!entry || departingRef.current) return;
+
+    setSelectedCode(entry.code);
+    polygonHoverRef.current = null;
+    labelHoverRef.current = null;
+    setHoveredCode(null);
     const globe = globeRef.current;
     if (!globe) return;
 
     globe.controls().autoRotate = false;
-    const { lat, lng } = getCountryCenter(target);
-    globe.pointOfView({ lat, lng: lng - 18, altitude: 1.5 }, 1500);
-  }
+    const altitude = entry.focusAltitude;
+    globe.pointOfView(
+      { lat: entry.center.lat, lng: entry.center.lng - 12 * altitude, altitude },
+      1500
+    );
+  }, []);
 
-  function resetGlobe() {
-    setSelectedCountry(null);
+  const handlePolygonClick = useCallback(
+    (feature: object) => selectCountry(entryByFeature.get(feature as CountryFeature)),
+    [selectCountry]
+  );
+
+  const handleLabelClick = useCallback(
+    (label: object) => selectCountry(entryByCode.get((label as CountryLabel).code)),
+    [selectCountry]
+  );
+
+  const handleGlobeRendered = useCallback(() => setIsGlobeReady(true), []);
+
+  const resetGlobe = useCallback(() => {
+    setSelectedCode(null);
     setDepartingMoment(null);
-    setHoveredCountryCode(null);
+    departingRef.current = false;
+    polygonHoverRef.current = null;
+    labelHoverRef.current = null;
+    setHoveredCode(null);
     const globe = globeRef.current;
     if (!globe) return;
 
     globe.pointOfView({ lat: 18, lng: 10, altitude: 2.25 }, 1200);
-  }
+  }, []);
+
+  // Clicking bare globe (ocean, or anywhere while a country is focused) returns
+  // to the world view; polygon clicks are handled separately and pick a country.
+  const handleGlobeClick = useCallback(() => {
+    if (selectedCode && !departingRef.current) resetGlobe();
+  }, [resetGlobe, selectedCode]);
 
   function openMoment(moment: Moment) {
-    if (!storyCountry || departingMoment) return;
+    if (!storyCountry || departingRef.current) return;
 
+    departingRef.current = true;
     setDepartingMoment(moment.id);
     window.setTimeout(() => {
       router.push(`/story/${storyCountry.code}/${moment.id}`);
     }, 700);
   }
 
-  function stopRotation() {
-    const controls = globeRef.current?.controls();
-    if (controls?.autoRotate) controls.autoRotate = false;
-  }
+  const globeProps = useMemo(
+    () => ({
+      globeImageUrl: "//unpkg.com/three-globe/example/img/earth-night.jpg",
+      bumpImageUrl: "//unpkg.com/three-globe/example/img/earth-topology.png",
+      backgroundColor: "rgba(0,0,0,0)",
+      rendererConfig: { antialias: true, powerPreference: "high-performance" },
+      polygonsData: countries,
+      polygonAltitude: 0.002,
+      polygonCapColor: getPolygonCapColor,
+      polygonSideColor: "rgba(255, 255, 255, 0.015)",
+      polygonStrokeColor: getPolygonStrokeColor,
+      polygonsTransitionDuration: 0,
+      pathsData: hoveredPaths,
+      pathPointAlt: 0.009,
+      pathColor: getHoverPathColor,
+      pathResolution: 2,
+      pathTransitionDuration: 0,
+      labelsData: visibleLabels,
+      labelsTransitionDuration: 0,
+      labelLat: getLabelLat,
+      labelLng: getLabelLng,
+      labelText: getLabelText,
+      labelSize: getLabelSize,
+      labelDotRadius: getLabelDotRadius,
+      labelAltitude: 0.045,
+      labelColor: getLabelColor,
+      labelResolution: 3,
+      onGlobeClick: handleGlobeClick,
+      onPolygonClick: handlePolygonClick,
+      onPolygonHover: handlePolygonHover,
+      onLabelClick: handleLabelClick,
+      onLabelHover: handleLabelHover,
+      onGlobeReady: handleGlobeRendered,
+      animateIn: true,
+      width: viewport.width,
+      height: viewport.height
+    }),
+    [
+      getPolygonCapColor,
+      getPolygonStrokeColor,
+      hoveredPaths,
+      visibleLabels,
+      handleGlobeClick,
+      getLabelSize,
+      getLabelDotRadius,
+      getLabelColor,
+      handlePolygonClick,
+      handlePolygonHover,
+      handleLabelClick,
+      handleLabelHover,
+      handleGlobeRendered,
+      viewport.width,
+      viewport.height
+    ]
+  );
 
   return (
     <main className="relative h-screen overflow-hidden bg-hero-radial">
       <div
         className={`absolute inset-0 transition-[transform,opacity] duration-700 ease-[cubic-bezier(.22,.8,.2,1)] motion-reduce:transition-none ${
-          hoveredCountryCode ? "[&_canvas]:!cursor-pointer" : "[&_canvas]:!cursor-grab"
+          hoveredCode ? "[&_canvas]:!cursor-pointer" : "[&_canvas]:!cursor-grab"
         } ${
           departingMoment
             ? "-translate-x-[35vw] opacity-0"
-            : selectedCountry
+            : selectedCode
               ? "-translate-x-[42vw] scale-[1.06]"
               : "translate-x-0 scale-100"
         }`}
       >
-        <GlobeCanvas
-          onReady={handleGlobeReady}
-          globeProps={{
-            globeImageUrl: "//unpkg.com/three-globe/example/img/earth-night.jpg",
-            bumpImageUrl: "//unpkg.com/three-globe/example/img/earth-topology.png",
-            backgroundColor: "rgba(0,0,0,0)",
-            polygonsData: countries,
-            polygonAltitude: 0.002,
-            polygonCapColor: getPolygonCapColor,
-            polygonSideColor: "rgba(255, 255, 255, 0.015)",
-            polygonStrokeColor: getPolygonStrokeColor,
-            polygonsTransitionDuration: 0,
-            pathsData: hoveredBoundary.length ? [hoveredBoundary] : [],
-            pathPointAlt: 0.0025,
-            pathColor: getHoverPathColor,
-            pathResolution: 2,
-            pathTransitionDuration: 0,
-            labelsData: countryLabels,
-            labelLat: (label: object) => (label as CountryLabel).lat,
-            labelLng: (label: object) => (label as CountryLabel).lng,
-            labelText: (label: object) => (label as CountryLabel).name,
-            labelSize: getLabelSize,
-            labelDotRadius: getLabelDotRadius,
-            labelAltitude: 0.045,
-            labelColor: getLabelColor,
-            labelResolution: 4,
-            onPolygonClick: (feature: object) => selectCountry(feature as CountryFeature),
-            onPolygonHover: (feature: object | null) =>
-              setHoveredCountryCode(
-                feature ? getCountryCode(feature as CountryFeature) : null
-              ),
-            onLabelClick: (label: object) => {
-              const countryLabel = label as CountryLabel;
-              const target = countries.find(
-                (feature) => getCountryCode(feature) === countryLabel.iso_a3
-              );
-              if (target) selectCountry(target);
-            },
-            onLabelHover: (label: object | null) =>
-              setHoveredCountryCode(label ? (label as CountryLabel).iso_a3 : null),
-            onGlobeClick: stopRotation,
-            onZoom: stopRotation,
-            onGlobeReady: () => setIsGlobeReady(true),
-            animateIn: true,
-            width: viewport.width,
-            height: viewport.height
-          }}
-        />
+        <GlobeCanvas onReady={handleGlobeReady} globeProps={globeProps} />
       </div>
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_46%,rgba(13,22,38,0.58)_100%)]" />
@@ -323,12 +467,12 @@ export function GlobeExperience() {
       </p>
       <div
         className={`pointer-events-none absolute right-0 top-0 z-10 h-full w-full bg-gradient-to-l from-[#0d1626]/92 via-[#0d1626]/45 to-transparent transition-opacity duration-700 md:w-[58%] ${
-          selectedCountry && !departingMoment ? "opacity-100" : "opacity-0"
+          selectedCode && !departingMoment ? "opacity-100" : "opacity-0"
         }`}
       />
       <div
         className={`pointer-events-none absolute left-1/2 top-8 z-10 w-[min(92vw,44rem)] -translate-x-1/2 text-center transition-all duration-500 ${
-          selectedCountry ? "-translate-y-4 opacity-0" : "opacity-100"
+          selectedCode ? "-translate-y-4 opacity-0" : "opacity-100"
         }`}
       >
         <p className="font-body text-xs uppercase tracking-[0.4em] text-gold/80">
@@ -343,14 +487,14 @@ export function GlobeExperience() {
       </div>
 
       <aside
-        aria-hidden={!selectedCountry}
+        aria-hidden={!selectedCode}
         className={`absolute right-0 top-0 z-20 flex h-full w-full flex-col bg-transparent px-6 py-7 [text-shadow:0_2px_18px_rgba(0,0,0,.75)] transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,.8,.2,1)] motion-reduce:transition-none sm:px-10 sm:py-9 md:w-[46%] lg:px-14 ${
-          selectedCountry && !departingMoment
+          selectedCode && !departingMoment
             ? "translate-x-0 opacity-100"
             : "pointer-events-none translate-x-8 opacity-0"
         }`}
       >
-        {selectedCountry && (
+        {selectedCode && (
           <>
             <button
               type="button"
@@ -363,20 +507,9 @@ export function GlobeExperience() {
             <div className="flex min-h-0 flex-1 items-center pr-1">
               {hasStory && storyCountry ? (
                 <div className="w-full">
-                  <div className="mb-4 flex items-baseline gap-3 px-[34px]">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-mist/45">
-                      {storyCountry.name}
-                    </span>
-                    <span className="h-px flex-1 bg-white/10" />
-                    <span className="font-mono text-[10px] tracking-[0.2em] text-gold/70">
-                      {storyCountry.eraLabel}
-                    </span>
-                  </div>
-
                   <PeriodSelector
                     theme="dusk"
                     height={drumHeight}
-                    showNote
                     periods={storyPeriods}
                     defaultValue={storyPeriods[0]?.id}
                     onActivate={(period) => {
@@ -384,10 +517,6 @@ export function GlobeExperience() {
                       if (moment) openMoment(moment);
                     }}
                   />
-
-                  <p className="mt-3 px-[34px] font-mono text-[9px] uppercase tracking-[0.24em] text-mist/30">
-                    Scroll or ↑↓ · select again to enter
-                  </p>
                 </div>
               ) : (
                 <p className="max-w-xs font-mono text-[10px] uppercase leading-5 tracking-[0.24em] text-mist/40">
@@ -399,7 +528,7 @@ export function GlobeExperience() {
         )}
       </aside>
 
-      {!selectedCountry && (
+      {!selectedCode && (
         <div className="pointer-events-none absolute bottom-7 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/10 bg-black/25 px-5 py-3 text-center text-xs tracking-wide text-mist/65 backdrop-blur-md sm:text-sm">
           Spain contains the complete demo story · Other countries preview the future atlas
         </div>

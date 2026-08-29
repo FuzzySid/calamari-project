@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import worldFeatures from "@/data/world-features.json";
@@ -37,6 +37,7 @@ type CountryLabel = {
 
 const GlobeCanvas = dynamic(() => import("@/components/globe-canvas"), { ssr: false });
 const storyCountry = getCountryByCode("ESP");
+const getHoverPathColor = () => "#f5dca0";
 const countries = (
   "features" in worldFeatures ? worldFeatures.features : worldFeatures
 ) as unknown as CountryFeature[];
@@ -135,25 +136,32 @@ export function GlobeExperience() {
 
   const selectedCode = selectedCountry ? getCountryCode(selectedCountry) : null;
   const hasStory = selectedCode === storyCountry?.code;
+  const hoveredBoundary = useMemo(() => {
+    const feature = countries.find(
+      (country) => getCountryCode(country) === hoveredCountryCode
+    );
+
+    return feature
+      ? getLargestRing(feature).map(([lng, lat]) => [lat, lng] as GeoCoordinate)
+      : [];
+  }, [hoveredCountryCode]);
 
   const getPolygonCapColor = useCallback(
     (feature: object) => {
       const code = getCountryCode(feature as CountryFeature);
       if (code === selectedCode) return "rgba(224, 192, 119, 0.68)";
-      if (code === hoveredCountryCode) return "rgba(224, 192, 119, 0.38)";
       return "rgba(255, 255, 255, 0.006)";
     },
-    [hoveredCountryCode, selectedCode]
+    [selectedCode]
   );
 
   const getPolygonStrokeColor = useCallback(
     (feature: object) => {
       const code = getCountryCode(feature as CountryFeature);
       if (code === selectedCode) return "rgba(245, 220, 160, 0.95)";
-      if (code === hoveredCountryCode) return "rgba(245, 220, 160, 0.8)";
       return "rgba(255, 255, 255, 0.08)";
     },
-    [hoveredCountryCode, selectedCode]
+    [selectedCode]
   );
 
   const getLabelSize = useCallback(
@@ -257,6 +265,11 @@ export function GlobeExperience() {
             polygonSideColor: "rgba(255, 255, 255, 0.015)",
             polygonStrokeColor: getPolygonStrokeColor,
             polygonsTransitionDuration: 0,
+            pathsData: hoveredBoundary.length ? [hoveredBoundary] : [],
+            pathPointAlt: 0.0025,
+            pathColor: getHoverPathColor,
+            pathResolution: 2,
+            pathTransitionDuration: 0,
             labelsData: countryLabels,
             labelLat: (label: object) => (label as CountryLabel).lat,
             labelLng: (label: object) => (label as CountryLabel).lng,

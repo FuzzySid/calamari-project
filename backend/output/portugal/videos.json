@@ -1,0 +1,61 @@
+{
+  "videos": {
+    "treaty_zamora_1143_1143": [
+      {
+        "order": 1,
+        "variant": 1,
+        "seed": 3232040772,
+        "source_image": "backend/output/portugal/images/01-treaty_zamora_1143_1143.jpeg",
+        "local_path": "backend/output/portugal/videos/01-treaty_zamora_1143_1143-10s.mp4",
+        "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+      }
+    ],
+    "vasco_da_gama_reaches_india_1498_1498": [
+      {
+        "order": 2,
+        "variant": 1,
+        "seed": 2640224550,
+        "source_image": "backend/output/portugal/images/02-vasco_da_gama_reaches_india_1498_1498.jpeg",
+        "local_path": "backend/output/portugal/videos/02-vasco_da_gama_reaches_india_1498_1498-10s.mp4",
+        "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+      }
+    ],
+    "great_lisbon_earthquake_1755_1755": [
+      {
+        "order": 3,
+        "variant": 1,
+        "seed": 1811292282,
+        "source_image": "backend/output/portugal/images/03-great_lisbon_earthquake_1755_1755.jpeg",
+        "local_path": "backend/output/portugal/videos/03-great_lisbon_earthquake_1755_1755-10s.mp4",
+        "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+      }
+    ],
+    "republican_revolution_1910_1910": [
+      {
+        "order": 4,
+        "variant": 1,
+        "seed": 3910221413,
+        "source_image": "backend/output/portugal/images/04-republican_revolution_1910_1910.jpeg",
+        "local_path": "backend/output/portugal/videos/04-republican_revolution_1910_1910-10s.mp4",
+        "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+      }
+    ],
+    "carnation_revolution_25_april_1974_1974": [
+      {
+        "order": 5,
+        "variant": 1,
+        "seed": 2477410455,
+        "source_image": "backend/output/portugal/images/05-carnation_revolution_25_april_1974_1974.jpeg",
+        "local_path": "backend/output/portugal/videos/05-carnation_revolution_25_april_1974_1974-10s.mp4",
+        "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+      }
+    ]
+  },
+  "country": "Portugal",
+  "country_slug": "portugal",
+  "generated_at": "2026-08-29T16:08:19.947224+00:00",
+  "model": "blackforestlabs/flux-3/image-to-video",
+  "duration_seconds": 10,
+  "resolution": "720p",
+  "aspect_ratio": "21:9"
+}

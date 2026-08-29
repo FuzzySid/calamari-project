@@ -26,6 +26,62 @@
         "description": "Years later, he leaves a small bronze figure at a sanctuary—a human life transformed into an object that can survive for millennia.",
         "video_url": "videos/the-offering.mp4"
       }
+    ],
+    "-218": [
+      {
+        "title": "Under Roman Rule",
+        "description": "For centuries, Rome transformed Hispania through cities, roads, law and infrastructure, leaving foundations that would shape Spain long after the empire disappeared.",
+        "video_url": "videos/under-roman-rule.mp4"
+      }
+    ],
+    "418": [
+      {
+        "title": "After Rome",
+        "description": "As Roman authority disappeared, the Visigoths took control of much of the peninsula and built a new kingdom over the remains of the Roman world.",
+        "video_url": "videos/after-rome.mp4"
+      }
+    ],
+    "711": [
+      {
+        "title": "Córdoba at Its Height",
+        "description": "Al-Andalus became one of medieval Europe's great centers of urban life, scholarship and exchange, bringing Islamic, Jewish and Christian cultures into close contact.",
+        "video_url": "videos/cordoba-at-its-height.mp4"
+      }
+    ],
+    "722": [
+      {
+        "title": "Two Frontiers",
+        "description": "For centuries, Christian kingdoms expanded southward while Muslim states defended their territories, reshaping the political map of the peninsula until Granada fell in 1492.",
+        "video_url": "videos/two-frontiers.mp4"
+      }
+    ],
+    "1500": [
+      {
+        "title": "An Empire Across Oceans",
+        "description": "During the 16th and 17th centuries, Spain became a global power, enriched by its overseas empire while art, politics, religion and war transformed life at home.",
+        "video_url": "videos/an-empire-across-oceans.mp4"
+      }
+    ],
+    "1700": [
+      {
+        "title": "A Kingdom Under Pressure",
+        "description": "Spain entered an era of dynastic change, foreign invasion and political upheaval as its global empire weakened and much of Spanish America broke away.",
+        "video_url": "videos/a-kingdom-under-pressure.mp4"
+      }
+    ],
+    "1936": [
+      {
+        "title": "Spain Divided",
+        "description": "The Civil War tore Spain apart between 1936 and 1939. Nationalist victory brought Francisco Franco to power, beginning a dictatorship that lasted until 1975.",
+        "video_url": "videos/spain-divided.mp4"
+      }
+    ],
+    "1975": [
+      {
+        "title": "A Country Opens",
+        "description": "After 1975, Spain transformed into a parliamentary democracy, joined the European Community in 1986 and emerged as a modern European society.",
+        "video_url": "videos/a-country-opens.mp4"
+      }
     ]
   }
 }

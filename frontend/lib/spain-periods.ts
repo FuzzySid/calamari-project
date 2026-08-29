@@ -30,19 +30,22 @@ export const spainPeriods: SpainPeriod[] = [
     id: "roman-hispania",
     name: "Roman Hispania",
     label: "218 BC",
-    note: "2nd century BC – 5th century AD"
+    note: "2nd century BC – 5th century AD",
+    storyId: "roman-hispania"
   },
   {
     id: "visigothic-kingdom",
     name: "Visigothic Kingdom",
     label: "418",
-    note: "5th–8th century"
+    note: "5th–8th century",
+    storyId: "visigothic-kingdom"
   },
   {
     id: "al-andalus",
     name: "Al-Andalus — Muslim Spain",
     label: "711",
     note: "711–1492",
+    storyId: "al-andalus",
     concurrentWith: ["reconquista"]
   },
   {
@@ -50,30 +53,35 @@ export const spainPeriods: SpainPeriod[] = [
     name: "The Reconquista",
     label: "722",
     note: "c. 722–1492",
+    storyId: "reconquista",
     concurrentWith: ["al-andalus"]
   },
   {
     id: "golden-age",
     name: "The Spanish Golden Age",
     label: "1500",
-    note: "16th–17th century"
+    note: "16th–17th century",
+    storyId: "golden-age"
   },
   {
     id: "bourbon-era",
     name: "Decline and Bourbon Era",
     label: "1700",
-    note: "18th–19th century"
+    note: "18th–19th century",
+    storyId: "bourbon-era"
   },
   {
     id: "civil-war-franco",
     name: "Civil War and Franco's Dictatorship",
     label: "1936",
-    note: "Civil War 1936–1939 · Dictatorship 1939–1975"
+    note: "Civil War 1936–1939 · Dictatorship 1939–1975",
+    storyId: "civil-war-franco"
   },
   {
     id: "modern-spain",
     name: "Democratic Transition and Modern Spain",
     label: "1975",
-    note: "1975–present"
+    note: "1975–present",
+    storyId: "modern-spain"
   }
 ];

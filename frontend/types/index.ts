@@ -37,6 +37,8 @@ export type StoryMoment = {
   sourceRef: string;
   imagePath: string;
   imagePrompt: string;
+  /** 360° equirectangular video for the immersive viewer; falls back to imagePath. */
+  videoPath?: string;
 };
 
 export type PeriodStory = {

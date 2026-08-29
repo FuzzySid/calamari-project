@@ -1,0 +1,10 @@
+Go through the readme here and create a script using Clala which can 
+
+Cala prompt:
+What are the most relevant historical periods of Spain
+
+
+Knowledge Search
+I want to do a knowledge search on this query and store the attributes such as a fact, and a short 1-2 line description and save it in a JSON format, add a timeline as an attribute
+
+Returns optimized natural language outputs in markdown. Full explainability, source citations, and extracted entities.

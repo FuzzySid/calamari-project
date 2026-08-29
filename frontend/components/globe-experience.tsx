@@ -528,14 +528,14 @@ export function GlobeExperience() {
 
       {selectedCode && (
         <div
-          className={`pointer-events-none absolute inset-y-0 left-0 z-10 hidden flex-col items-center justify-center transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,.8,.2,1)] motion-reduce:transition-none md:flex md:w-[54%] ${
+          className={`pointer-events-none absolute inset-y-0 right-0 z-10 hidden flex-col items-center justify-center transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,.8,.2,1)] motion-reduce:transition-none md:flex md:w-[30%] ${
             revealedPeriodId && !departingMoment
               ? "translate-y-0 opacity-100"
               : "translate-y-8 opacity-0"
           }`}
         >
           <div
-            className={`h-[58vh] w-[min(32vw,26rem)] ${
+            className={`h-[58vh] w-[min(26vw,22rem)] ${
               revealedPeriodId && !departingMoment ? "pointer-events-auto" : "pointer-events-none"
             }`}
           >
@@ -562,7 +562,9 @@ export function GlobeExperience() {
         aria-hidden={!selectedCode}
         className={`absolute right-0 top-0 z-20 flex h-full w-full flex-col bg-transparent px-6 py-7 [text-shadow:0_2px_18px_rgba(0,0,0,.75)] transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,.8,.2,1)] motion-reduce:transition-none sm:px-10 sm:py-9 md:w-[46%] lg:px-14 ${
           selectedCode && !departingMoment
-            ? "translate-x-0 opacity-100"
+            ? revealedPeriodId
+              ? "translate-x-0 opacity-100 md:-translate-x-[30vw]"
+              : "translate-x-0 opacity-100"
             : "pointer-events-none translate-x-8 opacity-0"
         }`}
       >

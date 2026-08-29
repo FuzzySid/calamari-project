@@ -45,9 +45,9 @@ async function loadModel(url: string) {
 function buildPlaceholder() {
   const group = new THREE.Group();
   const material = new THREE.MeshStandardMaterial({
-    color: 0xd4b16a,
-    roughness: 0.5,
-    metalness: 0.22
+    color: 0x8a6c34,
+    roughness: 0.62,
+    metalness: 0.3
   });
 
   const parts: Array<[THREE.BufferGeometry, number]> = [

@@ -1,0 +1,29 @@
+<task-notification>
+<task-id>a2771df7a8238c74b</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-sm-aswin21-Desktop-calamari-project/97c733f4-35fa-4726-bb7f-74d8265d75c0/tasks/a2771df7a8238c74b.output</output-file>
+<status>completed</status>
+<summary>Agent "Investigate Cala MCP tools for titles" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>No "cala" reference found there directly (likely uses `factText`/`sourceRef` matching the mock client). I have enough to report.
+
+## Findings (repo search, read-only)
+
+**No full JSON schemas exist locally.** The actual request/response schemas for `entity_search`, `entity_retrieval`, `knowledge_query`, `entity_introspection` are not documented in this repo — they're described as "loaded via the live MCP tool schemas" (per SKILL.md line 32: "This skill assumes the Cala tools are loaded (their schemas carry the params and body shapes)"). Only prose-level behavior is documented, in `/Users/sm_aswin21/Desktop/calamari-project/backend/.agents/skills/cala/SKILL.md`:
+- `knowledge_query`: dot-notation query language (`filters → order_by → limit → return()`), returns `{results, entities}`.
+- `entity_search`: fuzzy name→UUID, each hit has `name`, `entity_type`, `description`.
+- `entity_retrieval`: coarse (no body) or projected (`properties`, `relationships`, `numerical_observations`).
+- `entity_introspection`: discovers populated neighborhood/fields for a UUID.
+- `knowledge_search`: returns `content` (markdown) + `explainability[i] = {content, references}` + `context[j] = {id, origins[k].document.url, origins[k].source.name}` + `entities`.
+
+The plugin cache copy at `~/.claude/plugins/cache/claude-community/cala/1.0.0/` has the same README/SKILL content, no extra schema detail.
+
+**No "title" field anywhere.** Grepped all `.py/.ts/.tsx/.md/.json` repo-wide — zero hits for "title" tied to facts/entities/documents (only unrelated `document.title`-style DOM hits and `frontend/app/layout.tsx`'s page `title: "Calamari"`).
+
+**Concrete raw response shape** comes from `backend/knowledge_search.py` (calls `knowledge_search` with `explainability: true, return_entities: true`) and its actual output captured in `data/knowledge-search.json` / `frontend/data/knowledge-search.json`: each `explainability` item only has `content` (a `fact` string) — no `title`, no `id`. The script derives `fact`, `description` (truncated summary), `timeline` (regex-extracted date range) itself; those aren't native Cala fields.
+
+**Git history**: single relevant commit `ae1515f` ("Add Cala knowledge_search backend script and generated results") plus a merge wiring `frontend/components/globe-experience.tsx` and `frontend/types/index.ts` (using `Moment.factText`/`sourceRef`, mirroring `frontend/lib/cala.ts`'s mock `CalaFact` type — also no `title` field). No other exploratory commits/notes.
+
+**Conclusion**: any "title" concept you want to add would be new — not present in existing docs, code, or captured API responses.</result>
+<usage><subagent_tokens>40701</subagent_tokens><tool_uses>15</tool_uses><duration_ms>37205</duration_ms></usage>
+</task-notification>

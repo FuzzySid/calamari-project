@@ -3,6 +3,9 @@
 Runs a Cala knowledge_search query and saves the results as structured JSON.
 
 Each output record captures:
+  - title: the title of the cited source document, resolved from Cala's provenance
+           chain (explainability[i].references -> context[j].id -> origins[k].document.name),
+           per the Cala skill's citation guidance. Falls back to the publisher name, then "".
   - fact: the underlying supporting fact from Cala's explainability trace
   - description: a short 1-2 line summary of that fact
   - timeline: the historical period/date range the fact belongs to
@@ -20,7 +23,6 @@ import sys
 import urllib.request
 
 CALA_MCP_URL = "https://api.cala.ai/mcp/"
-
 
 def load_dotenv(path: str) -> None:
     """Minimal .env loader: sets os.environ for KEY=VALUE lines not already set."""
@@ -98,8 +100,25 @@ def summarize(text: str, max_sentences: int = 2) -> str:
     return " ".join(sentences[:max_sentences]).strip()
 
 
+def resolve_title(references: list, context_by_id: dict) -> str:
+    """Resolves a title for a claim via Cala's provenance chain: the first cited
+    context's source document name (falling back to its publisher name)."""
+    for ref_id in references:
+        context = context_by_id.get(ref_id)
+        if not context:
+            continue
+        for origin in context.get("origins") or []:
+            document_name = (origin.get("document") or {}).get("name")
+            if document_name:
+                return document_name
+            source_name = (origin.get("source") or {}).get("name")
+            if source_name:
+                return source_name
+    return ""
+
+
 def build_records(mcp_result: dict) -> list:
-    """Turns Cala's explainability entries into fact/description/timeline records."""
+    """Turns Cala's explainability entries into title/fact/description/timeline records."""
     content_blocks = mcp_result.get("content", [])
     tool_output = None
     for block in content_blocks:
@@ -109,11 +128,15 @@ def build_records(mcp_result: dict) -> list:
     if tool_output is None:
         raise RuntimeError("No text content block found in Cala MCP response")
 
+    context_by_id = {ctx["id"]: ctx for ctx in tool_output.get("context", []) if "id" in ctx}
+
     records = []
     for item in tool_output.get("explainability", []):
         fact = item.get("content", "")
+        references = item.get("references", [])
         records.append(
             {
+                "title": resolve_title(references, context_by_id),
                 "fact": fact,
                 "description": summarize(fact),
                 "timeline": extract_timeline(fact),

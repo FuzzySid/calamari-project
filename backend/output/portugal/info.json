@@ -1,0 +1,183 @@
+{
+  "country": "Portugal",
+  "country_slug": "portugal",
+  "query": "five most notable events in Portugal history",
+  "generated_at": "2026-08-29T16:01:12.341826+00:00",
+  "total_returned": 5,
+  "events": [
+    {
+      "id": "treaty_zamora_1143_1143",
+      "title": "Treaty of Zamora — 1143",
+      "description": "The Treaty of Zamora in 1143 formally recognised Portugal’s independence, establishing it as one of Europe’s oldest nation‑states.",
+      "timeline": {
+        "start": "1143",
+        "end": "1143",
+        "display": "1143"
+      },
+      "sources": [
+        {
+          "publisher": "Establishment of the 2.nd County of Portugal (Condado ...",
+          "url": "http://web.tecnico.ulisboa.pt/~mcasquilho/acad/Portugal/HistoryPortugal.pdf",
+          "date": null
+        },
+        {
+          "publisher": "Portugal - Algarve Vacation Rentals",
+          "url": "https://portugalestateholidays.com/portugal",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Treaty of Zamora",
+          "entity_type": "Event"
+        },
+        {
+          "name": "Portugal",
+          "entity_type": "GPE"
+        }
+      ],
+      "event_text": "The Treaty of Zamora in 1143 formally recognised Portugal’s independence, establishing it as one of Europe’s oldest nation‑states."
+    },
+    {
+      "id": "vasco_da_gama_reaches_india_1498_1498",
+      "title": "Vasco da Gama Reaches India — 1498",
+      "description": "Vasco da Gama’s arrival in India in 1498 opened a direct sea route from Europe to Asia, marking the height of Portugal’s Age of Discovery and its global maritime empire.",
+      "timeline": {
+        "start": "1498",
+        "end": "1498",
+        "display": "1498"
+      },
+      "sources": [
+        {
+          "publisher": "Establishment of the 2.nd County of Portugal (Condado ...",
+          "url": "http://web.tecnico.ulisboa.pt/~mcasquilho/acad/Portugal/HistoryPortugal.pdf",
+          "date": null
+        },
+        {
+          "publisher": "Portugal - Algarve Vacation Rentals",
+          "url": "https://portugalestateholidays.com/portugal",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Vasco de Gama",
+          "entity_type": "Person"
+        },
+        {
+          "name": "India",
+          "entity_type": "Country"
+        },
+        {
+          "name": "Portugal",
+          "entity_type": "GPE"
+        }
+      ],
+      "event_text": "Vasco da Gama’s arrival in India in 1498 opened a direct sea route from Europe to Asia, marking the height of Portugal’s Age of Discovery and its global maritime empire."
+    },
+    {
+      "id": "great_lisbon_earthquake_1755_1755",
+      "title": "The Great Lisbon Earthquake — 1755",
+      "description": "The Great Lisbon Earthquake on 1 November 1755 devastated the capital, prompting extensive rebuilding under the Marquis of Pombal and influencing Enlightenment thought.",
+      "timeline": {
+        "start": "1755",
+        "end": "1755",
+        "display": "1755"
+      },
+      "sources": [
+        {
+          "publisher": "Establishment of the 2.nd County of Portugal (Condado ...",
+          "url": "http://web.tecnico.ulisboa.pt/~mcasquilho/acad/Portugal/HistoryPortugal.pdf",
+          "date": null
+        },
+        {
+          "publisher": "The Chef Team Has Landed in Lisbon! - Taher, Inc. Food Service",
+          "url": "https://www.taher.com/chef-team-landed-lisbon",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Great Lisbon Earthquake",
+          "entity_type": "Event"
+        },
+        {
+          "name": "Marquis of Pombal",
+          "entity_type": "Person"
+        }
+      ],
+      "event_text": "The Great Lisbon Earthquake on 1 November 1755 devastated the capital, prompting extensive rebuilding under the Marquis of Pombal and influencing Enlightenment thought."
+    },
+    {
+      "id": "republican_revolution_1910_1910",
+      "title": "Republican Revolution — 1910",
+      "description": "The Republican Revolution of 1910 overthrew the Portuguese monarchy and established the First Portuguese Republic, ending centuries of royal rule.",
+      "timeline": {
+        "start": "1910",
+        "end": "1910",
+        "display": "1910"
+      },
+      "sources": [
+        {
+          "publisher": "Establishment of the 2.nd County of Portugal (Condado ...",
+          "url": "http://web.tecnico.ulisboa.pt/~mcasquilho/acad/Portugal/HistoryPortugal.pdf",
+          "date": null
+        },
+        {
+          "publisher": "Carnation Revolution",
+          "url": "https://www.portuguesemuseum.org/?page_id=2002&exhibit=31&event=",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Republican Revolution",
+          "entity_type": "Event"
+        },
+        {
+          "name": "First Portuguese Republic",
+          "entity_type": "Organization"
+        }
+      ],
+      "event_text": "The Republican Revolution of 1910 overthrew the Portuguese monarchy and established the First Portuguese Republic, ending centuries of royal rule."
+    },
+    {
+      "id": "carnation_revolution_25_april_1974_1974",
+      "title": "The Carnation Revolution — 25 April 1974",
+      "description": "The Carnation Revolution on 25 April 1974, a largely bloodless military coup, ended the authoritarian Estado Novo regime and led to democratic reforms and decolonisation.",
+      "timeline": {
+        "start": "1974",
+        "end": "1974",
+        "display": "1974"
+      },
+      "sources": [
+        {
+          "publisher": "Establishment of the 2.nd County of Portugal (Condado ...",
+          "url": "http://web.tecnico.ulisboa.pt/~mcasquilho/acad/Portugal/HistoryPortugal.pdf",
+          "date": null
+        },
+        {
+          "publisher": "Carnation Revolution",
+          "url": "https://www.portuguesemuseum.org/?page_id=2002&exhibit=31&event=",
+          "date": null
+        },
+        {
+          "publisher": "Carnation Revolution Volume 2 | Europe@War | Helion & Company",
+          "url": "https://www.helion.co.uk/military-history-books/carnation-revolution-volume-2-coup-in-portugal-april-1974.php",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Estado Novo",
+          "entity_type": "Organization"
+        },
+        {
+          "name": "Carnation Revolution",
+          "entity_type": "Event"
+        }
+      ],
+      "event_text": "The Carnation Revolution on 25 April 1974, a largely bloodless military coup, ended the authoritarian Estado Novo regime and led to democratic reforms and decolonisation."
+    }
+  ]
+}

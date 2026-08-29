@@ -13,3 +13,4 @@ pnpm-debug.log*
 # TypeScript incremental build cache
 *.tsbuildinfo
 node_modules
+backend/state/

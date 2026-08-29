@@ -1,0 +1,168 @@
+{
+  "runs": [
+    {
+      "generated_at": "2026-08-29T14:52:42.725882+00:00",
+      "stage": "stage3_images",
+      "country": "Spain",
+      "country_slug": "spain",
+      "profile_version": "equirect-360-v1",
+      "generation_model": "fal-ai/nano-banana-pro",
+      "aspect_ratio": "2:1",
+      "resolution": "2K",
+      "images_per_event": 1,
+      "events": []
+    },
+    {
+      "generated_at": "2026-08-29T15:01:11.858477+00:00",
+      "stage": "stage3_images",
+      "country": "Spain",
+      "country_slug": "spain",
+      "profile_version": "wide-panorama-v1",
+      "generation_model": "fal-ai/nano-banana-pro",
+      "aspect_ratio": "21:9",
+      "resolution": "2K",
+      "images_per_event": 1,
+      "events": [
+        {
+          "event_id": "columbus_s_voyage_age_exploration_1492",
+          "order": 2,
+          "variant": 1,
+          "seed": 531109859,
+          "final_prompt": "Build an ultra-wide cinematic panorama image depicting this event\nDawn at the estuary of Palos de la Frontera, August 1492: a panoramic view from the stone quay captures three outbound vessels moored in a gentle tide—the broad‑beamed nao Santa María centered with a high sterncastle and square sails marked by deep red crosses, flanked by the smaller caravels Niña (to the left with lateen yards furled along her raked masts) and Pinta (to the right with square yards braced for departure). The foreground is busy and tactile: sailors in linen shirts, wool caps, and rough leather jerkins heft casks of water and wine, sacks of hardtack, and salted meat onto creaking gangplanks; coils of hemp rope, tar pots, iron hooks, a sandglass, a brass astrolabe and a cross‑staff lie among wicker baskets and earthenware jugs. A Franciscan friar in a coarse brown habit raises a wooden cross in blessing as a knot of crewmen bow their heads; a woman in a veil grips a sailor’s hands, while a dockworker in hose and a short doublet tightens lashings. Beyond, the whitewashed Andalusian town rises in soft morning mist: terracotta roof tiles, timber balconies, and a slender Mudejar bell tower of patterned brick with horseshoe‑arched openings; a fragment of an old fortress wall crowns a low hill. Marsh grasses fringe the calm water, gulls wheel in the sky, and a faint land breeze ruffles flags in red and gold hues. The light is golden and low, picking out tar‑blackened seams and sun‑bleached linen, casting long shadows across worn cobbles and shimmering reflections across the hulls; the mood is hushed anticipation at the threshold of the ocean. Rich, painterly realism, crisp period textures, natural golden hour light, wide cinematic composition from a slightly elevated vantage.\n\nStyle: muted indigo and ochre palette, restrained saturation, archival paper grain, soft directional light, and a quiet museum-editorial composition.\n\nProjection requirements:\n- ultra-wide panoramic view, as if scanning the full sweep of the scene\n- the horizon sits on the vertical centre line and stays level across the full width\n- distribute subject matter across the full horizontal sweep rather than centring one focal point\n- no fisheye distortion, no vignetting, no circular framing\n\nConstraints (must all hold):\n- historically grounded objects, architecture, landscapes, maps, textiles, or ships\n- avoid identifiable historical figures unless the supplied source explicitly requires them\n- no text\n- no labels\n- no watermark\n- no modern objects\n- no spectacle-first sunset",
+          "local_path": "backend/output/spain/images/02-columbus_s_voyage_age_exploration_1492.jpeg",
+          "fal_url": "expired: Fal URLs are short-lived; use local_path"
+        },
+        {
+          "event_id": "spanish_armada_1588",
+          "order": 3,
+          "variant": 1,
+          "seed": 1079098487,
+          "final_prompt": "Build an ultra-wide cinematic panorama image depicting this event\nNight, August 1588, off Calais in the English Channel: a wide, cinematic view from the quarterdeck of a towering Spanish galleon as English fireships drift toward the anchored Armada, their tarred hulls and yardarms a roaring lattice of orange flame that paints the black water copper. In the foreground, Spanish mariners in late 16th-century dress—coarse woolen jerkins, hose and knit caps—hack at a thick hemp anchor cable with boarding axes, while soldiers in morion helmets and breastplates shoulder pikes and arquebuses; an officer in a black slashed doublet with a white ruff and felt hat points urgently to the oncoming blaze. The galleon’s high sterncastle looms with gilded carvings and a great stern lantern glazed with horn panes; tar-seamed oak timbers, sand-strewn decks, coils of hemp rope, and bronze culverins with linstocks and smoldering slowmatch speak to the material world of the fleet. Midground, the Armada’s crescent unravels: naos and galleons sheer off, sails half-loosed, rigging straining, a Neapolitan galleass churns the chop with oars; pennons bearing bold red crosses snap in the rising wind. Beyond, the fireships’ ember-lit smoke rolls under a torn bank of clouds, where a pallid moon breaks through; whitecaps and spray glitter with cinders. On the far horizon, the low Flanders shore and the dark silhouette of Calais’s late medieval walls and bastioned forts flicker with distant beacon fires. The palette is cold slate-blue and iron-grey broken by searing orange and gold; atmosphere tense and chaotic, the sea heaving, masts and lines etched in hard contrast, every surface wet with brine and firelight—no modern elements, no text.\n\nStyle: muted indigo and ochre palette, restrained saturation, archival paper grain, soft directional light, and a quiet museum-editorial composition.\n\nProjection requirements:\n- ultra-wide panoramic view, as if scanning the full sweep of the scene\n- the horizon sits on the vertical centre line and stays level across the full width\n- distribute subject matter across the full horizontal sweep rather than centring one focal point\n- no fisheye distortion, no vignetting, no circular framing\n\nConstraints (must all hold):\n- historically grounded objects, architecture, landscapes, maps, textiles, or ships\n- avoid identifiable historical figures unless the supplied source explicitly requires them\n- no text\n- no labels\n- no watermark\n- no modern objects\n- no spectacle-first sunset",
+          "local_path": "backend/output/spain/images/03-spanish_armada_1588.jpeg",
+          "fal_url": "expired: Fal URLs are short-lived; use local_path"
+        },
+        {
+          "event_id": "spanish_civil_war_1936",
+          "order": 4,
+          "variant": 1,
+          "seed": 1183601832,
+          "final_prompt": "Build an ultra-wide cinematic panorama image depicting this event\nSpain, Catalonia, pre-dawn July 1938 on the Ebro River during the Battle of the Ebro: a low, misty riverbank lined with poplars and willow roots, terraced hills and scattered whitewashed farmhouses with red-tile roofs rising beyond. In the foreground, Republican soldiers in mismatched 1930s kit—khaki tunics, wool trousers, puttees or worn leather boots, some in flat sidecaps and others in dull, scuffed French-style steel helmets—heave a canvas-and-wood assault boat into the black water, paddles ready, Mauser rifles slung, a rolled blanket and bread bag over each shoulder, cartridge pouches and a canteen bouncing at their belts. Midground engineers in blue-grey work jackets and overalls lash timber pontoons with thick hemp rope to form a narrow, quivering bridge; a mule with ammo crates waits beside stacked saplings and a coil of wire, steam rising from its flanks. On the opposite bank, more figures crouch behind low stone walls and reed beds, a tripod-mounted light machine gun set on a sandbagged hummock, muzzle pointed toward the dusky hills. Star shells hang pale and ghostly over the ridgeline; occasional orange artillery flashes bloom and fade, their rumbles softened by the river fog. Overhead, the sky is a deep, cold blue sliding toward grey, the first thin smear of dawn gilding the water’s ripples and wet wood. The air glistens with fine mist and smoke; uniforms are dusty, fabric frayed, metal fittings dull and worn. No legible insignia or signage. Cinematic, documentary feel—1930s film grain, naturalistic color, soft, directional pre-dawn light cutting through haze, emphasizing texture of wet canvas, rough-hewn timber, and riverbank mud.\n\nStyle: muted indigo and ochre palette, restrained saturation, archival paper grain, soft directional light, and a quiet museum-editorial composition.\n\nProjection requirements:\n- ultra-wide panoramic view, as if scanning the full sweep of the scene\n- the horizon sits on the vertical centre line and stays level across the full width\n- distribute subject matter across the full horizontal sweep rather than centring one focal point\n- no fisheye distortion, no vignetting, no circular framing\n\nConstraints (must all hold):\n- historically grounded objects, architecture, landscapes, maps, textiles, or ships\n- avoid identifiable historical figures unless the supplied source explicitly requires them\n- no text\n- no labels\n- no watermark\n- no modern objects\n- no spectacle-first sunset",
+          "local_path": "backend/output/spain/images/04-spanish_civil_war_1936.jpeg",
+          "fal_url": "expired: Fal URLs are short-lived; use local_path"
+        },
+        {
+          "event_id": "transition_democracy_1978_constitution_1975",
+          "order": 5,
+          "variant": 1,
+          "seed": 1194513010,
+          "final_prompt": "Build an ultra-wide cinematic panorama image depicting this event\nDecember 1978, Madrid — inside a public school classroom repurposed as a polling station for the constitutional referendum. Foreground: a clear acrylic ballot box half-filled with pale cream envelopes, a pair of adult hands in worn leather gloves dropping another sealed envelope through the slot; the corner of a green paper identity booklet peeks from the voter’s palm. Mid-ground: a long, scarred wooden table where poll workers in late-70s attire—corduroy jackets, sweater vests, horn-rimmed glasses—check a thick bound register, flip through stacks of envelopes, and press a rubber stamp onto ink pads; an ashtray curls a thin ribbon of smoke beside a chipped ceramic mug. To the right, a neat line of voters snakes past wooden student desks and a radiator: elderly men in dark wool overcoats and black berets, women in houndstooth coats and knee-length skirts with leather handbags, a young couple in flared trousers and suede jackets; muted earth tones, mustard, olive, and browns. Background: pale green classroom walls with a dusty chalkboard and educational posters with no legible text, tall metal-framed windows admitting cold winter daylight that slants across terrazzo flooring; the hum of fluorescent tubes overhead mixes cool light with the warm glow of a small desk lamp. Through the glass-paneled door, a tiled corridor leads to the entrance where two uniformed officers in olive-green with tricorn hats stand watchful but relaxed near a parked olive Land Rover outside; beyond, a glimpse of parked SEATs along a damp street. Materials feel tactile—paper, acrylic, wood, wool, leather, metal. Mood: quiet, solemn expectancy with a current of hope, dust motes suspended in the low sun. Shot on 35mm color film aesthetic, slight grain, naturalistic color, eye-level 50mm framing that focuses sharply on the moment the envelope meets the slot while the queue and corridor fall gently out of focus. No legible text anywhere.\n\nStyle: muted indigo and ochre palette, restrained saturation, archival paper grain, soft directional light, and a quiet museum-editorial composition.\n\nProjection requirements:\n- ultra-wide panoramic view, as if scanning the full sweep of the scene\n- the horizon sits on the vertical centre line and stays level across the full width\n- distribute subject matter across the full horizontal sweep rather than centring one focal point\n- no fisheye distortion, no vignetting, no circular framing\n\nConstraints (must all hold):\n- historically grounded objects, architecture, landscapes, maps, textiles, or ships\n- avoid identifiable historical figures unless the supplied source explicitly requires them\n- no text\n- no labels\n- no watermark\n- no modern objects\n- no spectacle-first sunset",
+          "local_path": "backend/output/spain/images/05-transition_democracy_1978_constitution_1975.jpeg",
+          "fal_url": "expired: Fal URLs are short-lived; use local_path"
+        }
+      ]
+    },
+    {
+      "generated_at": "2026-08-29T15:07:47.204115+00:00",
+      "stage": "stage3_images",
+      "country": "Spain",
+      "country_slug": "spain",
+      "profile_version": "wide-panorama-v1",
+      "generation_model": "fal-ai/nano-banana-pro",
+      "aspect_ratio": "21:9",
+      "resolution": "2K",
+      "images_per_event": 1,
+      "events": [
+        {
+          "event_id": "reconquista_701",
+          "order": 1,
+          "variant": 1,
+          "seed": 1184974013,
+          "final_prompt": "Build an ultra-wide cinematic panorama image depicting this event\nMid-13th-century Iberian Reconquista siege scene: a hilltop Andalusi fortress-town under assault in late afternoon light. Foreground: Christian infantry advance behind rough timber mantlets and wicker gabions, some pushing ladders, others bracing plain-colored heater and late kite shields; they wear knee-length mail hauberks with coifs, padded gambesons, wool surcoats in muted reds and indigos, and a mix of conical nasal helmets and iron kettle hats. To the left, a stout timber trebuchet creaks, its sling just released, a pale stone arcing toward the walls; a leather-draped battering ram shelter sits nearer the gate. Middle ground: the fortress’s red-ochre tapial (rammed earth) walls with square towers and crenellations, a tall horseshoe-arched gate defended by projecting wooden hoardings. Andalusi defenders in quilted coats, striped wool robes, and short mail shirts, some with turbans wrapped around iron helmets, lean from the hoardings and battlements, loosing composite arrows and casting stones; others brace rawhide adarga shields with simple geometric patterns. A few defenders rush amphorae of water and sand to douse small fires licking at the gate timbers; a clay jar of flaming pitch tumbles, trailing smoke. Behind the walls, glimpses of whitewashed houses with terracotta roofs, a narrow minaret of orange brick with a modest green-tile band, and a shaded courtyard with a low fountain faced in blue-and-white tiles; cypress and pomegranate trees rise above terraced gardens fed by narrow acequias. Background: rolling olive groves and a dusty ridge receding into pale haze. Atmosphere: hot, dry wind snapping plain banners, dust and smoke glowing amber in slanting golden sun, deep indigo shadows under battlements; gritty textures of wool, leather, iron rivets, rough pine timbers, and sunbaked earth rendered in high detail, with a sweeping, cinematic composition that leads the eye from the attackers in the foreground up the diagonal of ladders and flying stone toward the defended horseshoe gate.\n\nStyle: muted indigo and ochre palette, restrained saturation, archival paper grain, soft directional light, and a quiet museum-editorial composition.\n\nProjection requirements:\n- ultra-wide panoramic view, as if scanning the full sweep of the scene\n- the horizon sits on the vertical centre line and stays level across the full width\n- distribute subject matter across the full horizontal sweep rather than centring one focal point\n- no fisheye distortion, no vignetting, no circular framing\n\nConstraints (must all hold):\n- historically grounded objects, architecture, landscapes, maps, textiles, or ships\n- avoid identifiable historical figures unless the supplied source explicitly requires them\n- no text\n- no labels\n- no watermark\n- no modern objects\n- no spectacle-first sunset",
+          "local_path": "backend/output/spain/images/01-reconquista_701.jpeg",
+          "fal_url": "expired: Fal URLs are short-lived; use local_path"
+        }
+      ]
+    },
+    {
+      "generated_at": "2026-08-29T15:16:05.671611+00:00",
+      "stage": "stage3_images",
+      "country": "Spain",
+      "country_slug": "spain",
+      "profile_version": "wide-panorama-v1",
+      "generation_model": "fal-ai/nano-banana-pro",
+      "aspect_ratio": "21:9",
+      "resolution": "2K",
+      "images_per_event": 1,
+      "events": []
+    },
+    {
+      "generated_at": "2026-08-29T15:24:04.559190+00:00",
+      "stage": "videos",
+      "country": "Spain",
+      "country_slug": "spain",
+      "model": "blackforestlabs/flux-3/image-to-video",
+      "duration_seconds": 10,
+      "resolution": "720p",
+      "aspect_ratio": "21:9",
+      "events": [
+        {
+          "event_id": "spanish_armada_1588",
+          "order": 3,
+          "variant": 1,
+          "seed": 2248025100,
+          "source_image": "backend/output/spain/images/03-spanish_armada_1588.jpeg",
+          "local_path": "backend/output/spain/videos/03-spanish_armada_1588-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        }
+      ]
+    },
+    {
+      "generated_at": "2026-08-29T15:34:39.247582+00:00",
+      "stage": "videos",
+      "country": "Spain",
+      "country_slug": "spain",
+      "model": "blackforestlabs/flux-3/image-to-video",
+      "duration_seconds": 10,
+      "resolution": "720p",
+      "aspect_ratio": "21:9",
+      "events": [
+        {
+          "event_id": "reconquista_701",
+          "order": 1,
+          "variant": 1,
+          "seed": 4121117856,
+          "source_image": "backend/output/spain/images/01-reconquista_701.jpeg",
+          "local_path": "backend/output/spain/videos/01-reconquista_701-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        },
+        {
+          "event_id": "columbus_s_voyage_age_exploration_1492",
+          "order": 2,
+          "variant": 1,
+          "seed": 3022634897,
+          "source_image": "backend/output/spain/images/02-columbus_s_voyage_age_exploration_1492.jpeg",
+          "local_path": "backend/output/spain/videos/02-columbus_s_voyage_age_exploration_1492-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        },
+        {
+          "event_id": "spanish_civil_war_1936",
+          "order": 4,
+          "variant": 1,
+          "seed": 3045351129,
+          "source_image": "backend/output/spain/images/04-spanish_civil_war_1936.jpeg",
+          "local_path": "backend/output/spain/videos/04-spanish_civil_war_1936-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        },
+        {
+          "event_id": "transition_democracy_1978_constitution_1975",
+          "order": 5,
+          "variant": 1,
+          "seed": 2241388040,
+          "source_image": "backend/output/spain/images/05-transition_democracy_1978_constitution_1975.jpeg",
+          "local_path": "backend/output/spain/videos/05-transition_democracy_1978_constitution_1975-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        }
+      ]
+    }
+  ]
+}

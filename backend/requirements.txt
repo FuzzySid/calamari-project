@@ -1,1 +1,2 @@
-fal-client>=0.8.0
+# No third-party dependencies: the pipeline is standard library only (urllib.request).
+# Python 3.8+.

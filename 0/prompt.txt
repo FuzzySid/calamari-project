@@ -1,0 +1,1 @@
+In the same folder now there is a panaromic video called event.mp4, the `/panorama?country=Spain` URL now needs to render that video in a panoramic view

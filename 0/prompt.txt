@@ -1,0 +1,1 @@
+help me render the docs html and svg correctly in readme

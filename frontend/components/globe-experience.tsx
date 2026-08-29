@@ -47,9 +47,9 @@ const Globe = dynamic(() => import("react-globe.gl"), {
   ssr: false
 });
 
-const countries = (
+const countries = ((
   "features" in worldFeatures ? worldFeatures.features : worldFeatures
-) as CountryFeature[];
+) as unknown) as CountryFeature[];
 
 function getCountryName(feature: CountryFeature) {
   return (

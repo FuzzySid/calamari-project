@@ -1,0 +1,203 @@
+now using the images under spain under output i want to generate a video per image and use this script and this file and model and add a script and save the video as .mp4 
+
+#!/usr/bin/env python3
+"""
+Create 10-second seamless 360° panorama videos with FLUX 3 on Fal.
+
+Install:
+    pip install fal-client python-dotenv
+
+Create a .env file beside this script:
+    FAL_KEY=your_fal_api_key
+
+Run one image:
+    python image_to_360_video.py ./panorama.jpg
+
+Run every supported image in a folder:
+    python image_to_360_video.py ./input-images --output-dir ./generated-videos
+
+Optional scene-specific motion:
+    python image_to_360_video.py ./panorama.jpg \
+      --motion "small market flags flutter gently; dust drifts subtly near the road"
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import sys
+from pathlib import Path
+from urllib.request import urlopen
+
+import fal_client
+from dotenv import load_dotenv
+
+
+MODEL_ID = "blackforestlabs/flux-3/image-to-video"
+DURATION_SECONDS = 10
+RESOLUTION = "720p"
+ASPECT_RATIO = "2:1"
+
+SUPPORTED_IMAGES = {".jpg", ".jpeg", ".png", ".webp"}
+
+BASE_PROMPT = """
+Create a seamless equirectangular 360 degree panorama video from the supplied
+image. The camera is completely static and locked on a tripod: no panning, no
+tilting, no zooming, and no rotation.
+
+Preserve the original 2:1 equirectangular spherical distortion and ensure
+perfect continuity between the left and right edges of the frame.
+
+Only subtle ambient motion: clouds drift very slowly across the sky and people
+walk naturally. Add only one or two scene-appropriate gentle motions. Everything
+else remains perfectly still. The result is slow, calm, atmospheric, and
+suitable for viewing as a 360 degree panorama.
+""".strip()
+
+
+def get_input_images(input_path: Path) -> list[Path]:
+    if input_path.is_file():
+        if input_path.suffix.lower() not in SUPPORTED_IMAGES:
+            raise ValueError(
+                f"Unsupported image type: {input_path.suffix}. "
+                f"Supported: {', '.join(sorted(SUPPORTED_IMAGES))}"
+            )
+        return [input_path]
+
+    if input_path.is_dir():
+        images = sorted(
+            image
+            for image in input_path.iterdir()
+            if image.is_file() and image.suffix.lower() in SUPPORTED_IMAGES
+        )
+        if images:
+            return images
+        raise ValueError(f"No supported images found in {input_path}")
+
+    raise FileNotFoundError(f"Input does not exist: {input_path}")
+
+
+def download_file(url: str, destination: Path) -> None:
+    """Download the generated Fal video without loading it fully into memory."""
+    with urlopen(url, timeout=600) as response, destination.open("wb") as output:
+        shutil.copyfileobj(response, output)
+
+
+def generate_video(
+    image_path: Path,
+    output_dir: Path,
+    scene_motion: str,
+) -> dict[str, str]:
+    print(f"\nUploading {image_path.name}...")
+    image_url = fal_client.upload_file(str(image_path))
+
+    prompt = BASE_PROMPT
+    if scene_motion:
+        prompt += f"\n\nScene-specific gentle motion: {scene_motion.strip()}"
+
+    print(f"Generating a {DURATION_SECONDS}-second 360° video...")
+    result = fal_client.subscribe(
+        MODEL_ID,
+        arguments={
+            "prompt": prompt,
+            "image_url": image_url,
+            "duration": DURATION_SECONDS,
+            "aspect_ratio": ASPECT_RATIO,
+            "resolution": RESOLUTION,
+            "generate_audio": False,
+            "safety_tolerance": 2,
+        },
+        with_logs=True,
+        client_timeout=900,
+    )
+
+    try:
+        video_url = result["video"]["url"]
+    except (KeyError, TypeError) as error:
+        raise RuntimeError(
+            "Fal did not return a video URL:\n"
+            + json.dumps(result, indent=2)
+        ) from error
+
+    video_path = output_dir / f"{image_path.stem}-360-10s.mp4"
+    print(f"Downloading to {video_path}...")
+    download_file(video_url, video_path)
+
+    return {
+        "input_image": str(image_path),
+        "output_video": str(video_path),
+        "fal_video_url": video_url,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Turn equirectangular panorama images into 10-second 360° videos."
+    )
+    parser.add_argument(
+        "input",
+        type=Path,
+        help="A JPG, JPEG, PNG, WebP image, or a folder containing images.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("generated-videos"),
+        help="Folder for generated MP4 files.",
+    )
+    parser.add_argument(
+        "--motion",
+        default="",
+        help="Optional gentle, scene-specific motion to add.",
+    )
+    args = parser.parse_args()
+
+    load_dotenv()
+
+    if not os.getenv("FAL_KEY"):
+        print("FAL_KEY is missing. Add it to .env or export it.", file=sys.stderr)
+        return 1
+
+    try:
+        images = get_input_images(args.input)
+    except (FileNotFoundError, ValueError) as error:
+        print(error, file=sys.stderr)
+        return 1
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+
+    completed: list[dict[str, str]] = []
+    failed: list[dict[str, str]] = []
+
+    for image in images:
+        try:
+            completed.append(generate_video(image, args.output_dir, args.motion))
+        except Exception as error:
+            print(f"Failed to generate {image.name}: {error}", file=sys.stderr)
+            failed.append({"input_image": str(image), "error": str(error)})
+
+    manifest_path = args.output_dir / "video-generation-manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "model": MODEL_ID,
+                "duration_seconds": DURATION_SECONDS,
+                "resolution": RESOLUTION,
+                "aspect_ratio": ASPECT_RATIO,
+                "completed": completed,
+                "failed": failed,
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    print(f"\nFinished. Results saved in {args.output_dir}")
+    print(f"Manifest: {manifest_path}")
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

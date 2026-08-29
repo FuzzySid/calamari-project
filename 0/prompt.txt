@@ -1,0 +1,1 @@
+On the `/panorama` there needs to be a back button that takes back to the home page, and a small caption in the bottom that explains the depiction of this event. Add a dummy caption for now

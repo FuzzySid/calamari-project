@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PanoramaViewer } from "@/components/panorama-viewer";
 import { PanoramaTimeline } from "@/components/panorama-timeline";
 
 export default function PanoramaPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const country = searchParams.get("country") ?? "Spain";
   const countryLabel = country.trim() || "Spain";
@@ -22,12 +23,21 @@ export default function PanoramaPage() {
           minimal
         />
 
-        <Link
-          href="/"
-          className="absolute left-4 top-4 z-20 rounded-full border border-white/15 bg-black/45 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white/85 backdrop-blur-md transition hover:bg-black/65 sm:left-6 sm:top-5"
-        >
-          Back
-        </Link>
+        <div className="absolute left-4 top-4 z-20 flex items-center gap-2 sm:left-6 sm:top-5">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="rounded-full border border-white/15 bg-black/45 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white/85 backdrop-blur-md transition hover:bg-black/65"
+          >
+            Back
+          </button>
+          <Link
+            href="/"
+            className="rounded-full border border-white/15 bg-black/45 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white/85 backdrop-blur-md transition hover:bg-black/65"
+          >
+            Home
+          </Link>
+        </div>
 
         <p className="pointer-events-none absolute right-4 top-4 z-20 max-w-[75vw] text-right text-[11px] font-medium tracking-[0.08em] text-white/65 [text-shadow:0_1px_8px_rgba(0,0,0,.8)] sm:right-6 sm:top-5 sm:text-xs">
           {countryLabel}

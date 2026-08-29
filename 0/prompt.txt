@@ -1,0 +1,1 @@
+[http://localhost:3000/panorama](http://localhost:3000/panorama) URL is where a sample 3D image is rendered and video is rendered Connect it to the main app, when the user clicks on Spain on the globe the URL [http://localhost:3000/panorama](http://localhost:3000/panorama) should open with a query parameter country="spain"

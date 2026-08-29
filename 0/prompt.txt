@@ -1,0 +1,76 @@
+I now want to work on the URL [http://localhost:3000/panorama?country=Spain](http://localhost:3000/panorama?country=Spain)
+
+
+
+Take the current image it renders and take it 5 more times to have 6 same images and then build a single-page horizontal scrolling experience. Later all these 6 images will be different and dynamically generated for now Layout and interaction only — I'll handle data and generation separately.
+
+## The core idea
+
+Six images sit side by side in a horizontal strip. They are **not** a carousel or a gallery — they must read as **one continuous panorama** that the user travels along. All six show the same place from the same fixed vantage point at six different dates, so scrolling right is scrolling forward through time.
+
+## Layout
+
+- Full-viewport height. The strip is `100vh` tall, images fill it vertically.
+- Six images laid out left to right, **edge to edge**. No gaps, no margins, no borders, no rounded corners, no drop shadows between them. Any visible boundary between frames destroys the effect.
+- Total strip width is roughly 6× viewport width — the user scrolls through about six screens of content.
+- Horizontal overflow scroll. Vertical page scroll is disabled.
+
+## Making the seams disappear
+
+The six images will not line up perfectly at their edges. Handle this in the layout:
+
+- Overlap adjacent images by \~8% of their width rather than butting them together.
+- In each overlap zone, cross-fade the outgoing image into the incoming one with a horizontal alpha mask, so neither hard edge is ever visible.
+- The fade should be wide and gradual — the transition between two eras should feel like walking through a slow dissolve, not crossing a line.
+
+This is the single most important detail. If seams are visible, the piece looks like six pictures. If they aren't, it looks like one world changing.
+
+## Scroll input
+
+Support all of these, mapped to horizontal travel:
+
+- Trackpad two-finger scroll (both axes — vertical wheel delta must translate to horizontal movement)
+- Mouse wheel
+- Click and drag on the image
+- Touch swipe
+- Left/right arrow keys (moves one frame per press)
+
+Scrolling is **free and continuous** — no snapping to frames, no discrete steps. The user can rest anywhere, including mid-dissolve between two eras. Add gentle momentum/inertia on release so it feels like moving something heavy, not flicking a carousel.
+
+## Overlaid UI
+
+Three elements float above the strip. All should be minimal and stay out of the way of the image.
+
+**1. Year readout** — fixed position, top left or bottom left. Shows the current year. As the user scrolls through a dissolve between two frames, the year interpolates between the two dates rather than jumping, so the number is always counting up smoothly as they move.
+
+**2. Caption** — fixed position, bottom of the viewport. Shows the fact and narrative line for whichever frame is currently dominant on screen. Cross-fades out and back in as the dominant frame changes. Never two captions visible at once. Keep it to a couple of lines over a subtle scrim so it stays readable against any part of the image.
+
+**3. Progress rail** — a thin horizontal line along the very bottom edge, spanning the viewport. It represents the full era. A marker moves along it as the user scrolls. Small tick marks show where each of the six frames sits. The rail is also draggable to jump anywhere in the timeline.
+
+## Entry and exit
+
+- On load, show a brief title state over the first frame: the country, the era range, and one line on why this era. It fades as the user begins scrolling.
+- At the far right end, after the last frame, a simple end state with a control to return to wherever the user came from.
+- Do not auto-scroll or auto-play. The user drives everything.
+
+## Feel
+
+Slow and deliberate. This is a piece someone moves through, not a UI they operate. Long fades, unhurried momentum, nothing that snaps or bounces. If it feels like a slideshow, it's wrong.
+
+## Content structure
+
+Assume an array of six entries, each with: an image path, a year, a fact string, and a narrative line. Build against placeholder images (any six solid-color or sample images at consistent dimensions) so the layout works before real content exists.
+
+## Do not build
+
+- Thumbnails, dots, or any frame-picker UI
+- Snap-to-frame scrolling
+- Autoplay or timed advance
+- Zoom, pan within a frame, or lightbox
+- Anything that reveals the six images as six separate assets
+
+## Requirements
+
+- Desktop first. On mobile, make it functional (touch swipe works, layout doesn't break) but don't optimize further.
+- Images should be preloaded so no frame pops in blank mid-scroll.
+- Respect `prefers-reduced-motion` by reducing momentum and fade durations.

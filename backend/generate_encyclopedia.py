@@ -265,7 +265,7 @@ def build_entry(entity: dict, country: str, api_key: str) -> dict:
     if not use_retrieved_profile or is_thin_profile(entry["properties"], entry["relationships"]):
         entry["enriched_fact"] = enrich_via_knowledge_search(name, entity_type, country, api_key)
         if not entry["description"]:
-            entry["description"] = entry["enriched_fact"]["summary"][:280]
+            entry["description"] = summarize_markdown(entry["enriched_fact"]["summary"])
 
     return entry
 

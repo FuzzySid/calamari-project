@@ -7,8 +7,6 @@ export type Period = {
   name: string;
   /** Human-readable span shown under the name, e.g. "711 — 1492" */
   label: string;
-  /** Short figure used as the ghosted background marker, e.g. "711" */
-  marker?: string;
   note?: string;
   /** ids of periods that run at the same time as this one */
   concurrentWith?: string[];
@@ -32,14 +30,14 @@ export type PeriodSelectorProps = {
   className?: string;
 };
 
-const ROW = 78;
+const ROW = 96;
 const WHEEL_LOCK_MS = 180;
 const DRAG_PX_PER_ROW = 62;
 /** Pointer travel before a press is treated as a drag rather than a click. */
 const DRAG_THRESHOLD_PX = 6;
 const ROW_LEFT = 34;
-/** Left column holding the year label. */
-const GUTTER = 74;
+/** Left column holding the year range. */
+const GUTTER = 126;
 /** Space between the gutter and the name, where the tick sits. */
 const TICK_GAP = 38;
 const TICK_WIDTH = 16;
@@ -50,11 +48,19 @@ const MONO = "var(--font-plex-mono), ui-monospace, Menlo, monospace";
 const EDGE_FADE =
   "linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%)";
 
+/**
+ * Splits "711 — 1492" into its headline start and its smaller tail. Labels
+ * without a dash are treated as a start on their own.
+ */
+function splitRange(label: string) {
+  const match = label.match(/^(.*?)\s*[—–-]\s*(.*)$/);
+  return match ? { start: match[1], end: match[2] } : { start: label, end: "" };
+}
+
 const THEMES = {
   paper: {
     bg: "#fbf9f5",
     ink: "#101010",
-    ghost: "rgba(16,16,16,0.065)",
     dim: "rgba(16,16,16,0.5)",
     rule: "rgba(16,16,16,0.09)",
     accent: "#8c3a2e"
@@ -62,7 +68,6 @@ const THEMES = {
   dusk: {
     bg: "transparent",
     ink: "#f5efe2",
-    ghost: "rgba(245,239,226,0.085)",
     dim: "rgba(245,239,226,0.52)",
     rule: "rgba(245,239,226,0.13)",
     accent: "#d4b16a"
@@ -219,27 +224,6 @@ export function PeriodSelector({
           maskImage: EDGE_FADE
         }}
       >
-        {current?.marker && (
-          <div
-            aria-hidden
-            style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              top: "50%",
-              transform: "translateY(-50%)",
-              textAlign: "center",
-              font: `400 138px/0.8 ${SERIF}`,
-              letterSpacing: "-0.04em",
-              color: t.ghost,
-              pointerEvents: "none",
-              whiteSpace: "nowrap"
-            }}
-          >
-            {current.marker}
-          </div>
-        )}
-
         <div
           className="period-drum"
           style={{
@@ -255,6 +239,7 @@ export function PeriodSelector({
           {periods.map((period, position) => {
             const distance = Math.abs(position - index);
             const selected = position === index;
+            const range = splitRange(period.label);
 
             return (
               <div
@@ -296,20 +281,23 @@ export function PeriodSelector({
                     width: GUTTER,
                     flex: "none",
                     textAlign: "right",
-                    font: `400 11.5px/1 ${MONO}`,
-                    letterSpacing: "0.08em",
+                    letterSpacing: "0.02em",
                     color: t.dim,
                     whiteSpace: "nowrap"
                   }}
                 >
-                  {period.label}
+                  <span style={{ font: `400 20px/1 ${MONO}` }}>{range.start}</span>
+                  {range.end && (
+                    <span style={{ font: `400 11px/1 ${MONO}`, opacity: 0.7 }}>
+                      {` — ${range.end}`}
+                    </span>
+                  )}
                 </div>
                 <div
                   style={{
-                    font: `400 31px/1 ${SERIF}`,
+                    font: `400 24px/1.15 ${SERIF}`,
                     letterSpacing: "-0.015em",
-                    color: t.ink,
-                    whiteSpace: "nowrap"
+                    color: t.ink
                   }}
                 >
                   {period.name}

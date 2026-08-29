@@ -5,9 +5,9 @@ import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import worldFeatures from "@/data/world-features.json";
 import { getCountryByCode } from "@/lib/data";
-import type { Moment } from "@/types";
 import type { GlobeMethods } from "@/components/globe-canvas";
-import { PeriodSelector, type Period } from "@/components/period-selector";
+import { PeriodSelector } from "@/components/period-selector";
+import { spainPeriods } from "@/lib/spain-periods";
 
 type GeoCoordinate = [number, number];
 type PolygonCoordinates = GeoCoordinate[][];
@@ -47,14 +47,6 @@ type CountryEntry = {
 
 const GlobeCanvas = dynamic(() => import("@/components/globe-canvas"), { ssr: false });
 const storyCountry = getCountryByCode("ESP");
-const storyPeriods: Period[] =
-  storyCountry?.moments.map((moment) => ({
-    id: moment.id,
-    name: moment.title ?? moment.factText,
-    label: String(moment.year),
-    marker: String(moment.year),
-    note: moment.location ?? storyCountry.name
-  })) ?? [];
 const countries = (
   "features" in worldFeatures ? worldFeatures.features : worldFeatures
 ) as unknown as CountryFeature[];
@@ -409,17 +401,14 @@ export function GlobeExperience() {
     if (selectedCode && !departingRef.current) resetGlobe();
   }, [resetGlobe, selectedCode]);
 
-  function openMoment(moment: Moment) {
+  /** Fades the globe out, then hands over to the era's story. */
+  function openPeriod(periodId: string, storyId: string) {
     if (!storyCountry || departingRef.current) return;
 
     departingRef.current = true;
-    setDepartingMoment(moment.id);
+    setDepartingMoment(periodId);
     window.setTimeout(() => {
-      router.push(
-        `/panorama?country=${encodeURIComponent(storyCountry.name)}&event=${encodeURIComponent(
-          String(moment.year)
-        )}`
-      );
+      router.push(`/story/${storyCountry.code}/period/${encodeURIComponent(storyId)}`);
     }, 700);
   }
 
@@ -549,11 +538,12 @@ export function GlobeExperience() {
                   <PeriodSelector
                     theme="dusk"
                     height={drumHeight}
-                    periods={storyPeriods}
-                    defaultValue={storyPeriods[0]?.id}
+                    periods={spainPeriods}
+                    defaultValue={spainPeriods[0]?.id}
                     onActivate={(period) => {
-                      const moment = storyCountry.moments.find((item) => item.id === period.id);
-                      if (moment) openMoment(moment);
+                      // Only the eras with a generated story can be entered.
+                      const storyId = spainPeriods.find((era) => era.id === period.id)?.storyId;
+                      if (storyId) openPeriod(period.id, storyId);
                     }}
                   />
                 </div>

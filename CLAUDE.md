@@ -9,8 +9,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 The repo is split into two independent halves that share only JSON data contracts:
 
 - **`frontend/`** — the Next.js app (App Router + TypeScript). Everything a user sees.
-- **`backend/`** — a standalone Python script that queries Cala's knowledge API directly and writes JSON to `data/`. Unrelated to the frontend's own TypeScript generation pipeline (see below) — kept deliberately separate.
-- **`data/`** — output of `backend/knowledge_search.py`, sitting outside both halves.
+- **`backend/`** — a standalone, country-parameterized Python pipeline (Cala → OpenAI → Fal) that gathers facts, prompts, images and videos into `backend/output/<country-slug>/`. Stdlib only. Unrelated to the frontend's own TypeScript generation pipeline (see below) — kept deliberately separate.
+
+The two halves are currently **disconnected**: the backend gathers data but does not write anything the frontend reads. `frontend/data/spain.json` is a committed artifact of the old pipeline and nothing regenerates it.
 
 ## Commands
 
@@ -26,15 +27,29 @@ npm run lint     # next lint
 npm run generate # runs scripts/generate.ts — the offline content pipeline (see below)
 ```
 
-There is no test suite configured in this repo.
-
-Backend script (run from repo root):
+The frontend has no test suite. The backend's tests are stdlib `unittest` (there is no
+pytest in this environment):
 
 ```bash
-python3 backend/knowledge_search.py "your query here"
+python3 -m unittest discover -s tests -q
 ```
 
-Reads `CALA_API_KEY` from a `.env` file at the repo root (not `frontend/.env.local`). Writes results to `data/knowledge-search.json` by default; override with `-o <path>`.
+Backend pipeline (run from repo root). Four stages, each re-runnable on its own, all driven
+by a single `--country`:
+
+```bash
+python3 backend/stage1_facts.py   --country Spain   # Cala   -> output/<slug>/info.json
+python3 backend/stage2_prompts.py --country Spain   # OpenAI -> output/<slug>/prompts_image.json
+python3 backend/stage3_images.py  --country Spain   # Fal    -> output/<slug>/images.json + images/
+python3 backend/stage4_videos.py  --country Spain   # Fal    -> output/<slug>/videos.json + videos/
+
+python3 backend/run_pipeline.py --country Spain [--with-videos]
+```
+
+Reads `CALA_API_KEY`, `OPENAI_API_KEY` and `FAL_API_KEY` (or `FAL_KEY`) from a `.env` at the
+repo root (not `frontend/.env.local`). Every stage skips work that already exists, so
+re-runs are cheap; `--force` overrides, `--dry-run` calls nothing. See `backend/README.md`
+for the full contract and known limits.
 
 ## Architecture
 
@@ -61,15 +76,31 @@ Each external API sits behind a thin adapter in `frontend/lib/` (`cala.ts`, `ope
 
 **Content rule enforced by the data model:** `Moment.factText` (from Cala) and `Moment.narrativeCopy` (from OpenAI) are stored as separate fields specifically so narrative copy can never introduce a claim that isn't traceable back to a retrieved fact — see the type in `frontend/types/index.ts`.
 
-### Backend: standalone Cala knowledge-search script
+### Backend: the country pipeline
 
-`backend/knowledge_search.py` is unrelated to `generate.ts` / `lib/cala.ts` above — it's a separate, general-purpose script that calls Cala's `knowledge_search` MCP tool over HTTP directly (JSON-RPC, no MCP SDK) for arbitrary natural-language queries, not tied to the Spain era pipeline. For each fact Cala returns, it derives:
-- `title` — resolved via Cala's provenance chain (`explainability[i].references` → `context[j].id` → `origins[k].document.name`, falling back to publisher name), never fabricated
-- `fact` — the raw claim text
-- `description` — a 1–2 sentence summary
-- `timeline` — a date/era range extracted via regex from the fact text
+Unrelated to `generate.ts` / `lib/cala.ts` above. Four stages, each writing its own JSON so
+any one can be re-run alone, chained by a **stable event id** generated in Stage 1 (e.g.
+`spanish_civil_war_1936`). That id is the join key across `info.json`, `prompts_image.json`,
+`images.json` and `videos.json`, which is what makes `--only <event_id>` able to regenerate a
+single event without disturbing the others.
 
-If a Cala skill file is present, it documents the full `knowledge_search`/`knowledge_query`/`entity_search`/`entity_retrieval`/`entity_introspection` tool schemas and query language in more depth than this file — consult it before changing how the script talks to Cala.
+Per country: **5 events → 5 prompts → 5 images → 5 ten-second MP4s**.
+
+Everything derives from `--country`; no country name, slug or path is hardcoded, so adding a
+country is a command rather than a code change. All HTTP is raw `urllib.request` — no SDKs,
+no third-party packages. Shared helpers live in `backend/pipeline_common.py`; never redefine
+them in a stage.
+
+Provenance rules carried over from the original script: a source `title`/`url` is resolved
+through Cala's chain (`explainability[i].references` → `context[j].id` → `origins[k].document`,
+falling back to publisher), and a source `date` is emitted **only** when Cala supplies one —
+never fabricated.
+
+If a Cala skill file is present, it documents the full `knowledge_search`/`knowledge_query`/`entity_search`/`entity_retrieval`/`entity_introspection` tool schemas and query language in more depth than this file — consult it before changing how the pipeline talks to Cala.
+
+**Known limit worth knowing before you touch Stage 3:** `fal-ai/nano-banana-pro` rejects the
+2:1 aspect ratio a true equirectangular projection needs, so the output is a 21:9 ultra-wide
+panorama, *not* sphere-wrappable 360. See `backend/README.md`.
 
 ### Data model (`frontend/types/index.ts`)
 

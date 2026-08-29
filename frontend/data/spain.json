@@ -10,19 +10,34 @@
       "id": "granada-falls",
       "year": 1492,
       "orderIndex": 0,
+      "title": "The last kingdom falls",
+      "location": "Granada, Crown of Castile",
       "factText": "Granada surrendered to Ferdinand II and Isabella I in January 1492, ending the Nasrid kingdom in Iberia.",
       "sourceRef": "Mock Cala: Granada timeline",
       "narrativeCopy": "Spain's story shifted in 1492 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "detailCopy": "A city changed hands, a centuries-old polity ended, and the balance of power on the peninsula was remade. Explore this moment through the places, objects, and people who inhabited it.",
       "imagePath": "/moments/spain/01.svg",
-      "imagePrompt": "Painterly illustrated scene for 1492: Granada surrendered to Ferdinand II and Isabella I in January 1492, ending the Nasrid kingdom in Iberia. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+      "imagePrompt": "Painterly illustrated scene for 1492: Granada surrendered to Ferdinand II and Isabella I in January 1492, ending the Nasrid kingdom in Iberia. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette.",
+      "mapPoints": [
+        { "id": "alhambra", "label": "The Alhambra", "description": "The Nasrid palace complex overlooking Granada and the symbolic center of the transition.", "x": 57, "y": 35 },
+        { "id": "albaicin", "label": "The Albaicín", "description": "The hillside quarter facing the Alhambra across the Darro valley.", "x": 32, "y": 49 },
+        { "id": "vega", "label": "The Vega", "description": "The fertile plain surrounding the city, crossed by armies, roads, and irrigation channels.", "x": 69, "y": 72 }
+      ],
+      "representative": {
+        "label": "A craftsperson of Granada",
+        "description": "A representative, illustrative figure—not a reconstruction of a documented individual. Clothing and setting are shown as demo artwork pending expert review."
+      }
     },
     {
       "id": "columbus-sails",
       "year": 1492,
       "orderIndex": 1,
+      "title": "A voyage crosses the Atlantic",
+      "location": "Palos de la Frontera, Crown of Castile",
       "factText": "Christopher Columbus departed in August 1492 under the patronage of the Catholic Monarchs and reached the Caribbean that October.",
       "sourceRef": "Mock Cala: First voyage dossier",
       "narrativeCopy": "Spain's story shifted in 1492 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "detailCopy": "A departure from a small Atlantic port connected Iberian politics to a vast and violent new geography. This demo centers the route, port, and material world of the voyage.",
       "imagePath": "/moments/spain/02.svg",
       "imagePrompt": "Painterly illustrated scene for 1492: Christopher Columbus departed in August 1492 under the patronage of the Catholic Monarchs and reached the Caribbean that October. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
     },
@@ -30,9 +45,12 @@
       "id": "tordesillas",
       "year": 1494,
       "orderIndex": 2,
+      "title": "The world is divided on paper",
+      "location": "Tordesillas, Crown of Castile",
       "factText": "The Treaty of Tordesillas in 1494 divided newly claimed overseas territories between Spain and Portugal along an agreed meridian.",
       "sourceRef": "Mock Cala: Treaty summary",
       "narrativeCopy": "Spain's story shifted in 1494 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "detailCopy": "A line imagined across the globe attempted to turn distant seas and territories into negotiated claims. Maps became instruments of power.",
       "imagePath": "/moments/spain/03.svg",
       "imagePrompt": "Painterly illustrated scene for 1494: The Treaty of Tordesillas in 1494 divided newly claimed overseas territories between Spain and Portugal along an agreed meridian. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
     },
@@ -40,9 +58,12 @@
       "id": "charles-v",
       "year": 1519,
       "orderIndex": 3,
+      "title": "A crown becomes an empire",
+      "location": "A connected European court",
       "factText": "Charles I of Spain became Holy Roman Emperor Charles V in 1519, linking Spanish power to a wider European imperial network.",
       "sourceRef": "Mock Cala: Imperial succession notes",
       "narrativeCopy": "Spain's story shifted in 1519 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "detailCopy": "The inheritance and election of Charles V joined territories across Europe and beyond under one ruler, creating a network that was powerful, expensive, and difficult to govern.",
       "imagePath": "/moments/spain/04.svg",
       "imagePrompt": "Painterly illustrated scene for 1519: Charles I of Spain became Holy Roman Emperor Charles V in 1519, linking Spanish power to a wider European imperial network. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
     },
@@ -50,9 +71,12 @@
       "id": "escorial-rises",
       "year": 1563,
       "orderIndex": 4,
+      "title": "Power takes architectural form",
+      "location": "San Lorenzo de El Escorial, Castile",
       "factText": "Construction of El Escorial began in 1563 under Philip II, symbolizing royal authority, piety, and administrative order.",
       "sourceRef": "Mock Cala: Architecture brief",
       "narrativeCopy": "Spain's story shifted in 1563 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "detailCopy": "Monastery, palace, library, and royal burial place came together in a single ordered complex. Architecture made an argument about faith and authority.",
       "imagePath": "/moments/spain/05.svg",
       "imagePrompt": "Painterly illustrated scene for 1563: Construction of El Escorial began in 1563 under Philip II, symbolizing royal authority, piety, and administrative order. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
     },
@@ -60,9 +84,12 @@
       "id": "armada",
       "year": 1588,
       "orderIndex": 5,
+      "title": "The Armada meets its limits",
+      "location": "The English Channel and North Atlantic",
       "factText": "The Spanish Armada sailed against England in 1588 and was ultimately dispersed after battle, weather, and logistical strain.",
       "sourceRef": "Mock Cala: Naval campaign log",
       "narrativeCopy": "Spain's story shifted in 1588 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "detailCopy": "Ships, weather, supply, and strategy collided across the Channel and the long route home. The campaign exposed the limits hidden inside imperial scale.",
       "imagePath": "/moments/spain/06.svg",
       "imagePrompt": "Painterly illustrated scene for 1588: The Spanish Armada sailed against England in 1588 and was ultimately dispersed after battle, weather, and logistical strain. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
     }

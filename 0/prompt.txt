@@ -1,0 +1,34 @@
+<task-notification>
+<task-id>a13821b698da86989</task-id>
+<tool-use-id>toolu_01X8u6MQtgGvFpzFfF2mhGqU</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-sm-aswin21-Desktop-calamari-project/97c733f4-35fa-4726-bb7f-74d8265d75c0/tasks/a13821b698da86989.output</output-file>
+<status>completed</status>
+<summary>Agent "Explore backend pipeline and skills folders" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>Confirmed: this is the "Entire" dev-workflow/session-provenance tool (checkpoints, `entire search`/`explain`/`teach`, git history introspection). Nothing about building app features or calling Cala's knowledge_search/entity APIs. I have enough to report.
+
+## Backend pipeline (current shape)
+
+Cala's data flows in one direction — event/period text only — through five scripts plus one shared module:
+
+- **`backend/knowledge_search.py`** — calls Cala MCP `knowledge_search` (JSON-RPC over HTTP, `CALA_API_KEY`) for a free-text query, extracts `title`/`fact`/`description`/`timeline` per result via the explainability→context→origins provenance chain. Writes `data/knowledge-search.json`.
+- **`backend/knowledge_search_events.py`** — same Cala call, but with `return_entities: True`; produces `event`/`timeline`/`title`/`source_url`/`entities` (Cala's own typed entities matched to the event text), sorted chronologically. Writes `data/knowledge-search-spain-2.json`. This is the closest existing precedent for pulling structured entities (people/places) out of Cala — it already resolves `entities: [{name, entity_type}]` per event but never persists or displays them beyond attaching them to events.
+- **`backend/main.py`** — standalone/older path: reads a knowledge-search JSON, calls OpenAI (`gpt-4o-mini`, Responses API) to build an image prompt per result, then Fal (`fal-ai/flux/schnell`) to generate + download an image. Writes back into the same input JSON plus JPEGs under `data/photos/&lt;slug&gt;/`.
+- **`backend/generate_photos.py`** — similar but skips OpenAI; builds prompts directly from `fact`/`timeline`, calls Fal, writes to `data/ohotos/` (sic) and a `prompts.json`.
+- **`backend/story_pipeline.py`** — shared, no-API pure logic module: normalizes Cala records, builds the OpenAI curator prompt/schema (6-moment story), validates GPT output against source indices, builds the frontend story JSON shape, builds Fal prompts, and appends to `data/fal.json` (credential-scrubbed run log).
+- **`backend/generate_story.py`** — the current main pipeline (per README): reads a Cala knowledge-search JSON → `normalize_cala_records` → OpenAI (`gpt-5` by default) curates a 6-event chronological story with strict JSON schema → Fal (`generation_model` then `edit_model`, e.g. FLUX.2 Pro + Pro Edit) generates and style-anchors one image per event → writes `frontend/data/esp.json` + JPEGs in `frontend/public/moments/esp/` + appends to `data/fal.json`. Has a separate anchor-approval flow (`--create-anchor-candidates` / `--select-anchor`) gated on `data/styles/museum-editorial-v1.json`.
+- **`backend/generate_nano_banana_trial.py`** — one-off trial script reusing `generate_story`/`story_pipeline` helpers to call Fal's `nano-banana-pro` model with a panorama reference image; writes a single JPEG and logs to `data/fal.json`.
+- **`backend/requirements.txt`** — just `fal-client&gt;=0.8.0` (OpenAI/Cala calls go via raw `urllib.request`, no SDKs).
+- **`backend/README.md`** — documents the `generate_story.py` flow only (anchor approval → run pipeline → outputs).
+
+**No file today fetches people/places as first-class entities or builds anything encyclopedia-like.** `knowledge_search_events.py`'s `entities` field is the only existing touchpoint — it already asks Cala for `return_entities: True` and typed `entity_type`, which is a natural extension point for a new stage (e.g. a `generate_encyclopedia.py` that takes those entities, or issues further Cala `knowledge_search`/entity-lookup calls per person/place, then writes something like `frontend/data/esp-encyclopedia.json`).
+
+## Skills folders verdict
+
+`.agents/skills/` is the source of truth; `.claude/skills/` is symlinks to it; `agent/skills/` is a byte-different duplicate (likely a stale merge artifact — `diff -rq` shows every file differs, so it's drifted, not identical).
+
+All twelve skills (`address-findings`, `explain`, `recall`, `replay`, `review`, `search`, `session-crosslink`, `session-handoff`, `session-to-skill`, `teach`, `using-entire`, `what-happened`) belong to **"Entire"** — a session/checkpoint provenance tool wrapping the `entire` CLI (`entire search`, `entire explain`, `entire status`, `entire dispatch`, requires `entire login`). They're for answering "why does this code exist", replaying git/session history, teaching from past checkpoints, or reviewing diffs with recorded developer intent — i.e., **git/session archaeology, not application functionality.**
+
+**Verdict: unrelated dev-workflow tooling.** Nothing in these skills touches Cala's API, OpenAI, Fal, or building a knowledge-graph/encyclopedia feature. If "use good skills for this, find them in this folder" was said in that context, it does not point to anything substantive for building the people/places backend feature — you'd design that from the existing `backend/` pipeline shape (especially extending `knowledge_search_events.py`'s entity extraction) rather than from `.agents/skills/`.</result>
+<usage><subagent_tokens>62081</subagent_tokens><tool_uses>16</tool_uses><duration_ms>38999</duration_ms></usage>
+</task-notification>

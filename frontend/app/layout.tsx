@@ -1,5 +1,20 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-instrument-serif"
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-plex-mono"
+});
 
 const title = "Calamari — Step Inside the Moment";
 const description =
@@ -32,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${instrumentSerif.variable} ${plexMono.variable}`}>
       <body>{children}</body>
     </html>
   );

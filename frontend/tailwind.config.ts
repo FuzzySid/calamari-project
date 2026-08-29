@@ -11,14 +11,17 @@ const config: Config = {
         ink: "#08111f",
         gold: "#d4b16a",
         sea: "#14304f",
+        dusk: "#0d1626",
         mist: "#d4d0c8"
       },
       backgroundImage: {
         "hero-radial":
-          "radial-gradient(circle at top, rgba(212, 177, 106, 0.15), transparent 35%), radial-gradient(circle at bottom, rgba(20, 48, 79, 0.65), rgba(8, 17, 31, 1))"
+          "radial-gradient(circle at 50% 8%, rgba(212, 177, 106, 0.12), transparent 42%), radial-gradient(circle at 50% 46%, #2a4363 0%, #1c2f4c 44%, #13233a 70%, #0d1626 100%)"
       },
       fontFamily: {
         display: ["Georgia", "serif"],
+        serifDisplay: ["var(--font-instrument-serif)", "Georgia", "serif"],
+        mono: ["var(--font-plex-mono)", "ui-monospace", "Menlo", "monospace"],
         body: ["ui-sans-serif", "system-ui", "sans-serif"]
       },
       boxShadow: {

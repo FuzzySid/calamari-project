@@ -9,3 +9,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 .DS_Store
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+node_modules

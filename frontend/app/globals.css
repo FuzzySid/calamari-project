@@ -14,8 +14,8 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top, rgba(212, 177, 106, 0.12), transparent 30%),
-    linear-gradient(180deg, #102540 0%, #08111f 50%, #050a13 100%);
+    radial-gradient(circle at 50% 8%, rgba(212, 177, 106, 0.12), transparent 42%),
+    linear-gradient(180deg, #23395a 0%, #16273f 52%, #0d1626 100%);
   color: #f5efe2;
   font-family: ui-sans-serif, system-ui, sans-serif;
 }
@@ -31,4 +31,84 @@ body {
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+@keyframes timeline-reveal {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes detail-enter {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes map-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(138, 77, 45, 0.35);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgba(138, 77, 45, 0);
+  }
+}
+
+.timeline-reveal {
+  opacity: 0;
+  animation: timeline-reveal 520ms cubic-bezier(.22, .8, .2, 1) forwards;
+}
+
+.detail-enter {
+  animation: detail-enter 650ms cubic-bezier(.22, .8, .2, 1) both;
+}
+
+.map-pulse {
+  animation: map-pulse 2.6s ease-out infinite;
+}
+
+.period-drum {
+  transition: transform 500ms cubic-bezier(.2, .9, .2, 1);
+}
+
+.period-row {
+  transition: opacity 400ms, transform 500ms cubic-bezier(.2, .9, .2, 1);
+}
+
+.period-tie {
+  transition: opacity 350ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .timeline-reveal,
+  .detail-enter,
+  .map-pulse {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .period-drum,
+  .period-row,
+  .period-tie {
+    transition: none;
+  }
 }

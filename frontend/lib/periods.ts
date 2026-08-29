@@ -3,7 +3,59 @@ import path from "node:path";
 import preRomanIberia from "@/data/spain-preroman.json";
 import type { PeriodStory } from "@/types";
 
-const periodStories: PeriodStory[] = [preRomanIberia as PeriodStory];
+type PublicEvent = {
+  title: string;
+  description: string;
+  video_url: string;
+};
+
+type PublicCountryData = {
+  events: Record<string, PublicEvent[]>;
+};
+
+function loadPublicEvents(year: string): PublicEvent[] {
+  const dataPath = path.join(process.cwd(), "public", "spain", "data.json");
+  const data = JSON.parse(fs.readFileSync(dataPath, "utf8")) as PublicCountryData;
+  const events = data.events[year];
+
+  if (!events) {
+    throw new Error(`No Spain events found for ${year} in ${dataPath}`);
+  }
+
+  return events;
+}
+
+function buildPreRomanStory(): PeriodStory {
+  const story = preRomanIberia as PeriodStory;
+  const events = loadPublicEvents("-250");
+
+  if (events.length !== story.moments.length) {
+    throw new Error(
+      `Spain -250 has ${events.length} videos but ${story.moments.length} story moments`
+    );
+  }
+
+  const moments = story.moments.map((moment, index) => {
+    const event = events[index];
+    const videoPath = `/spain/${event.video_url.replace(/^\//, "")}`;
+    const absoluteVideoPath = path.join(process.cwd(), "public", videoPath.replace(/^\//, ""));
+
+    if (!fs.existsSync(absoluteVideoPath)) {
+      throw new Error(`Spain event video does not exist: ${absoluteVideoPath}`);
+    }
+
+    return {
+      ...moment,
+      title: event.title,
+      narrativeCopy: event.description,
+      videoPath
+    };
+  });
+
+  return { ...story, moments };
+}
+
+const periodStories: PeriodStory[] = [buildPreRomanStory()];
 
 export function getPeriodStory(code: string, periodId: string): PeriodStory | null {
   return (

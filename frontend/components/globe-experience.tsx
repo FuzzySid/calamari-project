@@ -154,6 +154,7 @@ export function GlobeExperience() {
   const router = useRouter();
   const globeRef = useRef<GlobeMethods | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionCountry, setTransitionCountry] = useState<string | null>(null);
   const [viewport, setViewport] = useState({ width: 1200, height: 800 });
 
   useEffect(() => {
@@ -191,18 +192,24 @@ export function GlobeExperience() {
     }
 
     setIsTransitioning(true);
+    setTransitionCountry(getCountryName(target));
 
     const globe = globeRef.current;
     if (globe) {
       const controls = globe.controls();
       controls.autoRotate = false;
       const { lat, lng } = getCountryCenter(target);
-      globe.pointOfView({ lat, lng, altitude: 0.8 }, 1800);
+
+      globe.pointOfView({ lat, lng, altitude: 1.45 }, 900);
+
+      window.setTimeout(() => {
+        globe.pointOfView({ lat, lng, altitude: 0.24 }, 1700);
+      }, 700);
     }
 
     window.setTimeout(() => {
       router.push(`/panorama?country=${encodeURIComponent(getCountryName(target))}`);
-    }, 2100);
+    }, 2450);
   }
 
   function handleInteraction() {
@@ -215,8 +222,8 @@ export function GlobeExperience() {
   return (
     <main className="relative h-screen overflow-hidden bg-hero-radial">
       <div
-        className={`absolute inset-0 transition-opacity duration-[1800ms] ${
-          isTransitioning ? "opacity-0" : "opacity-100"
+        className={`absolute inset-0 transition-[opacity,transform,filter] duration-[2200ms] ${
+          isTransitioning ? "scale-[1.16] opacity-0 blur-[1.5px]" : "scale-100 opacity-100"
         }`}
       >
         <Globe
@@ -251,6 +258,31 @@ export function GlobeExperience() {
       </div>
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_45%,rgba(5,10,19,0.72)_100%)]" />
+      <div
+        className={`pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(214,233,255,0.22)_0%,rgba(89,135,191,0.18)_18%,rgba(6,12,22,0.08)_42%,rgba(4,8,16,0.86)_100%)] transition-[opacity,transform] duration-[2200ms] ${
+          isTransitioning ? "scale-[1.35] opacity-100" : "scale-100 opacity-0"
+        }`}
+      />
+      <div
+        className={`pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_34%,rgba(3,6,12,0.4)_60%,rgba(3,6,12,0.96)_100%)] transition-[opacity,transform] duration-[2200ms] ${
+          isTransitioning ? "scale-[1.28] opacity-100" : "scale-100 opacity-0"
+        }`}
+      />
+
+      <div
+        className={`pointer-events-none absolute left-1/2 top-1/2 z-20 w-[min(90vw,34rem)] -translate-x-1/2 -translate-y-1/2 text-center transition-all duration-[1800ms] ${
+          isTransitioning
+            ? "translate-y-[-52%] opacity-100"
+            : "translate-y-[-44%] opacity-0"
+        }`}
+      >
+        {/* <p className="text-xs uppercase tracking-[0.45em] text-mist/60">
+          Descending Through Atmosphere
+        </p> */}
+        <h2 className="mt-4 font-display text-3xl text-mist sm:text-5xl">
+          {transitionCountry}
+        </h2>
+      </div>
 
       <div className="pointer-events-none absolute left-1/2 top-8 z-10 w-[min(92vw,44rem)] -translate-x-1/2 text-center">
         <p className="font-body text-xs uppercase tracking-[0.4em] text-mist/70">

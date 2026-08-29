@@ -4,7 +4,37 @@
 
 The project was built for the **{Tech: Europe} × Cala Hackathon** in Barcelona, in the Visual Storytelling track.
 
+## System map
+
+<img src="docs/system_map.svg" alt="Turn the Globe system map: Cala, OpenAI and fal.ai generate content at build time; the Next.js runtime only reads committed JSON and media" width="100%">
+
+> Offline content, delivered as a journey. Research and generation happen before
+> release; the runtime only reads committed JSON, images and panoramas.
+
+**[Open the interactive map →](docs/system_map.html)** — richer detail and hover states. GitHub
+shows this file as source, so download it or open it locally in a browser; if you enable GitHub
+Pages for this repository it is also served at `/{repo}/system_map.html`.
+
+<details>
+<summary>Pipeline at a glance</summary>
+
+| Stage | Does | File |
+| --- | --- | --- |
+| Cala | Dated events with source provenance | `backend/stage1_facts.py` |
+| OpenAI | Events → image prompts | `backend/stage2_prompts.py` |
+| fal.ai | Prompts → 21:9 panorama stills | `backend/stage3_images.py` |
+| fal.ai | Stills → 10-second silent videos | `backend/stage4_videos.py` |
+| Commit | Versioned manifests and media | `backend/output/<country>/` |
+| Runtime | Reads committed content only | `frontend/app/page.tsx` |
+
+The frontend's `lib/cala.ts`, `lib/openai.ts` and `lib/fal.ts` are **mock** adapters used by
+`scripts/generate.ts` for offline UI work. The real generation is the Python pipeline above.
+
+</details>
+
 > Current frontend demo: Spain. The generation pipeline is country-parameterised and already has sample output for Spain and Portugal.
+
+
 
 ## Contents
 

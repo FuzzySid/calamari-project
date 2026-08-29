@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turn the Globe — System Map</title>
+<style>
+  :root{
+    --ink:#0A1B32;
+    --slate:#5C7799;
+    --mist:#DDE7F5;
+    --paper:#F7FAFF;
+    --gold:#E0A83C;
+    --mint:#5BC6A8;
+    --white:#fff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:
+      radial-gradient(900px 520px at 88% -8%, #DCE8FB 0%, transparent 60%),
+      radial-gradient(700px 500px at 2% 108%, #FBEBCB 0%, transparent 60%),
+      linear-gradient(160deg,#F8FBFF,#EDF2FB);
+    color:var(--ink);
+    font-family:Inter,"Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:28px 20px 60px;
+  }
+  .wrap{max-width:1600px;margin:0 auto}
+
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;color:#7C93B3;margin:0 0 10px}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(28px,4vw,44px);line-height:1.05;margin:0 0 10px;letter-spacing:-.01em}
+  .sub{margin:0;color:var(--slate);font-size:16px;max-width:640px}
+
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:26px 0 18px}
+  button{
+    font:inherit;font-size:13px;font-weight:600;color:var(--slate);
+    background:rgba(255,255,255,.8);border:1px solid var(--mist);
+    padding:9px 16px;border-radius:999px;cursor:pointer;
+    transition:background .18s,color .18s,border-color .18s,transform .18s;
+  }
+  button:hover{color:var(--ink);border-color:#B9CBE4;transform:translateY(-1px)}
+  button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .spacer{flex:1}
+  .hint{font-size:12.5px;color:#8FA4C0}
+
+  .board{
+    position:relative;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9);
+    border-radius:26px;padding:8px;box-shadow:0 24px 60px rgba(10,27,50,.10);
+    overflow-x:auto;
+  }
+  svg{display:block;width:100%;min-width:1080px;height:auto}
+
+  /* --- node styling --- */
+  .node{cursor:pointer}
+  .node .plate{transition:transform .22s cubic-bezier(.2,.7,.3,1), filter .22s}
+  .node:hover .plate,.node:focus-visible .plate,.node.sel .plate{transform:translateY(-4px)}
+  .node.sel .plate{filter:drop-shadow(0 10px 20px rgba(10,27,50,.22))}
+  .node .ring{opacity:0;transition:opacity .2s}
+  .node.sel .ring{opacity:1}
+  svg text{pointer-events:none}
+
+  .lane-dim{opacity:.22;transition:opacity .25s}
+  .lane-on{opacity:1;transition:opacity .25s}
+
+  .edge{stroke:#5C7799;stroke-width:2.2;fill:none}
+  .edge-dash{stroke:var(--gold);stroke-width:2.2;stroke-dasharray:6 5;fill:none}
+
+  #pulse{offset-path:path("M486 390H1356V664H494v132h862");offset-rotate:0deg;animation:run 7s linear infinite}
+  @keyframes run{from{offset-distance:0%}to{offset-distance:100%}}
+  .paused #pulse{animation-play-state:paused;opacity:.25}
+  @media (prefers-reduced-motion:reduce){#pulse{animation:none;opacity:.3}}
+
+  /* --- detail --- */
+  .detail{
+    display:grid;grid-template-columns:180px 1fr;gap:28px;
+    margin-top:22px;padding:24px 28px;border-radius:22px;
+    background:linear-gradient(135deg,#12294A,#0A1B32);color:#fff;
+    box-shadow:0 20px 44px rgba(10,27,50,.18);
+  }
+  .detail .tag{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--gold)}
+  .detail h2{font-family:Georgia,serif;font-size:26px;margin:8px 0 0;font-weight:700}
+  .detail p{margin:0;color:#C3D3E9;font-size:15.5px;line-height:1.6;max-width:70ch}
+  .detail code{
+    display:inline-block;margin-top:14px;font-family:"SF Mono",Consolas,monospace;
+    font-size:12.5px;color:var(--gold);background:rgba(224,168,60,.12);
+    padding:6px 12px;border-radius:8px;letter-spacing:.04em
+  }
+  @media(max-width:720px){.detail{grid-template-columns:1fr;gap:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">TURN THE GLOBE / SYSTEM MAP</p>
+  <h1>Offline content, delivered as a journey.</h1>
+  <p class="sub">Everything is generated before release. The app only reads what was committed.</p>
+
+  <div class="bar">
+    <button id="b-all" data-lane="all" aria-pressed="true">All</button>
+    <button data-lane="build" aria-pressed="false">Build time</button>
+    <button data-lane="runtime" aria-pressed="false">Runtime</button>
+    <button data-lane="rails" aria-pressed="false">Rails</button>
+    <div class="spacer"></div>
+    <button id="motion" aria-pressed="true">Pause flow</button>
+    <span class="hint">Click any block for detail · arrow keys to move</span>
+  </div>
+
+  <div class="board">
+  <svg id="map" viewBox="0 0 1600 1000" role="img" aria-label="System map of the Turn the Globe pipeline">
+    <defs>
+      <linearGradient id="navy" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#12294A"/><stop offset="1" stop-color="#0A1B32"/>
+      </linearGradient>
+      <linearGradient id="dark" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#173357"/><stop offset="1" stop-color="#0D2242"/>
+      </linearGradient>
+      <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#0A1B32" flood-opacity=".10"/>
+      </filter>
+      <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 10 5 0 10z" fill="#5C7799"/>
+      </marker>
+      <marker id="arwg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 10 5 0 10z" fill="#E0A83C"/>
+      </marker>
+      <style>
+        .lead{font-family:Georgia,serif;font-size:25px;font-weight:700;fill:#0A1B32}
+        .chip{font-size:11px;font-weight:700;letter-spacing:.14em;fill:#5C7799}
+        .nt{font-family:Georgia,serif;font-size:21px;font-weight:700;fill:#0A1B32}
+        .nd{font-size:14px;fill:#5C7799}
+        .code{font-family:"SF Mono",Consolas,monospace;font-size:12px;fill:#8095B2}
+        .kick{font-size:10px;font-weight:700;letter-spacing:.14em;fill:#9BAFC9}
+        .edgelbl{font-size:11px;font-weight:600;fill:#7C93B3}
+        .lt{font-family:Georgia,serif;font-size:21px;font-weight:700;fill:#fff}
+        .ld{font-size:14px;fill:#B9CBE4}
+        .lcode{font-family:"SF Mono",Consolas,monospace;font-size:12px;fill:#E0A83C;letter-spacing:.05em}
+        .lkick{font-size:10px;font-weight:700;letter-spacing:.14em;fill:#E0A83C}
+      </style>
+    </defs>
+
+    <!-- ===== RAILS ===== -->
+    <g class="lane" data-lane="rails">
+      <rect x="40" y="120" width="240" height="736" rx="22" fill="url(#navy)" filter="url(#soft)"/>
+      <text x="64" y="156" class="lkick">SUPPORTING RAILS</text>
+      <text x="64" y="188" class="lt">Build with context.</text>
+      <text x="64" y="214" class="ld">Never runs in the live app.</text>
+
+      <g class="node" tabindex="0" role="button" data-id="entire" aria-label="Entire">
+        <g class="plate">
+          <rect class="ring" x="60" y="232" width="200" height="244" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="64" y="236" width="192" height="236" rx="18" fill="#fff" opacity=".07"/>
+          <rect x="88" y="260" width="46" height="46" rx="13" fill="#E0A83C" opacity=".18"/>
+          <g stroke="#E8B44A" stroke-width="2" fill="none" stroke-linecap="round">
+            <circle cx="102" cy="274" r="5.5"/><circle cx="122" cy="274" r="5.5"/><circle cx="112" cy="294" r="5.5"/>
+            <path d="M107 274h10M105 279l5 10M119 279l-5 10"/>
+          </g>
+          <text x="88" y="348" class="lt">Entire</text>
+          <text x="88" y="376" class="ld">Repo context, skills</text>
+          <text x="88" y="396" class="ld">and workflow.</text>
+          <text x="88" y="432" class="lkick">CONTEXT + WORKFLOW</text>
+        </g>
+      </g>
+
+      <g class="node" tabindex="0" role="button" data-id="aikido" aria-label="Aikido">
+        <g class="plate">
+          <rect class="ring" x="60" y="508" width="200" height="244" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="64" y="512" width="192" height="236" rx="18" fill="#fff" opacity=".07"/>
+          <rect x="88" y="536" width="46" height="46" rx="13" fill="#5BC6A8" opacity=".18"/>
+          <g stroke="#7FDCC0" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M111 546l14 5v10c0 8-6 13-14 16-8-3-14-8-14-16v-10z"/><path d="M105 561l4.5 4.5 8-8.5"/>
+          </g>
+          <text x="88" y="624" class="lt">Aikido</text>
+          <text x="88" y="652" class="ld">Scans code, deps</text>
+          <text x="88" y="672" class="ld">and delivery paths.</text>
+          <text x="88" y="708" class="lkick">SECURITY CHECKS</text>
+        </g>
+      </g>
+      <path class="edge-dash" d="M280 358h30" marker-end="url(#arwg)"/>
+      <path class="edge-dash" d="M280 634h30" marker-end="url(#arwg)"/>
+    </g>
+
+    <!-- ===== BUILD ===== -->
+    <g class="lane" data-lane="build">
+      <rect x="316" y="120" width="1244" height="330" rx="22" fill="#fff" opacity=".85" filter="url(#soft)"/>
+      <rect x="340" y="140" width="196" height="26" rx="13" fill="#E8EFFB"/>
+      <text x="354" y="158" class="chip">BUILD TIME / OFFLINE</text>
+      <text x="340" y="202" class="lead">Generate and commit before anyone visits.</text>
+
+      <g class="node" tabindex="0" role="button" data-id="cala" aria-label="Cala">
+        <g class="plate">
+          <rect class="ring" x="336" y="228" width="252" height="172" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="340" y="232" width="244" height="164" rx="18" fill="#fff" stroke="#DDE7F5"/>
+          <rect x="364" y="254" width="42" height="42" rx="12" fill="#E8EFFB"/>
+          <g stroke="#2F5A8C" stroke-width="2" fill="none">
+            <ellipse cx="385" cy="267" rx="10" ry="4"/>
+            <path d="M375 267v16c0 2.2 4.5 4 10 4s10-1.8 10-4v-16"/>
+            <path d="M375 275c0 2.2 4.5 4 10 4s10-1.8 10-4"/>
+          </g>
+          <text x="420" y="272" class="kick">01 / KNOWLEDGE</text>
+          <text x="364" y="328" class="nt">Cala</text>
+          <text x="364" y="354" class="nd">Verified facts for the era.</text>
+          <text x="364" y="378" class="code">lib/cala.ts</text>
+        </g>
+      </g>
+      <path class="edge" d="M592 314h30" marker-end="url(#arw)"/>
+      <text x="607" y="302" class="edgelbl" text-anchor="middle">facts</text>
+
+      <g class="node" tabindex="0" role="button" data-id="openai" aria-label="OpenAI">
+        <g class="plate">
+          <rect class="ring" x="626" y="228" width="252" height="172" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="630" y="232" width="244" height="164" rx="18" fill="#fff" stroke="#DDE7F5"/>
+          <rect x="654" y="254" width="42" height="42" rx="12" fill="#E8EFFB"/>
+          <g stroke="#2F5A8C" stroke-width="2" fill="none" stroke-linecap="round">
+            <path d="M675 261v24M664 268l22 12M686 268l-22 12"/>
+            <circle cx="675" cy="273" r="3.4" fill="#2F5A8C" stroke="none"/>
+          </g>
+          <text x="710" y="272" class="kick">02 / NARRATIVE</text>
+          <text x="654" y="328" class="nt">OpenAI</text>
+          <text x="654" y="354" class="nd">Facts become story copy.</text>
+          <text x="654" y="378" class="code">lib/openai.ts</text>
+        </g>
+      </g>
+      <path class="edge" d="M882 314h30" marker-end="url(#arw)"/>
+      <text x="897" y="302" class="edgelbl" text-anchor="middle">copy</text>
+
+      <g class="node" tabindex="0" role="button" data-id="fal" aria-label="Fal AI">
+        <g class="plate">
+          <rect class="ring" x="916" y="228" width="252" height="172" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="920" y="232" width="244" height="164" rx="18" fill="#fff" stroke="#DDE7F5"/>
+          <rect x="944" y="254" width="42" height="42" rx="12" fill="#FBEBCB"/>
+          <g stroke="#B3801E" stroke-width="2" fill="none" stroke-linejoin="round">
+            <rect x="954" y="264" width="22" height="22" rx="4"/>
+            <path d="M954 280l6-6 5 5 4-4 7 7"/><circle cx="969" cy="271" r="2.2"/>
+          </g>
+          <text x="1000" y="272" class="kick">03 / GENERATION</text>
+          <text x="944" y="328" class="nt">Fal AI</text>
+          <text x="944" y="354" class="nd">Prompts become visuals.</text>
+          <text x="944" y="378" class="code">lib/fal.ts</text>
+        </g>
+      </g>
+      <path class="edge" d="M1172 314h30" marker-end="url(#arw)"/>
+      <text x="1187" y="302" class="edgelbl" text-anchor="middle">media</text>
+
+      <g class="node" tabindex="0" role="button" data-id="assets" aria-label="Static assets">
+        <g class="plate">
+          <rect class="ring" x="1206" y="228" width="252" height="172" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="1210" y="232" width="244" height="164" rx="18" fill="url(#dark)"/>
+          <rect x="1234" y="254" width="42" height="42" rx="12" fill="#E0A83C" opacity=".2"/>
+          <g stroke="#E8B44A" stroke-width="2" fill="none" stroke-linecap="round">
+            <path d="M1244 268h22M1244 275h22M1244 282h14"/>
+          </g>
+          <text x="1290" y="272" class="lkick">04 / OUTPUT</text>
+          <text x="1234" y="328" class="lt">Static assets</text>
+          <text x="1234" y="354" class="ld">Committed before deploy.</text>
+          <text x="1234" y="378" class="lcode">scripts/generate.ts</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- handoff -->
+    <path class="edge" d="M1332 396V588H470v40" marker-end="url(#arw)"/>
+    <rect x="804" y="574" width="184" height="28" rx="14" fill="#EEF3FC" stroke="#DDE7F5"/>
+    <text x="896" y="593" class="edgelbl" text-anchor="middle">COMMITTED CONTENT</text>
+
+    <!-- ===== RUNTIME ===== -->
+    <g class="lane" data-lane="runtime">
+      <rect x="316" y="486" width="1244" height="370" rx="22" fill="#fff" opacity=".85" filter="url(#soft)"/>
+      <rect x="340" y="506" width="182" height="26" rx="13" fill="#E8EFFB"/>
+      <text x="354" y="524" class="chip">RUNTIME / NEXT.JS</text>
+      <text x="340" y="564" class="lead">Read it back. No live AI calls.</text>
+
+      <g class="node" tabindex="0" role="button" data-id="bundle" aria-label="Content bundle">
+        <g class="plate">
+          <rect class="ring" x="336" y="624" width="252" height="192" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="340" y="628" width="244" height="184" rx="18" fill="url(#dark)"/>
+          <rect x="364" y="650" width="42" height="42" rx="12" fill="#E0A83C" opacity=".2"/>
+          <g stroke="#E8B44A" stroke-width="2" fill="none" stroke-linejoin="round">
+            <path d="M385 658l11 6v12l-11 6-11-6v-12z"/><path d="M374 664l11 6 11-6M385 670v12"/>
+          </g>
+          <text x="420" y="668" class="lkick">DATA CONTRACT</text>
+          <text x="364" y="730" class="lt">Content bundle</text>
+          <text x="364" y="756" class="ld">Committed JSON + media.</text>
+          <text x="364" y="790" class="lcode">data/*.json · public/*</text>
+        </g>
+      </g>
+      <path class="edge" d="M592 720h30" marker-end="url(#arw)"/>
+      <text x="607" y="708" class="edgelbl" text-anchor="middle">read</text>
+
+      <g class="node" tabindex="0" role="button" data-id="globe" aria-label="Homepage globe">
+        <g class="plate">
+          <rect class="ring" x="626" y="624" width="252" height="192" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="630" y="628" width="244" height="184" rx="18" fill="#fff" stroke="#DDE7F5"/>
+          <rect x="654" y="650" width="42" height="42" rx="12" fill="#E8EFFB"/>
+          <g stroke="#2F5A8C" stroke-width="2" fill="none">
+            <circle cx="675" cy="671" r="12"/><ellipse cx="675" cy="671" rx="5" ry="12"/>
+            <path d="M663 671h24M665.5 664h19M665.5 678h19"/>
+          </g>
+          <text x="710" y="668" class="kick">ENTRY</text>
+          <text x="654" y="730" class="nt">Homepage globe</text>
+          <text x="654" y="756" class="nd">Pick a country and era.</text>
+          <text x="654" y="790" class="code">app/page.tsx · three.js</text>
+        </g>
+      </g>
+      <path class="edge" d="M882 720h30" marker-end="url(#arw)"/>
+      <text x="897" y="708" class="edgelbl" text-anchor="middle">select</text>
+
+      <g class="node" tabindex="0" role="button" data-id="panorama" aria-label="Panorama viewer">
+        <g class="plate">
+          <rect class="ring" x="916" y="624" width="252" height="192" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="920" y="628" width="244" height="184" rx="18" fill="#fff" stroke="#DDE7F5"/>
+          <rect x="944" y="650" width="42" height="42" rx="12" fill="#E8EFFB"/>
+          <g stroke="#2F5A8C" stroke-width="2" fill="none" stroke-linejoin="round">
+            <path d="M965 659l12 21h-24z"/><path d="M959 680h12"/>
+          </g>
+          <text x="1000" y="668" class="kick">RENDERER</text>
+          <text x="944" y="730" class="nt">Panorama viewer</text>
+          <text x="944" y="756" class="nd">Media wrapped on a sphere.</text>
+          <text x="944" y="790" class="code">panorama-viewer.tsx</text>
+        </g>
+      </g>
+      <path class="edge" d="M1172 720h30" marker-end="url(#arw)"/>
+      <text x="1187" y="708" class="edgelbl" text-anchor="middle">explore</text>
+
+      <g class="node" tabindex="0" role="button" data-id="story" aria-label="Story and panorama">
+        <g class="plate">
+          <rect class="ring" x="1206" y="624" width="252" height="192" rx="20" fill="none" stroke="#E0A83C" stroke-width="2"/>
+          <rect x="1210" y="628" width="244" height="184" rx="18" fill="url(#dark)"/>
+          <rect x="1234" y="650" width="42" height="42" rx="12" fill="#E0A83C" opacity=".2"/>
+          <g stroke="#E8B44A" stroke-width="2" fill="none" stroke-linejoin="round">
+            <rect x="1244" y="660" width="22" height="22" rx="6"/><path d="M1252 666l8 5-8 5z"/>
+          </g>
+          <text x="1290" y="668" class="lkick">OUTCOME</text>
+          <text x="1234" y="730" class="lt">Story + panorama</text>
+          <text x="1234" y="756" class="ld">A global view becomes</text>
+          <text x="1234" y="776" class="ld">one focused moment.</text>
+          <text x="1234" y="802" class="lcode">/story/* · /panorama</text>
+        </g>
+      </g>
+    </g>
+
+    <circle id="pulse" r="6" fill="#E0A83C"/>
+    <circle id="pulse2" r="14" fill="#E0A83C" opacity=".18" style="offset-path:path('M486 390H1356V664H494v132h862');animation:run 7s linear infinite"/>
+
+    <circle cx="326" cy="893" r="4" fill="#E0A83C"/>
+    <text x="340" y="898" class="nd">scripts/generate.ts runs offline · the runtime serves only pre-generated files.</text>
+  </svg>
+  </div>
+
+  <div class="detail" id="detail" aria-live="polite">
+    <div>
+      <div class="tag" id="d-tag">START HERE</div>
+      <h2 id="d-title">Pick a block</h2>
+    </div>
+    <div>
+      <p id="d-body">Two lanes, one rule: nothing is generated while a visitor is on the page. The build lane turns verified facts into copy, images and panoramas; the runtime lane only reads what was committed.</p>
+      <code id="d-code">scripts/generate.ts</code>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  entire:{tag:"RAIL · CONTEXT + WORKFLOW",title:"Entire",body:"Keeps repository context, skills and the development workflow attached to each change, so the generation scripts stay consistent as the project grows. It is a build-side rail — it never ships to the browser.",code:"development workflow"},
+  aikido:{tag:"RAIL · SECURITY",title:"Aikido",body:"Scans source, dependencies and delivery paths for vulnerabilities. Because the runtime has no live model calls, the attack surface is mostly supply chain — which is exactly what this catches.",code:"CI security checks"},
+  cala:{tag:"01 · KNOWLEDGE",title:"Cala",body:"Pulls verified facts for the chosen country and era. This is the anchor: every later artifact traces back to something checked here, so hallucinated detail cannot leak into published copy.",code:"lib/cala.ts"},
+  openai:{tag:"02 · NARRATIVE",title:"OpenAI",body:"Turns the fact set into story copy plus repeatable media prompts. Prompts are written out as a reviewable artifact rather than being generated on the fly, so a rerun produces the same journey.",code:"lib/openai.ts"},
+  fal:{tag:"03 · GENERATION",title:"Fal AI",body:"Produces the panoramas, images and video from the approved prompts. Nothing reaches the app until the output has been looked at and committed.",code:"lib/fal.ts"},
+  assets:{tag:"04 · VERSIONED OUTPUT",title:"Static assets",body:"JSON, moments, panoramas and video are written to disk and committed before deploy. This is the boundary between the two lanes — and the thing you can diff when something looks wrong.",code:"scripts/generate.ts"},
+  bundle:{tag:"RUNTIME · DATA CONTRACT",title:"Content bundle",body:"The app reads committed JSON and pre-generated media only. No browser-side model calls, no API keys in the client, no cold-start latency.",code:"data/*.json · public/*"},
+  globe:{tag:"RUNTIME · ENTRY",title:"Homepage globe",body:"A country query focuses the globe and guides era selection. It is the one interactive surface that decides which committed content gets loaded next.",code:"app/page.tsx · react-globe.gl + three.js"},
+  panorama:{tag:"RUNTIME · RENDERER",title:"Panorama viewer",body:"Maps panorama images or event video onto an explorable sphere. Shared by both the story route and the standalone immersive view.",code:"components/panorama-viewer.tsx"},
+  story:{tag:"RUNTIME · OUTCOME",title:"Story + panorama",body:"The global view narrows into a single focused moment with rich media. Fast and predictable, because it is all files served from the edge.",code:"/story/* · /panorama"}
+};
+
+const svg = document.getElementById('map');
+const nodes = [...svg.querySelectorAll('.node')];
+const $ = id => document.getElementById(id);
+const dTag = $('d-tag'), dTitle = $('d-title'), dBody = $('d-body'), dCode = $('d-code');
+
+function select(el){
+  nodes.forEach(n=>n.classList.toggle('sel', n===el));
+  const k = DATA[el.dataset.id];
+  dTag.textContent = k.tag;
+  dTitle.textContent = k.title;
+  dBody.textContent = k.body;
+  dCode.textContent = k.code;
+}
+nodes.forEach((n,i)=>{
+  n.addEventListener('click',()=>select(n));
+  n.addEventListener('mouseenter',()=>select(n));
+  n.addEventListener('focus',()=>select(n));
+  n.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();select(n);}
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();nodes[(i+1)%nodes.length].focus();}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();nodes[(i-1+nodes.length)%nodes.length].focus();}
+  });
+});
+
+// lane filter
+const lanes = [...svg.querySelectorAll('.lane')];
+document.querySelectorAll('[data-lane]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-lane]').forEach(b=>b.setAttribute('aria-pressed', b===btn));
+    const want = btn.dataset.lane;
+    lanes.forEach(l=>{
+      const on = want==='all' || l.dataset.lane===want;
+      l.classList.toggle('lane-dim', !on);
+      l.classList.toggle('lane-on', on);
+    });
+  });
+});
+
+// motion toggle
+const mbtn = document.getElementById('motion');
+mbtn.addEventListener('click',()=>{
+  const paused = document.body.classList.toggle('paused');
+  mbtn.setAttribute('aria-pressed', String(!paused));
+  mbtn.textContent = paused ? 'Play flow' : 'Pause flow';
+});
+if(matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.body.classList.add('paused');
+  mbtn.textContent='Play flow'; mbtn.setAttribute('aria-pressed','false');
+}
+</script>
+</body>
+</html>

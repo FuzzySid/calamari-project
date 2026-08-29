@@ -46,6 +46,7 @@ type CountryEntry = {
 };
 
 const GlobeCanvas = dynamic(() => import("@/components/globe-canvas"), { ssr: false });
+const PeriodFigure = dynamic(() => import("@/components/period-figure"), { ssr: false });
 const periodsByCountry: Record<string, SpainPeriod[]> = {
   ESP: spainPeriods,
   JPN: japanPeriods
@@ -223,6 +224,8 @@ export function GlobeExperience() {
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [hoveredCode, setHoveredCode] = useState<string | null>(null);
   const [departingMoment, setDepartingMoment] = useState<string | null>(null);
+  // The era whose figure is standing on the stage, once one has been summoned.
+  const [revealedPeriodId, setRevealedPeriodId] = useState<string | null>(null);
   const [isGlobeReady, setIsGlobeReady] = useState(false);
   const [viewport, setViewport] = useState({ width: 1200, height: 800 });
   const countryParam = searchParams.get("country")?.trim() ?? "";
@@ -230,6 +233,7 @@ export function GlobeExperience() {
   const drumHeight = Math.max(390, Math.min(702, viewport.height - 150));
   const activePeriods = selectedCode ? periodsByCountry[selectedCode] : undefined;
   const hasStory = Boolean(activePeriods?.length);
+  const revealedPeriod = activePeriods?.find((period) => period.id === revealedPeriodId);
 
   const hoveredPaths = useMemo(
     () => (hoveredCode ? entryByCode.get(hoveredCode)?.rings ?? EMPTY_PATHS : EMPTY_PATHS),
@@ -330,6 +334,7 @@ export function GlobeExperience() {
     if (!entry || departingRef.current) return;
 
     setSelectedCode(entry.code);
+    setRevealedPeriodId(null);
     if (syncUrl) {
       router.replace(`/?country=${encodeURIComponent(entry.name)}`, { scroll: false });
     }
@@ -362,6 +367,7 @@ export function GlobeExperience() {
   const clearSelection = useCallback((syncUrl = true) => {
     setSelectedCode(null);
     setDepartingMoment(null);
+    setRevealedPeriodId(null);
     departingRef.current = false;
     if (syncUrl) {
       router.replace("/", { scroll: false });
@@ -480,9 +486,11 @@ export function GlobeExperience() {
         } ${
           departingMoment
             ? "-translate-x-[35vw] opacity-0"
-            : selectedCode
-              ? "-translate-x-[42vw] scale-[1.06]"
-              : "translate-x-0 scale-100"
+            : revealedPeriodId
+              ? "-translate-x-[58vw] scale-[0.94]"
+              : selectedCode
+                ? "-translate-x-[42vw] scale-[1.06]"
+                : "translate-x-0 scale-100"
         }`}
       >
         <GlobeCanvas onReady={handleGlobeReady} globeProps={globeProps} />
@@ -518,6 +526,38 @@ export function GlobeExperience() {
         </p>
       </div>
 
+      {selectedCode && (
+        <div
+          className={`pointer-events-none absolute inset-y-0 left-0 z-10 hidden flex-col items-center justify-center transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,.8,.2,1)] motion-reduce:transition-none md:flex md:w-[54%] ${
+            revealedPeriodId && !departingMoment
+              ? "translate-y-0 opacity-100"
+              : "translate-y-8 opacity-0"
+          }`}
+        >
+          <div
+            className={`h-[58vh] w-[min(32vw,26rem)] ${
+              revealedPeriodId && !departingMoment ? "pointer-events-auto" : "pointer-events-none"
+            }`}
+          >
+            <PeriodFigure
+              className="relative h-full w-full"
+              code={selectedCode}
+              periodId={revealedPeriodId}
+            />
+          </div>
+
+          <div className="mt-2 max-w-xs text-center [text-shadow:0_2px_18px_rgba(0,0,0,.75)]">
+            <p className="font-display text-xl text-mist">{revealedPeriod?.name}</p>
+            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-mist/45">
+              {revealedPeriod?.note}
+            </p>
+            <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-gold/55">
+              Drag to turn · choose the era again to enter
+            </p>
+          </div>
+        </div>
+      )}
+
       <aside
         aria-hidden={!selectedCode}
         className={`absolute right-0 top-0 z-20 flex h-full w-full flex-col bg-transparent px-6 py-7 [text-shadow:0_2px_18px_rgba(0,0,0,.75)] transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,.8,.2,1)] motion-reduce:transition-none sm:px-10 sm:py-9 md:w-[46%] lg:px-14 ${
@@ -544,7 +584,14 @@ export function GlobeExperience() {
                     height={drumHeight}
                     periods={activePeriods}
                     defaultValue={activePeriods[0]?.id}
+                    onChange={(period) => setRevealedPeriodId(period.id)}
                     onActivate={(period) => {
+                      // First activation summons the era's figure; only once it
+                      // is standing does a second one enter the story.
+                      if (revealedPeriodId !== period.id) {
+                        setRevealedPeriodId(period.id);
+                        return;
+                      }
                       // Only the eras with a generated story can be entered.
                       const storyId = activePeriods.find((era) => era.id === period.id)?.storyId;
                       if (storyId) openPeriod(period.id, storyId);

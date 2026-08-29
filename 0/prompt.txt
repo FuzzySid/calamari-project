@@ -1,0 +1,3 @@
+now i want to find out based on the cala's docs, its uses and distinction between open ai and how can we show it in this app 
+
+one idea is to have a fact drop down with a markdown for all the information on the json file and keep it as a icon when clicked a user can read more about it and have verified sources and explore cala more and also think about a knowledge graph idea but nothing to implement now

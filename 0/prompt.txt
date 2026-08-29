@@ -1,0 +1,55 @@
+# Local FastAPI Country-Generation Plan
+
+## Summary
+
+Build a local-only FastAPI service and a separate local worker. Clicking a country starts the existing four-stage pipeline—facts, prompts, images, and 10-second FLUX 3 videos—without blocking the frontend. Spain remains ready; Portugal (`PRT`) is the first live end-to-end test.
+
+## Backend changes
+
+- Add FastAPI and Uvicorn dependencies, with the API bound only to `127.0.0.1:8000`.
+- Reuse `backend/run_pipeline.py` and its existing stages. Extend its `run_country()` function with a stage-progress callback so the worker can report `facts`, `prompts`, `images`, `videos`, `ready`, and `failed`.
+- Add a local JSON job store under `backend/state/`:
+  - `countries.json` records country code, name, slug, status, and output directory.
+  - `jobs/<job-id>.json` records status, stage, progress message, timestamps, and a scrubbed error when applicable.
+  - Use atomic JSON writes plus a local file lock so repeated clicks for the same country return the existing job instead of creating duplicate AI costs.
+  - On worker restart, mark interrupted jobs as `failed`; a later click explicitly creates a retry job.
+- Add a worker process that takes one queued job at a time, invokes `run_country(..., with_videos=True, limit=5)`, and keeps assets in the existing `backend/output/<country-slug>/` layout.
+- Seed Spain (`ESP`) as `ready` by detecting its existing output and videos; do not regenerate it.
+- Add these local API contracts:
+  - `GET /api/countries` returns every known country and its state.
+  - `POST /api/countries/{iso3}/generate` accepts `{ "name": "Portugal" }`; returns the existing ready/generating job where applicable, otherwise queues one new job.
+  - `GET /api/jobs/{jobId}` returns job state and stage for polling.
+  - `GET /api/countries/{iso3}/media` returns the generated videos and images once ready.
+  - Mount `backend/output/` as a read-only local asset route for generated MP4s and images.
+- Configure CORS only for the local Next.js origin (`http://localhost:3000`). API keys remain exclusively in the backend `.env`.
+
+## Frontend changes
+
+- Add a small API client using `NEXT_PUBLIC_PIPELINE_API_URL`, defaulting to `http://127.0.0.1:8000`.
+- Update the globe click handler to send the clicked country’s ISO-3 code and display name to `POST /api/countries/{code}/generate`.
+- Preserve the globe transition, then route to the existing panorama experience with the country code and job ID.
+- Update the panorama page to:
+  - show “Preparing this journey” while the job is queued or running;
+  - poll the job endpoint every 3 seconds;
+  - automatically load the first completed 10-second video when the country becomes ready;
+  - show a retry action for failed jobs;
+  - load Spain immediately from the ready API response.
+- Label the output as a “wide panorama video,” not a true 360° equirectangular video: the existing image stage produces 21:9 source panoramas, and this plan deliberately preserves that current pipeline.
+
+## Test plan
+
+- Add unit tests for the file-backed job store: country-job deduplication, atomic status transitions, and retry creation after failure.
+- Add FastAPI route tests with the real file store and a fake pipeline runner; assert API responses and persisted job status rather than asserting mock calls.
+- Add worker tests for successful stage progression and pipeline failure handling.
+- Run the full existing Python test suite and the frontend lint/build checks.
+- Perform one live local smoke test for Portugal:
+  - verify `CALA_API_KEY`, `OPENAI_API_KEY`, and `FAL_KEY` are available;
+  - start the API and worker;
+  - click Portugal on the globe;
+  - verify one job is created, all four stages finish, five videos are written under `backend/output/portugal/`, the asset route returns an MP4, and the panorama page plays it.
+
+## Assumptions
+
+- This is a local-development feature only: no database, cloud storage, authentication, or multi-machine deployment.
+- One worker processes one country at a time to control cost and avoid concurrent local generation.
+- Portugal is the paid live test country; France, Italy, and Greece are deferred.

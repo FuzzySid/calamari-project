@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1040" viewBox="0 0 1600 1040" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="160" y1="80" x2="1440" y2="960" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4f8ff" />
+      <stop offset="0.45" stop-color="#eaf2ff" />
+      <stop offset="1" stop-color="#dfe8f7" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.98" />
+      <stop offset="1" stop-color="#f7fbff" stop-opacity="0.94" />
+    </linearGradient>
+    <linearGradient id="heroPanel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10233f" />
+      <stop offset="1" stop-color="#1d3b63" />
+    </linearGradient>
+    <linearGradient id="pill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d4b16a" />
+      <stop offset="1" stop-color="#f1d59a" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#19324d" flood-opacity="0.12" />
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5e7593" />
+    </marker>
+    <style>
+      .title { font: 700 42px Georgia, serif; fill: #10233f; }
+      .subtitle { font: 500 18px Arial, sans-serif; fill: #57708f; }
+      .section { font: 700 14px Arial, sans-serif; letter-spacing: 3.6px; text-transform: uppercase; fill: #7a8fa8; }
+      .cardTitle { font: 700 24px Arial, sans-serif; fill: #10233f; }
+      .cardBody { font: 500 16px Arial, sans-serif; fill: #5b708b; }
+      .small { font: 700 12px Arial, sans-serif; letter-spacing: 2.4px; text-transform: uppercase; fill: #7f93ab; }
+      .heroTitle { font: 700 25px Arial, sans-serif; fill: #f4f8ff; }
+      .heroBody { font: 500 16px Arial, sans-serif; fill: #d5dfed; }
+      .heroMini { font: 700 12px Arial, sans-serif; letter-spacing: 2.2px; text-transform: uppercase; fill: #f1d59a; }
+      .badge { font: 700 15px Arial, sans-serif; fill: #10233f; }
+      .caption { font: 500 14px Arial, sans-serif; fill: #5f7794; }
+      .mono { font: 700 13px 'Courier New', monospace; fill: #294463; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1040" rx="36" fill="url(#bg)" />
+  <circle cx="1310" cy="190" r="250" fill="#d5e4ff" fill-opacity="0.38" />
+  <circle cx="280" cy="850" r="320" fill="#fff0c8" fill-opacity="0.42" />
+  <circle cx="920" cy="560" r="380" fill="#ffffff" fill-opacity="0.3" />
+
+  <text x="84" y="92" class="title">Turn the Globe - Architecture Diagram</text>
+  <text x="84" y="126" class="subtitle">Repo-based view of the offline generation pipeline, runtime experience, and the supporting development and security rails.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="64" y="168" width="242" height="808" rx="30" fill="url(#heroPanel)" />
+  </g>
+  <text x="96" y="214" class="heroMini">Development Rails</text>
+  <text x="96" y="252" class="heroTitle">How the team builds and checks the product</text>
+  <text x="96" y="286" class="heroBody">These systems support the repo lifecycle around the app rather than the live runtime itself.</text>
+
+  <g transform="translate(92 336)">
+    <rect width="186" height="220" rx="26" fill="#f6fbff" fill-opacity="0.08" stroke="#8ca3bf" stroke-opacity="0.28" />
+    <circle cx="46" cy="46" r="24" fill="#f1d59a" />
+    <circle cx="36" cy="46" r="4.5" fill="#10233f" />
+    <circle cx="46" cy="36" r="4.5" fill="#10233f" />
+    <circle cx="56" cy="46" r="4.5" fill="#10233f" />
+    <path d="M36 70h40v28H36z" fill="#10233f" fill-opacity="0.12" stroke="#10233f" stroke-width="2" />
+    <path d="M56 70v28" stroke="#10233f" stroke-width="2" />
+    <text x="28" y="114" class="heroTitle" font-size="22">Entire</text>
+    <text x="28" y="142" class="heroBody">Reads skills, preserves repo context, and supports the development cycle.</text>
+    <text x="28" y="196" class="heroMini">Skills + workflow</text>
+  </g>
+
+  <g transform="translate(92 588)">
+    <rect width="186" height="236" rx="26" fill="#f6fbff" fill-opacity="0.08" stroke="#8ca3bf" stroke-opacity="0.28" />
+    <circle cx="46" cy="46" r="24" fill="#a7d8c0" />
+    <path d="M46 27 L61 34 V48 C61 58 55 66 46 70 C37 66 31 58 31 48 V34 Z" fill="#10233f" fill-opacity="0.16" stroke="#10233f" stroke-width="2" />
+    <path d="M39 48 L44 54 L55 40" stroke="#10233f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="28" y="114" class="heroTitle" font-size="22">Aikido</text>
+    <text x="28" y="142" class="heroBody">Security and vulnerability scanning for the repo, dependencies, and delivery pipeline.</text>
+    <text x="28" y="212" class="heroMini">Security scan</text>
+  </g>
+
+  <text x="360" y="210" class="section">Build Time / Offline Pipeline</text>
+  <g filter="url(#shadow)">
+    <rect x="340" y="228" width="1200" height="286" rx="32" fill="url(#panel)" />
+  </g>
+
+  <g transform="translate(376 280)">
+    <rect width="230" height="176" rx="26" fill="#f8fbff" stroke="#d4dfef" />
+    <circle cx="48" cy="48" r="24" fill="#c5e5ff" />
+    <ellipse cx="48" cy="40" rx="16" ry="7" fill="#10233f" fill-opacity="0.18" stroke="#10233f" stroke-width="2" />
+    <path d="M32 40v24c0 4 7 8 16 8s16-4 16-8V40" fill="#10233f" fill-opacity="0.08" stroke="#10233f" stroke-width="2" />
+    <path d="M32 52c0 4 7 8 16 8s16-4 16-8" stroke="#10233f" stroke-width="2" />
+    <path d="M32 64c0 4 7 8 16 8s16-4 16-8" stroke="#10233f" stroke-width="2" />
+    <text x="84" y="45" class="small">Knowledge Layer</text>
+    <text x="84" y="74" class="cardTitle">Cala</text>
+    <text x="24" y="116" class="cardBody">Provides verified facts for a chosen era before anything is written or generated.</text>
+    <text x="24" y="150" class="mono">lib/cala.ts</text>
+  </g>
+
+  <g transform="translate(662 280)">
+    <rect width="252" height="176" rx="26" fill="#f8fbff" stroke="#d4dfef" />
+    <circle cx="48" cy="48" r="24" fill="#d9e1ff" />
+    <g transform="translate(48 48)" stroke="#10233f" stroke-width="2.2" fill="none" stroke-linecap="round">
+      <path d="M0-14 C9-14 14-9 14 0 C14 9 9 14 0 14 C-9 14 -14 9 -14 0 C-14 -9 -9 -14 0 -14Z" stroke-opacity="0.22" />
+      <path d="M0-14 L10-6 L10 6 L0 14 L-10 6 L-10 -6 Z" />
+      <path d="M-10 -6 L10 6" />
+      <path d="M10 -6 L-10 6" />
+    </g>
+    <text x="84" y="45" class="small">Prompt + Copy Layer</text>
+    <text x="84" y="74" class="cardTitle">OpenAI</text>
+    <text x="24" y="116" class="cardBody">Turns facts into narrative copy and reproducible image or video prompts without inventing new facts.</text>
+    <text x="24" y="150" class="mono">lib/openai.ts</text>
+  </g>
+
+  <g transform="translate(970 280)">
+    <rect width="252" height="176" rx="26" fill="#f8fbff" stroke="#d4dfef" />
+    <circle cx="48" cy="48" r="24" fill="#ffe0ca" />
+    <rect x="34" y="34" width="28" height="20" rx="4" fill="#10233f" fill-opacity="0.12" stroke="#10233f" stroke-width="2" />
+    <path d="M38 50l7-8 6 6 5-4 6 6" stroke="#10233f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M67 31l3 6 6 3-6 3-3 6-3-6-6-3 6-3 3-6Z" fill="#10233f" fill-opacity="0.18" />
+    <text x="84" y="45" class="small">Generation Layer</text>
+    <text x="84" y="74" class="cardTitle">Fal AI</text>
+    <text x="24" y="116" class="cardBody">Consumes the prompts and produces the generated visual assets used by the experience.</text>
+    <text x="24" y="150" class="mono">lib/fal.ts</text>
+  </g>
+
+  <g transform="translate(1278 280)">
+    <rect width="220" height="176" rx="26" fill="#10233f" />
+    <circle cx="48" cy="48" r="24" fill="url(#pill)" />
+    <path d="M36 41h25M36 49h25M36 57h17" stroke="#10233f" stroke-width="3" stroke-linecap="round" />
+    <text x="84" y="45" class="small" fill="#f1d59a">Committed Outputs</text>
+    <text x="84" y="74" class="heroTitle" font-size="23">Static assets</text>
+    <text x="24" y="116" class="heroBody">`data/*.json`, `public/moments/*`, and `public/panoramas/*` are written ahead of runtime.</text>
+    <text x="24" y="150" class="heroMini">scripts/generate.ts</text>
+  </g>
+
+  <path d="M606 368 H662" stroke="#5e7593" stroke-width="3.5" marker-end="url(#arrow)" />
+  <path d="M914 368 H970" stroke="#5e7593" stroke-width="3.5" marker-end="url(#arrow)" />
+  <path d="M1222 368 H1278" stroke="#5e7593" stroke-width="3.5" marker-end="url(#arrow)" />
+  <text x="668" y="350" class="caption">verified facts</text>
+  <text x="974" y="350" class="caption">copy + prompts</text>
+  <text x="1278" y="350" class="caption">generated visuals</text>
+
+  <text x="360" y="570" class="section">Runtime / Next.js App</text>
+  <g filter="url(#shadow)">
+    <rect x="340" y="588" width="1200" height="356" rx="32" fill="url(#panel)" />
+  </g>
+
+  <g transform="translate(376 644)">
+    <rect width="214" height="220" rx="26" fill="#10233f" />
+    <rect x="26" y="28" width="62" height="48" rx="10" fill="#f1d59a" />
+    <path d="M42 54 C52 40 69 40 74 54 C71 65 58 72 42 54Z" fill="#10233f" fill-opacity="0.22" />
+    <text x="110" y="46" class="heroMini">Entry</text>
+    <text x="110" y="76" class="heroTitle" font-size="24">Homepage globe</text>
+    <text x="26" y="122" class="heroBody">`app/page.tsx` loads the globe experience and focuses a country based on the query string.</text>
+    <text x="26" y="166" class="heroMini">Country -> era selection</text>
+    <text x="26" y="194" class="heroBody">Powered by `react-globe.gl` on top of `three.js`.</text>
+  </g>
+
+  <g transform="translate(636 644)">
+    <rect width="246" height="220" rx="26" fill="#f8fbff" stroke="#d4dfef" />
+    <circle cx="48" cy="48" r="24" fill="#cde6ff" />
+    <path d="M48 28 L63 56 L48 68 L33 56 Z" fill="#10233f" fill-opacity="0.15" stroke="#10233f" stroke-width="2" />
+    <path d="M48 28 L48 68 M33 56 H63" stroke="#10233f" stroke-width="2" />
+    <text x="84" y="45" class="small">Immersive Renderer</text>
+    <text x="84" y="74" class="cardTitle">three.js panorama viewer</text>
+    <text x="24" y="116" class="cardBody">`PanoramaViewer` maps equirectangular images or `event.mp4` onto a 3D sphere for exploration.</text>
+    <text x="24" y="150" class="mono">components/panorama-viewer.tsx</text>
+    <text x="24" y="178" class="caption">Used by `/panorama` and immersive views.</text>
+  </g>
+
+  <g transform="translate(928 644)">
+    <rect width="274" height="220" rx="26" fill="#f8fbff" stroke="#d4dfef" />
+    <circle cx="48" cy="48" r="24" fill="#e0e9ff" />
+    <path d="M36 38h24v20H36z" fill="#10233f" fill-opacity="0.12" stroke="#10233f" stroke-width="2" />
+    <path d="M42 48h12M42 56h12" stroke="#10233f" stroke-width="2" stroke-linecap="round" />
+    <text x="84" y="45" class="small">Static Data Contract</text>
+    <text x="84" y="74" class="cardTitle">Country + moment payloads</text>
+    <text x="24" y="116" class="cardBody">The runtime only reads committed JSON and media. No AI calls happen in the browser during the demo.</text>
+    <text x="24" y="150" class="mono">data/spain.json + public assets</text>
+    <text x="24" y="178" class="caption">Fast load, reviewable content, and predictable cost.</text>
+  </g>
+
+  <g transform="translate(1248 644)">
+    <rect width="250" height="220" rx="26" fill="#10233f" />
+    <circle cx="48" cy="48" r="24" fill="#f1d59a" />
+    <path d="M34 36h28v18H34z" fill="#10233f" fill-opacity="0.14" stroke="#10233f" stroke-width="2" />
+    <path d="M45 40l10 6-10 6z" fill="#10233f" />
+    <text x="84" y="45" class="heroMini">Experience Output</text>
+    <text x="84" y="74" class="heroTitle" font-size="24">Story and panorama</text>
+    <text x="24" y="116" class="heroBody">Users move from a global view into event-specific narrative moments and panoramic media.</text>
+    <text x="24" y="166" class="heroMini">Routes</text>
+    <text x="24" y="194" class="heroBody">`/`, `/story/*`, `/panorama`</text>
+  </g>
+
+  <path d="M590 754 H636" stroke="#5e7593" stroke-width="3.5" marker-end="url(#arrow)" />
+  <path d="M882 754 H928" stroke="#5e7593" stroke-width="3.5" marker-end="url(#arrow)" />
+  <path d="M1202 754 H1248" stroke="#5e7593" stroke-width="3.5" marker-end="url(#arrow)" />
+  <text x="620" y="736" class="caption">focus and route selection</text>
+  <text x="916" y="736" class="caption">reads static media + data</text>
+  <text x="1222" y="736" class="caption">renders to the user</text>
+
+  <path d="M1388 456 V620" stroke="#5e7593" stroke-width="3.5" stroke-dasharray="10 10" marker-end="url(#arrow)" />
+  <text x="1412" y="542" class="caption">committed outputs feed runtime</text>
+
+  <path d="M278 444 C318 444 320 444 340 444" stroke="#f1d59a" stroke-width="3.5" stroke-dasharray="10 10" marker-end="url(#arrow)" />
+  <path d="M278 704 C318 704 320 704 340 704" stroke="#9fd1b8" stroke-width="3.5" stroke-dasharray="10 10" marker-end="url(#arrow)" />
+  <text x="322" y="430" class="caption">development context</text>
+  <text x="322" y="690" class="caption">security checks</text>
+
+  <g transform="translate(368 920)">
+    <rect width="1130" height="74" rx="22" fill="#ffffff" fill-opacity="0.78" stroke="#d5dfec" />
+    <circle cx="36" cy="37" r="8" fill="#d4b16a" />
+    <text x="58" y="32" class="badge">Repo note</text>
+    <text x="58" y="56" class="caption">This diagram is inferred from code and `frontend/README.md`: `scripts/generate.ts` runs offline, while the Next.js app serves pre-generated JSON, images, and panoramas with zero runtime AI calls.</text>
+  </g>
+</svg>

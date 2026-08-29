@@ -26,6 +26,33 @@ export type Moment = {
   };
 };
 
+export type StoryMoment = {
+  id: string;
+  orderIndex: number;
+  title: string;
+  location: {
+    label: string;
+    lat: number;
+    lng: number;
+  };
+  narrativeCopy: string;
+  factText: string;
+  sourceRef: string;
+  imagePath: string;
+  imagePrompt: string;
+};
+
+export type PeriodStory = {
+  code: string;
+  name: string;
+  periodId: string;
+  eraLabel: string;
+  eraRationale: string;
+  storyTagline: string;
+  stylePrefix: string;
+  moments: StoryMoment[];
+};
+
 export type Country = {
   code: string;
   name: string;

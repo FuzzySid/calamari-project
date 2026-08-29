@@ -1,0 +1,66 @@
+{
+  "code": "ESP",
+  "name": "Spain",
+  "periodId": "pre-roman-iberia",
+  "eraLabel": "Pre-Roman and Ancient Iberia (before 2nd century BC)",
+  "eraRationale": "The Iberian Peninsula was originally inhabited by peoples thought to have arrived from North Africa, settling in the south. Celtic tribes invaded from the north around 1200 BC. By 1100 BC, Phoenicians and Greeks arrived and founded colonies along the southern and Mediterranean coasts. During the wars between Rome and Carthage, the Carthaginians invaded and conquered large parts of Spain.",
+  "storyTagline": "The story is fiction; every detail is real.",
+  "stylePrefix": "Painterly historical illustration, muted earth-and-ochre palette with deep blue accents, parchment texture, soft cinematic golden light, no photoreal faces, figures small in frame, wide 16:9 composition.",
+  "moments": [
+    {
+      "id": "hillfort-childhood",
+      "orderIndex": 0,
+      "title": "The Hilltop Where He Was Born",
+      "narrativeCopy": "A boy grows up behind six-metre stone walls, in a village of adobe houses terraced into the hill.",
+      "factText": "Iberian oppida were fortified hilltop towns: at L'Esquerda the defensive wall was about six metres thick with square towers flanking the gate, while eastern Iberian houses were rectangular, built of mudbrick on stone foundations with timber-and-branch roofs, arranged along a central cobbled street.",
+      "sourceRef": "Cala: Iberian hillfort settlements — walls, houses & materials",
+      "location": { "label": "L'Esquerda hillfort, Catalonia", "lat": 41.98, "lng": 2.3 },
+      "imagePrompt": "Painterly historical illustration, muted earth-and-ochre palette with deep blue accents, parchment texture, soft cinematic golden light, no photoreal faces, figures small in frame, wide 16:9 composition. An Iberian hilltop oppidum at dawn, 4th century BC Spain: massive dry-stone defensive walls six metres thick with two square towers flanking the gate, rectangular houses of mudbrick on stone foundations with timber-and-branch roofs, one cobbled main street running through the settlement, terraces following the slope. In the fields below, a family harvests grain and herds goats; a small boy in a short belted wool tunic watches from the wall.",
+      "imagePath": "/moments/spain-preroman/01.jpg"
+    },
+    {
+      "id": "emporion-market",
+      "orderIndex": 1,
+      "title": "The Market of Foreign Ships",
+      "narrativeCopy": "At the Greek port of Emporion he sees ships, painted vases, and coins — the first money ever struck in Iberia.",
+      "factText": "Emporion (modern Empúries) was founded around 575 BCE and its name means 'trading post'. Greeks traded Attic painted pottery, wine, and olive oil for Iberian metals and cereals, and the first coins minted in Iberia were struck at Emporion and Rhode in the mid-5th century BCE.",
+      "sourceRef": "Cala: Phoenician and Greek colonies on the Iberian coast",
+      "location": { "label": "Emporion (Empúries)", "lat": 42.13, "lng": 3.12 },
+      "imagePrompt": "Painterly historical illustration, muted earth-and-ochre palette with deep blue accents, parchment texture, soft cinematic golden light, no photoreal faces, figures small in frame, wide 16:9 composition. The Greek trading colony of Emporion on the Iberian coast, 4th century BC: a busy harbor market with Greek merchant ships, stalls of painted Attic vases and amphorae of wine and olive oil, sacks of Iberian grain and ingots of silver being traded, silver coins changing hands. A father and son in plain wool tunics stand amazed among Greek merchants, the Mediterranean glittering behind.",
+      "imagePath": "/moments/spain-preroman/02.jpg"
+    },
+    {
+      "id": "iberian-warrior",
+      "orderIndex": 2,
+      "title": "The Falcata and the Small Shield",
+      "narrativeCopy": "He becomes a warrior: a forward-curving sword that could split helmets, a round shield, and a fistful of iron javelins.",
+      "factText": "The falcata was a single-edged, forward-curving sword that Roman chroniclers said could split helmets. Iberian warriors carried the caetra, a round shield about 60 cm wide with a central metal boss, all-iron soliferrum javelins, and wealthier fighters wore decorated bronze pectoral discs over short belted tunics with geometric border bands.",
+      "sourceRef": "Cala: The Iberian warrior — weapons, armor & clothing",
+      "location": { "label": "His tribe's hillfort, Catalonia", "lat": 41.9, "lng": 2.45 },
+      "imagePrompt": "Painterly historical illustration, muted earth-and-ochre palette with deep blue accents, parchment texture, soft cinematic golden light, no photoreal faces, figures small in frame, wide 16:9 composition. An Iberian warrior standing on rocky ground, seen from slightly behind so his face is turned away: single-edged forward-curving falcata sword in hand, small round caetra shield about 60 cm wide with a central metal boss, all-iron soliferrum javelins planted in the earth beside him, polished bronze pectoral disc strapped over a short white tunic with geometric border bands, broad waist-sash, crimson wool cloak lifting in the wind.",
+      "imagePath": "/moments/spain-preroman/03.jpg"
+    },
+    {
+      "id": "carthaginian-war",
+      "orderIndex": 3,
+      "title": "The War That Came from the Sea",
+      "narrativeCopy": "Carthage conquers southern Iberia, and he marches with thousands of Iberian warriors folded into Hannibal's army.",
+      "factText": "During the wars between Rome and Carthage, the Carthaginians invaded and conquered large parts of Spain, and Iberian mercenaries served in Carthaginian armies — including Hannibal's.",
+      "sourceRef": "Cala: Period description; The Iberian warrior — weapons, armor & clothing",
+      "location": { "label": "Saguntum, Mediterranean coast", "lat": 39.68, "lng": -0.27 },
+      "imagePrompt": "Painterly historical illustration, muted earth-and-ochre palette with deep blue accents, parchment texture, soft cinematic golden light, no photoreal faces, figures small in frame, wide 16:9 composition. A column of Iberian mercenary warriors marching within a vast Carthaginian army along the Spanish Mediterranean coast, 3rd century BC: crimson cloaks, small round shields and curved falcatas among Carthaginian spearmen, banners and dust, a fortified coastal city under siege in the distance with smoke rising, warships waiting on the sea.",
+      "imagePath": "/moments/spain-preroman/04.jpg"
+    },
+    {
+      "id": "sanctuary-votive",
+      "orderIndex": 4,
+      "title": "The Bronze Man in the Cave",
+      "narrativeCopy": "Old now, he leaves a small bronze figure of himself at the mountain sanctuary — so he can stand before the goddess forever.",
+      "factText": "Great Iberian sanctuaries like Collado de los Jardines in the Sierra Morena drew pilgrims from many communities; worshippers deposited small bronze votive figurines 8–20 cm tall, cast by lost-wax — praying figures, warriors, and horsemen — as personal representations left permanently before the deity. Over 2,500 have been recovered from Collado de los Jardines alone, and many sanctuaries were aligned with the sunset at the equinoxes.",
+      "sourceRef": "Cala: Iberian sanctuaries and votive offerings",
+      "location": { "label": "Collado de los Jardines, Sierra Morena", "lat": 38.39, "lng": -3.51 },
+      "imagePrompt": "Painterly historical illustration, muted earth-and-ochre palette with deep blue accents, parchment texture, soft cinematic golden light, no photoreal faces, figures small in frame, wide 16:9 composition. A mountain cave sanctuary in the Sierra Morena pass at equinox sunset, late 3rd century BC: golden light entering the cave mouth and striking a natural spring, hundreds of small bronze votive figurines 8–20 cm tall clustered on the rocks — praying figures, horsemen, warriors. An old man in a wool cloak, seen from behind, places one last small bronze horseman among them.",
+      "imagePath": "/moments/spain-preroman/05.jpg"
+    }
+  ]
+}

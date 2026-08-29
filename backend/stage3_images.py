@@ -40,7 +40,7 @@ from pipeline_common import (
 )
 
 FAL_URL = "https://fal.run/{model}"
-DEFAULT_PROFILE = "data/styles/wide-panorama-v1.json"
+DEFAULT_PROFILE = "backend/styles/wide-panorama-v1.json"
 
 
 def repo_relative(path):

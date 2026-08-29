@@ -106,6 +106,11 @@ Use `--motion` to add one scene-specific movement.
 
 ## Style profile
 
-`data/styles/wide-panorama-v1.json` holds the palette, projection guidance and constraints,
-and is country-agnostic — one profile serves every country. `museum-editorial-v1.json` is
-kept unchanged so older `data/fal.json` runs citing that version stay interpretable.
+`backend/styles/wide-panorama-v1.json` holds the palette, projection guidance and
+constraints, and is country-agnostic — one profile serves every country. Override with
+`--profile`.
+
+The repo-root `data/` directory is gone: everything in it was output from the previous
+pipeline (knowledge-search dumps, `fal.json`, `photos/`) and nothing read it any more. The
+style profile was the one live file and now sits here, next to the code that loads it. The
+frontend's own `frontend/data/` is unrelated and untouched.

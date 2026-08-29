@@ -5,10 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export type Period = {
   id: string;
   name: string;
-  /** Human-readable span shown under the name, e.g. "711 — 1492" */
+  /** Year shown in the left gutter, e.g. "711" or "218 BC" */
   label: string;
-  /** Short figure used as the ghosted background marker, e.g. "711" */
-  marker?: string;
   note?: string;
   /** ids of periods that run at the same time as this one */
   concurrentWith?: string[];
@@ -32,14 +30,14 @@ export type PeriodSelectorProps = {
   className?: string;
 };
 
-const ROW = 78;
+const ROW = 96;
 const WHEEL_LOCK_MS = 180;
 const DRAG_PX_PER_ROW = 62;
 /** Pointer travel before a press is treated as a drag rather than a click. */
 const DRAG_THRESHOLD_PX = 6;
 const ROW_LEFT = 34;
-/** Left column holding the year label. */
-const GUTTER = 74;
+/** Left column holding the era's anchor year. */
+const GUTTER = 86;
 /** Space between the gutter and the name, where the tick sits. */
 const TICK_GAP = 38;
 const TICK_WIDTH = 16;
@@ -54,7 +52,6 @@ const THEMES = {
   paper: {
     bg: "#fbf9f5",
     ink: "#101010",
-    ghost: "rgba(16,16,16,0.065)",
     dim: "rgba(16,16,16,0.5)",
     rule: "rgba(16,16,16,0.09)",
     accent: "#8c3a2e"
@@ -62,7 +59,6 @@ const THEMES = {
   dusk: {
     bg: "transparent",
     ink: "#f5efe2",
-    ghost: "rgba(245,239,226,0.085)",
     dim: "rgba(245,239,226,0.52)",
     rule: "rgba(245,239,226,0.13)",
     accent: "#d4b16a"
@@ -219,27 +215,6 @@ export function PeriodSelector({
           maskImage: EDGE_FADE
         }}
       >
-        {current?.marker && (
-          <div
-            aria-hidden
-            style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              top: "50%",
-              transform: "translateY(-50%)",
-              textAlign: "center",
-              font: `400 138px/0.8 ${SERIF}`,
-              letterSpacing: "-0.04em",
-              color: t.ghost,
-              pointerEvents: "none",
-              whiteSpace: "nowrap"
-            }}
-          >
-            {current.marker}
-          </div>
-        )}
-
         <div
           className="period-drum"
           style={{
@@ -296,8 +271,8 @@ export function PeriodSelector({
                     width: GUTTER,
                     flex: "none",
                     textAlign: "right",
-                    font: `400 11.5px/1 ${MONO}`,
-                    letterSpacing: "0.08em",
+                    font: `400 20px/1 ${MONO}`,
+                    letterSpacing: "0.02em",
                     color: t.dim,
                     whiteSpace: "nowrap"
                   }}
@@ -306,10 +281,9 @@ export function PeriodSelector({
                 </div>
                 <div
                   style={{
-                    font: `400 31px/1 ${SERIF}`,
+                    font: `400 24px/1.15 ${SERIF}`,
                     letterSpacing: "-0.015em",
-                    color: t.ink,
-                    whiteSpace: "nowrap"
+                    color: t.ink
                   }}
                 >
                   {period.name}

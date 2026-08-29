@@ -1,0 +1,5 @@
+import everything in this project to entire and use entire skill to import claude and codex and entire doctor if needed. then push and merge to main
+
+---
+
+Make sure to not import anything private or other things

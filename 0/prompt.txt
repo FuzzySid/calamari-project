@@ -1,0 +1,1 @@
+for the cala search first, i want to fetch an attribute called event which happened pertaining to Spain's hisotry, give me some prompt sugggestiosn and do a natural language seach using cala api and save it in a new JSON file called spain 2 and remove the description because fact and description are same and also fetch the source information use the cala mcp

@@ -35,6 +35,15 @@ export type PeriodSelectorProps = {
 const ROW = 78;
 const WHEEL_LOCK_MS = 180;
 const DRAG_PX_PER_ROW = 62;
+/** Pointer travel before a press is treated as a drag rather than a click. */
+const DRAG_THRESHOLD_PX = 6;
+const ROW_LEFT = 34;
+/** Left column holding the year label. */
+const GUTTER = 74;
+/** Space between the gutter and the name, where the tick sits. */
+const TICK_GAP = 38;
+const TICK_WIDTH = 16;
+const TICK_LEFT = ROW_LEFT + GUTTER + (TICK_GAP - TICK_WIDTH) / 2;
 
 const SERIF = "var(--font-instrument-serif), Georgia, serif";
 const MONO = "var(--font-plex-mono), ui-monospace, Menlo, monospace";
@@ -83,7 +92,7 @@ export function PeriodSelector({
 
   const drumRef = useRef<HTMLDivElement | null>(null);
   const wheelLock = useRef(false);
-  const drag = useRef<{ y: number; index: number } | null>(null);
+  const drag = useRef<{ y: number; index: number; capturing: boolean } | null>(null);
 
   const select = useCallback(
     (next: number) => {
@@ -138,13 +147,24 @@ export function PeriodSelector({
   }
 
   function handlePointerDown(event: React.PointerEvent) {
-    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
-    drag.current = { y: event.clientY, index };
+    drag.current = { y: event.clientY, index, capturing: false };
   }
 
   function handlePointerMove(event: React.PointerEvent) {
-    if (!drag.current) return;
-    select(drag.current.index + Math.round((drag.current.y - event.clientY) / DRAG_PX_PER_ROW));
+    const gesture = drag.current;
+    if (!gesture) return;
+
+    const travel = gesture.y - event.clientY;
+
+    // Capturing on pointerdown would retarget the click to this element and
+    // swallow the row's own handler, so only capture once it is really a drag.
+    if (!gesture.capturing) {
+      if (Math.abs(travel) < DRAG_THRESHOLD_PX) return;
+      (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+      gesture.capturing = true;
+    }
+
+    select(gesture.index + Math.round(travel / DRAG_PX_PER_ROW));
   }
 
   function handlePointerUp() {
@@ -224,7 +244,7 @@ export function PeriodSelector({
           className="period-drum"
           style={{
             position: "absolute",
-            left: 34,
+            left: ROW_LEFT,
             right: 30,
             top: "50%",
             display: "flex",
@@ -249,7 +269,7 @@ export function PeriodSelector({
                   height: ROW,
                   display: "flex",
                   alignItems: "center",
-                  gap: 12,
+                  gap: TICK_GAP,
                   cursor: "pointer",
                   opacity: distance === 0 ? 1 : distance === 1 ? 0.32 : 0.13,
                   transform: `scale(${selected ? 1 : 0.86})`,
@@ -273,6 +293,19 @@ export function PeriodSelector({
                 )}
                 <div
                   style={{
+                    width: GUTTER,
+                    flex: "none",
+                    textAlign: "right",
+                    font: `400 11.5px/1 ${MONO}`,
+                    letterSpacing: "0.08em",
+                    color: t.dim,
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  {period.label}
+                </div>
+                <div
+                  style={{
                     font: `400 31px/1 ${SERIF}`,
                     letterSpacing: "-0.015em",
                     color: t.ink,
@@ -280,17 +313,6 @@ export function PeriodSelector({
                   }}
                 >
                   {period.name}
-                </div>
-                <div
-                  style={{
-                    font: `400 9.5px/1 ${MONO}`,
-                    letterSpacing: "0.1em",
-                    color: t.dim,
-                    paddingBottom: 4,
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  {period.label}
                 </div>
               </div>
             );
@@ -301,9 +323,9 @@ export function PeriodSelector({
           aria-hidden
           style={{
             position: "absolute",
-            left: 0,
+            left: TICK_LEFT,
             top: "50%",
-            width: 18,
+            width: TICK_WIDTH,
             height: 1,
             background: t.accent,
             zIndex: 3
@@ -312,7 +334,7 @@ export function PeriodSelector({
       </div>
 
       {showNote && current?.note && (
-        <div style={{ borderTop: `1px solid ${t.rule}`, margin: "0 34px 0 34px", padding: "14px 0 4px" }}>
+        <div style={{ borderTop: `1px solid ${t.rule}`, margin: `0 ${ROW_LEFT}px`, padding: "14px 0 4px" }}>
           <div style={{ font: `400 11px/1.5 ${MONO}`, letterSpacing: "0.06em", color: t.dim }}>
             {current.note}
           </div>

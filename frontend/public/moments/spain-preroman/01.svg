@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#193a5d" />
+      <stop offset="50%" stop-color="#7a5a2f" />
+      <stop offset="100%" stop-color="#0a111d" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)" />
+  <circle cx="1260" cy="160" r="220" fill="rgba(255,255,255,0.05)" />
+  <circle cx="340" cy="720" r="260" fill="rgba(212,177,106,0.10)" />
+  <text x="100" y="420" fill="#f4ead5" font-size="60" font-family="Georgia, serif">The Hilltop Where He Was Born</text>
+  <text x="100" y="500" fill="#d4b16a" font-size="26" font-family="Arial, sans-serif" letter-spacing="6">AWAITING GENERATED IMAGE 01</text>
+</svg>

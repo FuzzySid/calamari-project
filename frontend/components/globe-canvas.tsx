@@ -3,15 +3,19 @@
 import { useEffect, useRef } from "react";
 import Globe from "react-globe.gl";
 
+export type GlobeControls = {
+  autoRotate: boolean;
+  autoRotateSpeed: number;
+  addEventListener: (type: "start" | "change" | "end", listener: () => void) => void;
+  removeEventListener: (type: "start" | "change" | "end", listener: () => void) => void;
+};
+
 export type GlobeMethods = {
   pointOfView: (
     view: { lat?: number; lng?: number; altitude?: number },
     transitionMs?: number
   ) => void;
-  controls: () => {
-    autoRotate?: boolean;
-    autoRotateSpeed?: number;
-  };
+  controls: () => GlobeControls;
 };
 
 type GlobeCanvasProps = {

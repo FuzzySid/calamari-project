@@ -1,0 +1,1 @@
+Country on the globe to name mapping isn't done. For each country on the globe, it's name should appear on top of it. When the user clicks on a country, it's name should be taken and passed on to the URL [http://localhost:3000/panorama?country=](http://localhost:3000/panorama?country=) in the country query paramter

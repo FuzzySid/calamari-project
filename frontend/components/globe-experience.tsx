@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import worldFeatures from "@/data/world-features.json";
 
@@ -22,8 +23,11 @@ type MultiPolygonCoordinates = PolygonCoordinates[];
 
 type CountryFeature = {
   properties: {
-    name: string;
-    iso_a3: string;
+    name?: string;
+    iso_a3?: string;
+    NAME?: string;
+    ADMIN?: string;
+    ISO_A3?: string;
   };
   geometry: {
     type: "Polygon" | "MultiPolygon";
@@ -36,13 +40,29 @@ type CountryLabel = {
   lng: number;
   name: string;
   iso_a3: string;
+  size: number;
 };
 
 const Globe = dynamic(() => import("react-globe.gl"), {
   ssr: false
 });
 
-const countries = worldFeatures as CountryFeature[];
+const countries = (
+  "features" in worldFeatures ? worldFeatures.features : worldFeatures
+) as CountryFeature[];
+
+function getCountryName(feature: CountryFeature) {
+  return (
+    feature.properties.name ??
+    feature.properties.NAME ??
+    feature.properties.ADMIN ??
+    "Unknown"
+  );
+}
+
+function getCountryCode(feature: CountryFeature) {
+  return feature.properties.iso_a3 ?? feature.properties.ISO_A3 ?? "UNK";
+}
 
 function getRingArea(ring: GeoCoordinate[]) {
   let area = 0;
@@ -115,12 +135,18 @@ function getCountryCenter(feature: CountryFeature) {
 
 const countryLabels: CountryLabel[] = countries.map((feature) => {
   const { lat, lng } = getCountryCenter(feature);
+  const name = getCountryName(feature);
+  const iso_a3 = getCountryCode(feature);
+  const nameLength = name.length;
+  const size =
+    nameLength > 18 ? 0.54 : nameLength > 12 ? 0.68 : nameLength > 8 ? 0.8 : 0.92;
 
   return {
     lat,
     lng,
-    name: feature.properties.name,
-    iso_a3: feature.properties.iso_a3
+    name,
+    iso_a3,
+    size
   };
 });
 
@@ -128,7 +154,6 @@ export function GlobeExperience() {
   const router = useRouter();
   const globeRef = useRef<GlobeMethods | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [hoveredCountry, setHoveredCountry] = useState<CountryFeature | null>(null);
   const [viewport, setViewport] = useState({ width: 1200, height: 800 });
 
   useEffect(() => {
@@ -160,16 +185,8 @@ export function GlobeExperience() {
     controls.autoRotateSpeed = 0.28;
   }, []);
 
-  useEffect(() => {
-    document.body.style.cursor = hoveredCountry ? "pointer" : "grab";
-
-    return () => {
-      document.body.style.cursor = "";
-    };
-  }, [hoveredCountry]);
-
   function beginStoryTransition(target: CountryFeature) {
-    if (target.properties.iso_a3 !== "ESP" || isTransitioning) {
+    if (isTransitioning) {
       return;
     }
 
@@ -179,11 +196,12 @@ export function GlobeExperience() {
     if (globe) {
       const controls = globe.controls();
       controls.autoRotate = false;
-      globe.pointOfView({ lat: 40.4, lng: -3.7, altitude: 0.8 }, 1800);
+      const { lat, lng } = getCountryCenter(target);
+      globe.pointOfView({ lat, lng, altitude: 0.8 }, 1800);
     }
 
     window.setTimeout(() => {
-      router.push("/story/esp");
+      router.push(`/panorama?country=${encodeURIComponent(getCountryName(target))}`);
     }, 2100);
   }
 
@@ -192,11 +210,6 @@ export function GlobeExperience() {
     if (controls?.autoRotate) {
       controls.autoRotate = false;
     }
-  }
-
-  function handleCountryHover(feature: object | null) {
-    handleInteraction();
-    setHoveredCountry((feature as CountryFeature | null) ?? null);
   }
 
   return (
@@ -212,56 +225,23 @@ export function GlobeExperience() {
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
           backgroundColor="rgba(0,0,0,0)"
           polygonsData={countries}
-          polygonAltitude={(feature: object) =>
-            (feature as CountryFeature).properties.iso_a3 ===
-            hoveredCountry?.properties.iso_a3
-              ? 0.055
-              : 0.008
-          }
-          polygonCapColor={(feature: object) =>
-            (feature as CountryFeature).properties.iso_a3 ===
-            hoveredCountry?.properties.iso_a3
-              ? "rgba(255, 255, 255, 0.18)"
-              : "rgba(255, 255, 255, 0.02)"
-          }
-          polygonSideColor={(feature: object) =>
-            (feature as CountryFeature).properties.iso_a3 ===
-            hoveredCountry?.properties.iso_a3
-              ? "rgba(255, 255, 255, 0.12)"
-              : "rgba(255, 255, 255, 0.015)"
-          }
-          polygonStrokeColor={(feature: object) =>
-            (feature as CountryFeature).properties.iso_a3 ===
-            hoveredCountry?.properties.iso_a3
-              ? "rgba(255, 255, 255, 0.7)"
-              : "rgba(255, 255, 255, 0.16)"
-          }
+          polygonAltitude={0.002}
+          polygonCapColor={() => "rgba(255, 255, 255, 0.01)"}
+          polygonSideColor={() => "rgba(255, 255, 255, 0.01)"}
+          polygonStrokeColor={() => "rgba(255, 255, 255, 0.12)"}
           polygonsTransitionDuration={220}
           labelsData={countryLabels}
           labelLat={(label: object) => (label as CountryLabel).lat}
           labelLng={(label: object) => (label as CountryLabel).lng}
           labelText={(label: object) => (label as CountryLabel).name}
-          labelSize={(label: object) =>
-            (label as CountryLabel).iso_a3 === hoveredCountry?.properties.iso_a3
-              ? 1.15
-              : 0.72
-          }
-          labelDotRadius={0.12}
-          labelAltitude={(label: object) =>
-            (label as CountryLabel).iso_a3 === hoveredCountry?.properties.iso_a3
-              ? 0.03
-              : 0.015
-          }
-          labelColor={(label: object) =>
-            (label as CountryLabel).iso_a3 === hoveredCountry?.properties.iso_a3
-              ? "rgba(255, 231, 179, 0.95)"
-              : "rgba(235, 244, 255, 0.9)"
-          }
-          labelResolution={2}
+          labelSize={(label: object) => (label as CountryLabel).size}
+          labelDotRadius={0.18}
+          labelAltitude={0.045}
+          labelColor={() => "rgba(255, 255, 255, 0.98)"}
+          labelResolution={4}
           onPolygonClick={(feature: object) =>
             beginStoryTransition(feature as CountryFeature)
           }
-          onPolygonHover={handleCountryHover}
           onGlobeClick={handleInteraction}
           onZoom={handleInteraction}
           animateIn
@@ -277,17 +257,20 @@ export function GlobeExperience() {
           Interactive Historical Atlas
         </p>
         <p className="mt-4 text-sm text-mist/80 sm:text-base">
-          Drag to rotate the earth, hover a country to inspect it, and click Spain
-          to enter the story experience.
+          Drag to rotate the earth, hover a country to inspect it, and click any
+          country to open the panorama experience.
         </p>
       </div>
 
+      <Link
+        href="/panorama?country=spain"
+        className="absolute right-4 top-4 z-20 rounded-full border border-white/15 bg-black/25 px-4 py-2 text-sm text-mist/85 backdrop-blur-md transition hover:bg-black/45 focus:outline-none focus:ring-2 focus:ring-gold/70 sm:right-8 sm:top-8"
+      >
+        Try 360° viewer
+      </Link>
+
       <div className="pointer-events-none absolute bottom-8 left-1/2 z-10 w-[min(92vw,28rem)] -translate-x-1/2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-center text-sm text-mist/80 backdrop-blur-md">
-        {hoveredCountry
-          ? hoveredCountry.properties.iso_a3 === "ESP"
-            ? "Spain is story-enabled. Click to begin."
-            : hoveredCountry.properties.name
-          : "Explore the full globe. Spain is currently the active story destination."}
+        Explore the full globe and click any country to open its panorama view.
       </div>
     </main>
   );

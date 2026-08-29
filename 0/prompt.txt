@@ -1,0 +1,10 @@
+Ok good now npm run dev and install everything for the frontend - (base) sm_aswin21@Aswins-MacBook-Pro calamari-project % npm install
+npm error code ENOENT
+npm error syscall open
+npm error path /Users/sm_aswin21/Desktop/calamari-project/package.json
+npm error errno -2
+npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/Users/sm_aswin21/Desktop/calamari-project/package.json'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /Users/sm_aswin21/.npm/_logs/2026-08-29T12_02_43_889Z-debug-0.log
+(base) sm_aswin21@Aswins-MacBook-Pro calamari-project %

@@ -1,0 +1,1 @@
+I want to work in main. Can we, when select a period, instead of going directly to the story (scene), the world goes to the left and a 3d model of a typical person of that period and place appears fading in? I will paste the models in a folder, not sure the file format. Do you understand?

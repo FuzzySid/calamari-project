@@ -1,97 +1,94 @@
 {
   "code": "ESP",
   "name": "Spain",
-  "eraLabel": "1492–1588",
-  "eraStartYear": 1492,
-  "eraEndYear": 1588,
-  "eraRationale": "This span captures Spain's consolidation under Ferdinand and Isabella, its transatlantic expansion, and the imperial confidence that defined the Spanish Golden Age.",
+  "eraLabel": "Spain: Six Moments Across Millennia",
+  "eraStartYear": -1100,
+  "eraEndYear": 1975,
+  "eraRationale": "Six dated thresholds trace the peninsula’s course from pre‑Roman coastal colonisation through Romanisation, the long Muslim period, nineteenth‑century upheaval, civil war, and a peaceful democratic transition, as recorded in the cited sources.",
   "moments": [
     {
-      "id": "granada-falls",
-      "year": 1492,
+      "id": "coastal-colonisations-before-rome-c-1-100-206-bc",
+      "year": -1100,
       "orderIndex": 0,
-      "title": "The last kingdom falls",
-      "location": "Granada, Crown of Castile",
-      "factText": "Granada surrendered to Ferdinand II and Isabella I in January 1492, ending the Nasrid kingdom in Iberia.",
-      "sourceRef": "Mock Cala: Granada timeline",
-      "narrativeCopy": "Spain's story shifted in 1492 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
-      "detailCopy": "A city changed hands, a centuries-old polity ended, and the balance of power on the peninsula was remade. Explore this moment through the places, objects, and people who inhabited it.",
-      "imagePath": "/moments/spain/01.svg",
-      "imagePrompt": "Painterly illustrated scene for 1492: Granada surrendered to Ferdinand II and Isabella I in January 1492, ending the Nasrid kingdom in Iberia. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette.",
-      "mapPoints": [
-        { "id": "alhambra", "label": "The Alhambra", "description": "The Nasrid palace complex overlooking Granada and the symbolic center of the transition.", "x": 57, "y": 35 },
-        { "id": "albaicin", "label": "The Albaicín", "description": "The hillside quarter facing the Alhambra across the Darro valley.", "x": 32, "y": 49 },
-        { "id": "vega", "label": "The Vega", "description": "The fertile plain surrounding the city, crossed by armies, roads, and irrigation channels.", "x": 69, "y": 72 }
+      "factText": "c. 1,100–206 BC: the Iberian coast saw Phoenician, Greek and Carthaginian colonisation before Roman conquest.",
+      "sourceRef": "History of Spain Timeline - Globelink Blog",
+      "sourceIndices": [
+        1
       ],
-      "representative": {
-        "label": "A craftsperson of Granada",
-        "description": "A representative, illustrative figure—not a reconstruction of a documented individual. Clothing and setting are shown as demo artwork pending expert review."
-      }
+      "narrativeCopy": "Along the Iberian coast, Phoenician, Greek, and Carthaginian colonisation takes hold, a shoreline prelude to the coming Roman conquest.",
+      "visualBrief": "Coastal maps of the Iberian Peninsula; weathered stone foundations near shorelines; simple markers denoting Phoenician, Greek, and Carthaginian colonies along the coast.",
+      "imagePath": "/moments/spain/01-coastal-colonisations-before-rome-c-1-100-206-bc.jpg",
+      "styleProfile": "museum-editorial-v1"
     },
     {
-      "id": "columbus-sails",
-      "year": 1492,
+      "id": "roman-hispania-begins-206-bc-5th-century-ad",
+      "year": -206,
       "orderIndex": 1,
-      "title": "A voyage crosses the Atlantic",
-      "location": "Palos de la Frontera, Crown of Castile",
-      "factText": "Christopher Columbus departed in August 1492 under the patronage of the Catholic Monarchs and reached the Caribbean that October.",
-      "sourceRef": "Mock Cala: First voyage dossier",
-      "narrativeCopy": "Spain's story shifted in 1492 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
-      "detailCopy": "A departure from a small Atlantic port connected Iberian politics to a vast and violent new geography. This demo centers the route, port, and material world of the voyage.",
-      "imagePath": "/moments/spain/02.svg",
-      "imagePrompt": "Painterly illustrated scene for 1492: Christopher Columbus departed in August 1492 under the patronage of the Catholic Monarchs and reached the Caribbean that October. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+      "factText": "From 206 BC to the 5th century AD, Rome conquered the peninsula, Romanised it, and introduced Latin, law, infrastructure and Christianity.",
+      "sourceRef": "History of Spain Timeline - Globelink Blog",
+      "sourceIndices": [
+        2
+      ],
+      "narrativeCopy": "Across these centuries, Rome conquers the peninsula and Romanises it, introducing Latin, law, infrastructure, and Christianity.",
+      "visualBrief": "A provincial map labeled Hispania, dated 206 BC–5th century AD; robust stone infrastructure and civic architecture; orderly road tracings across the peninsula.",
+      "imagePath": "/moments/spain/02-roman-hispania-begins-206-bc-5th-century-ad.jpg",
+      "styleProfile": "museum-editorial-v1"
     },
     {
-      "id": "tordesillas",
-      "year": 1494,
+      "id": "al-andalus-emirate-caliphate-taifa-711-1492",
+      "year": 711,
       "orderIndex": 2,
-      "title": "The world is divided on paper",
-      "location": "Tordesillas, Crown of Castile",
-      "factText": "The Treaty of Tordesillas in 1494 divided newly claimed overseas territories between Spain and Portugal along an agreed meridian.",
-      "sourceRef": "Mock Cala: Treaty summary",
-      "narrativeCopy": "Spain's story shifted in 1494 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
-      "detailCopy": "A line imagined across the globe attempted to turn distant seas and territories into negotiated claims. Maps became instruments of power.",
-      "imagePath": "/moments/spain/03.svg",
-      "imagePrompt": "Painterly illustrated scene for 1494: The Treaty of Tordesillas in 1494 divided newly claimed overseas territories between Spain and Portugal along an agreed meridian. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+      "factText": "711–1492: Muslim Spain (al‑Andalus) lasted more than 700 years and was divided into the Emirate, the Caliphate and the Taifa kingdoms.",
+      "sourceRef": "History of Spain Timeline - Globelink Blog",
+      "sourceIndices": [
+        4
+      ],
+      "narrativeCopy": "For more than seven centuries, al‑Andalus endures, unfolding in the phases of the Emirate, the Caliphate, and the Taifa kingdoms.",
+      "visualBrief": "Period maps of the Iberian Peninsula marked 711–1492; courtyards and city walls from Islamic‑period Spain; architectural details rendered in stone and plaster.",
+      "imagePath": "/moments/spain/03-al-andalus-emirate-caliphate-taifa-711-1492.jpg",
+      "styleProfile": "museum-editorial-v1"
     },
     {
-      "id": "charles-v",
-      "year": 1519,
+      "id": "invasion-and-upheaval-1808-1874",
+      "year": 1808,
       "orderIndex": 3,
-      "title": "A crown becomes an empire",
-      "location": "A connected European court",
-      "factText": "Charles I of Spain became Holy Roman Emperor Charles V in 1519, linking Spanish power to a wider European imperial network.",
-      "sourceRef": "Mock Cala: Imperial succession notes",
-      "narrativeCopy": "Spain's story shifted in 1519 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
-      "detailCopy": "The inheritance and election of Charles V joined territories across Europe and beyond under one ruler, creating a network that was powerful, expensive, and difficult to govern.",
-      "imagePath": "/moments/spain/04.svg",
-      "imagePrompt": "Painterly illustrated scene for 1519: Charles I of Spain became Holy Roman Emperor Charles V in 1519, linking Spanish power to a wider European imperial network. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+      "factText": "In 1808 Napoleon defeated the Spanish army and replaced the king; after Napoleon’s defeat, Ferdinand VII restored the throne, followed by political instability and loss of colonies.",
+      "sourceRef": "History of Spain Timeline - Globelink Blog",
+      "sourceIndices": [
+        8
+      ],
+      "narrativeCopy": "Upheaval breaks in 1808 as Napoleon defeats the Spanish army and replaces the king; after his defeat, Ferdinand VII restores the throne, and the era is marked by political instability and loss of colonies.",
+      "visualBrief": "Nineteenth‑century maps of the peninsula dated 1808–1874; fortress walls and artillery emplacements; official decrees and seals on aged paper.",
+      "imagePath": "/moments/spain/04-invasion-and-upheaval-1808-1874.jpg",
+      "styleProfile": "museum-editorial-v1"
     },
     {
-      "id": "escorial-rises",
-      "year": 1563,
+      "id": "the-spanish-civil-war-1936-1939",
+      "year": 1936,
       "orderIndex": 4,
-      "title": "Power takes architectural form",
-      "location": "San Lorenzo de El Escorial, Castile",
-      "factText": "Construction of El Escorial began in 1563 under Philip II, symbolizing royal authority, piety, and administrative order.",
-      "sourceRef": "Mock Cala: Architecture brief",
-      "narrativeCopy": "Spain's story shifted in 1563 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
-      "detailCopy": "Monastery, palace, library, and royal burial place came together in a single ordered complex. Architecture made an argument about faith and authority.",
-      "imagePath": "/moments/spain/05.svg",
-      "imagePrompt": "Painterly illustrated scene for 1563: Construction of El Escorial began in 1563 under Philip II, symbolizing royal authority, piety, and administrative order. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+      "factText": "1936–1939: conflict between Republican and Nationalist forces.",
+      "sourceRef": "Spanish Civil War - Wikipedia",
+      "sourceIndices": [
+        10
+      ],
+      "narrativeCopy": "The peninsula divides into opposing camps as Republican and Nationalist forces wage a war from 1936 to 1939.",
+      "visualBrief": "Topographic maps of Spain annotated 1936–1939; field fortifications, sandbag lines, and neutral‑toned military textiles; urban street barricade remnants.",
+      "imagePath": "/moments/spain/05-the-spanish-civil-war-1936-1939.jpg",
+      "styleProfile": "museum-editorial-v1"
     },
     {
-      "id": "armada",
-      "year": 1588,
+      "id": "transition-and-integration-1975-present",
+      "year": 1975,
       "orderIndex": 5,
-      "title": "The Armada meets its limits",
-      "location": "The English Channel and North Atlantic",
-      "factText": "The Spanish Armada sailed against England in 1588 and was ultimately dispersed after battle, weather, and logistical strain.",
-      "sourceRef": "Mock Cala: Naval campaign log",
-      "narrativeCopy": "Spain's story shifted in 1588 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
-      "detailCopy": "Ships, weather, supply, and strategy collided across the Channel and the long route home. The campaign exposed the limits hidden inside imperial scale.",
-      "imagePath": "/moments/spain/06.svg",
-      "imagePrompt": "Painterly illustrated scene for 1588: The Spanish Armada sailed against England in 1588 and was ultimately dispersed after battle, weather, and logistical strain. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+      "factText": "After 1975, Spain saw a peaceful transition, the 1978 constitution, EU membership in 1986, and modern democratic status.",
+      "sourceRef": "Spanish Civil War - Wikipedia",
+      "sourceIndices": [
+        12
+      ],
+      "narrativeCopy": "After 1975, a peaceful transition unfolds: the 1978 constitution is adopted; in 1986, membership in the European Union follows; Spain stands as a modern democracy.",
+      "visualBrief": "Facsimiles of the 1978 constitution; contemporary governmental building facades; a 1986 map of the European Union highlighting Spain.",
+      "imagePath": "/moments/spain/06-transition-and-integration-1975-present.jpg",
+      "styleProfile": "museum-editorial-v1"
     }
   ]
 }

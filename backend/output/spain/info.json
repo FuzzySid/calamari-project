@@ -1,0 +1,149 @@
+{
+  "country": "Spain",
+  "country_slug": "spain",
+  "query": "five most notable events in Spain history",
+  "generated_at": "2026-08-29T14:48:13.890433+00:00",
+  "total_returned": 5,
+  "events": [
+    {
+      "id": "reconquista_701",
+      "title": "The Reconquista",
+      "description": "The Reconquista was a centuries‑long series of military campaigns (8th–15th centuries) by Christian kingdoms to retake the Iberian Peninsula from Muslim rule, which reshaped Spain’s political landscape and laid the foundation for later colonial expansion.",
+      "timeline": {
+        "start": "701",
+        "end": "1401",
+        "display": "8th–15th centuries"
+      },
+      "sources": [
+        {
+          "publisher": "Spanish Reconquista Definition - New Mexico History Key Term | Fiveable",
+          "url": "https://fiveable.me/key-terms/hs-new-mexico-history/spanish-reconquista",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Reconquista",
+          "entity_type": "Event"
+        }
+      ],
+      "event_text": "The Reconquista was a centuries‑long series of military campaigns (8th–15th centuries) by Christian kingdoms to retake the Iberian Peninsula from Muslim rule, which reshaped Spain’s political landscape and laid the foundation for later colonial expansion."
+    },
+    {
+      "id": "columbus_s_voyage_age_exploration_1492",
+      "title": "Columbus's Voyage and the Age of Exploration",
+      "description": "After the completion of the Reconquista, Ferdinand and Isabella financed Christopher Columbus’s 1492 expedition, providing the three ships Niña, Pinta, and Santa María, which opened the era of Spanish overseas colonization.",
+      "timeline": {
+        "start": "1492",
+        "end": "1492",
+        "display": "1492"
+      },
+      "sources": [
+        {
+          "publisher": "Portuguese Exploration and Spanish Conquest – U.S. History",
+          "url": "https://pressbooks.online.ucf.edu/osushistory/chapter/portuguese-exploration-and-spanish-conquest",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Reconquista",
+          "entity_type": "Event"
+        },
+        {
+          "name": "Ferdinand II of Aragon",
+          "entity_type": "Person"
+        },
+        {
+          "name": "Ferdinand and Isabella",
+          "entity_type": "Person"
+        },
+        {
+          "name": "Niña",
+          "entity_type": "Product"
+        },
+        {
+          "name": "Pinta",
+          "entity_type": "Product"
+        }
+      ],
+      "event_text": "After the completion of the Reconquista, Ferdinand and Isabella financed Christopher Columbus’s 1492 expedition, providing the three ships Niña, Pinta, and Santa María, which opened the era of Spanish overseas colonization."
+    },
+    {
+      "id": "spanish_armada_1588",
+      "title": "The Spanish Armada",
+      "description": "In the summer of 1588, King Philip II launched the Spanish Armada—about 130 ships carrying up to 30,000 men—with the goal of invading England and restoring Catholicism, but the fleet was defeated by English tactics and severe storms, marking the decline of Spain’s naval supremacy.",
+      "timeline": {
+        "start": "1588",
+        "end": "1588",
+        "display": "1588"
+      },
+      "sources": [
+        {
+          "publisher": "How Elizabethan England repelled the 'invincible' Spanish Armada - History Skills",
+          "url": "https://www.historyskills.com/classroom/year-8/spanish-armada",
+          "date": null
+        },
+        {
+          "publisher": "10 Surprising Facts About the Spanish Armada – 5-Minute History",
+          "url": "https://fiveminutehistory.com/?p=7526",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Spanish Armada",
+          "entity_type": "Event"
+        },
+        {
+          "name": "England",
+          "entity_type": "CountrySubdivision"
+        }
+      ],
+      "event_text": "In the summer of 1588, King Philip II launched the Spanish Armada—about 130 ships carrying up to 30,000 men—with the goal of invading England and restoring Catholicism, but the fleet was defeated by English tactics and severe storms, marking the decline of Spain’s naval supremacy."
+    },
+    {
+      "id": "spanish_civil_war_1936",
+      "title": "The Spanish Civil War",
+      "description": "The Spanish Civil War (July 1936 – April 1939) began when General Francisco Franco led a military rebellion against the Second Spanish Republic, drawing international support for both sides and ending with Franco’s victory, which set the stage for World II.",
+      "timeline": {
+        "start": "1936",
+        "end": "1939",
+        "display": "July 1936 – April 1939"
+      },
+      "sources": [
+        {
+          "publisher": "Spanish Civil War | History | Research Starters | EBSCO Research",
+          "url": "https://www.ebsco.com/research-starters/history/spanish-civil-war",
+          "date": null
+        }
+      ],
+      "entities": [
+        {
+          "name": "Guerra Civil española",
+          "entity_type": "Event"
+        }
+      ],
+      "event_text": "The Spanish Civil War (July 1936 – April 1939) began when General Francisco Franco led a military rebellion against the Second Spanish Republic, drawing international support for both sides and ending with Franco’s victory, which set the stage for World II."
+    },
+    {
+      "id": "transition_democracy_1978_constitution_1975",
+      "title": "The Transition to Democracy and the 1978 Constitution",
+      "description": "Following Franco’s death in 1975, Spain transitioned to democracy: political parties were legalized in 1977, the first democratic elections were held in 1977, the new Constitution was approved in December 1978, and municipal elections took place in April 1979, establishing a modern constitutional monarchy.",
+      "timeline": {
+        "start": "1975",
+        "end": "1975",
+        "display": "1975"
+      },
+      "sources": [
+        {
+          "publisher": "It happened in April: the key month of the Transition beyond the legalization of the PCE | Demócrata",
+          "url": "https://www.democrata.es/en/politics/it-happened-in-april-the-key-month-of-the-transition-beyond-the-legalization-of-the-pce",
+          "date": null
+        }
+      ],
+      "entities": [],
+      "event_text": "Following Franco’s death in 1975, Spain transitioned to democracy: political parties were legalized in 1977, the first democratic elections were held in 1977, the new Constitution was approved in December 1978, and municipal elections took place in April 1979, establishing a modern constitutional monarchy."
+    }
+  ]
+}

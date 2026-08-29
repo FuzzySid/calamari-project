@@ -1,0 +1,109 @@
+{
+  "query": "What are the most relevant historical periods of Spain",
+  "results": [
+    {
+      "title": "History of Spain Timeline - Globelink Blog",
+      "fact": "Prehistoric Iberia (c. 50,000 BC – 1,100 BC) is supported by the fact that the oldest findings in Spain date to about 30,000‑50,000 BC and include cave sites such as Cova Negra and Pinar, with Iberian peoples arriving from North Africa.",
+      "description": "Prehistoric Iberia (c. 50,000 BC – 1,100 BC) is supported by the fact that the oldest findings in Spain date to about 30,000‑50,000 BC and include cave sites such as Cova Negra and Pinar, with Iberian peoples arriving from North Africa.",
+      "timeline": "c. 50,000 BC – 1,100 BC",
+      "image_prompt": "A painterly illustration of a prehistoric landscape in Iberia, featuring rugged coastlines and mountainous terrain, adorned with ancient cave entrances like Cova Negra and Pinar. The scene should evoke a sense of mystery, showcasing the natural environment with cinematic lighting, subtle earth tones, and a texture resembling aged parchment, reflecting the early human presence in the region. Include artifacts like primitive tools and textiles subtly integrated into the landscape, suggestive of the Iberian peoples migrating from North Africa.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/01_c-50-000-BC-1-100-BC.jpg"
+    },
+    {
+      "title": "History of Spain Timeline - Globelink Blog",
+      "fact": "The Pre‑Roman and Carthaginian period (c. 1,100 – 206 BC) is described in the same source, which notes Phoenician, Greek and Carthaginian colonisation of the Iberian coast before Roman conquest.",
+      "description": "The Pre‑Roman and Carthaginian period (c. 1,100 – 206 BC) is described in the same source, which notes Phoenician, Greek and Carthaginian colonisation of the Iberian coast before Roman conquest.",
+      "timeline": "c. 1,100 – 206 BC",
+      "image_prompt": "A painterly scene capturing the Iberian coast during the Pre-Roman and Carthaginian period (c. 1,100–206 BC), featuring Phoenician and Greek ships anchored along rugged cliffs, surrounded by dense Mediterranean vegetation. A distant depiction of a Carthaginian settlement showcases thatched roofs and market stalls, with textiles and pottery displayed prominently. The sky is illuminated with warm, cinematic light, casting shadows over the coastal landscape, all presented with a parchment texture and restrained color palette, evoking the historical atmosphere without identifiable figures.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/02_c-1-100-206-BC.jpg"
+    },
+    {
+      "title": "History of Spain Timeline - Globelink Blog",
+      "fact": "Roman Hispania (206 BC – 5th century AD) is documented by the fact that Rome conquered the peninsula, Romanised it, introduced Latin, law, infrastructure and Christianity.",
+      "description": "Roman Hispania (206 BC – 5th century AD) is documented by the fact that Rome conquered the peninsula, Romanised it, introduced Latin, law, infrastructure and Christianity.",
+      "timeline": "206 BC – 5th century AD",
+      "image_prompt": "Create an editorial illustration of a Romanized Hispania during the period of 206 BC to the 5th century AD. Depict a panoramic view of a Roman city with classical architecture, aqueducts, and cobblestone streets, surrounded by rolling hills and Mediterranean landscapes. Include elements like Roman ships in a harbor and remnants of ancient maps on parchment, all rendered in painterly detail with cinematic light and a restrained color palette, emphasizing the legacy of Roman influence.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/03_206-BC-5th-century-AD.jpg"
+    },
+    {
+      "title": "History of Spain Timeline - Globelink Blog",
+      "fact": "The Visigothic Kingdom (418–711) is confirmed by the fact that Gothic dominance lasted until 711 when Muslims crossed the Strait of Gibraltar and defeated the last Visigoth king.",
+      "description": "The Visigothic Kingdom (418–711) is confirmed by the fact that Gothic dominance lasted until 711 when Muslims crossed the Strait of Gibraltar and defeated the last Visigoth king.",
+      "timeline": "418–711",
+      "image_prompt": "A detailed illustration depicting a Visigothic fortress on a rugged cliff overlooking the Strait of Gibraltar, with Gothic architectural elements such as pointed arches and intricate stonework. In the foreground, a muted landscape with rolling hills and sparse vegetation leading down to the coastline. A fleet of small ships is visible on the shimmering water, symbolizing the impending crossing by Muslim forces. The overall palette is restrained, featuring earthy tones and soft shadows to highlight the architectural details, all rendered on a textured parchment background to evoke a historical atmosphere.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/04_418-711.jpg"
+    },
+    {
+      "title": "History of Spain Timeline - Globelink Blog",
+      "fact": "Al‑Andalus – Muslim Spain (711–1492) and its three sub‑periods (Emirate, Caliphate, Taifa kingdoms) are directly taken from the fact that the Muslim period lasted more than 700 years and was divided into those three phases.",
+      "description": "Al‑Andalus – Muslim Spain (711–1492) and its three sub‑periods (Emirate, Caliphate, Taifa kingdoms) are directly taken from the fact that the Muslim period lasted more than 700 years and was divided into those three phases.",
+      "timeline": "711–1492",
+      "image_prompt": "Illustrate a detailed landscape of Al-Andalus during the Caliphate period (929–1031), featuring a vibrant and lush countryside with historical architecture such as mosques and palaces, intricate textile patterns suggesting the era's artistry, and a serene river reflecting the colorful sunset. Include hints of a bustling market scene with objects typical of the time, all rendered in a restrained, earthy palette with painterly textures on a parchment background. Ensure the light is cinematic and soft, enhancing the rich historical atmosphere without any textual elements.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/05_711-1492.jpg"
+    },
+    {
+      "title": "History of Spain Timeline - Globelink Blog",
+      "fact": "The Reconquista (711–1492) is supported by the same source, which describes the Christian campaign to reclaim the peninsula from Muslim rule.",
+      "description": "The Reconquista (711–1492) is supported by the same source, which describes the Christian campaign to reclaim the peninsula from Muslim rule.",
+      "timeline": "711–1492",
+      "image_prompt": "Illustrate a panoramic view of the Iberian Peninsula during the Reconquista (711–1492), featuring a juxtaposition of architectural styles from both Christian and Muslim influences, such as a Gothic cathedral alongside an ornate Moorish mosque. The landscape should include rolling hills and fortified castles, bathed in warm, cinematic light. Integrate elements like medieval ships on a river and traditional textiles draping in the foreground, all rendered in painterly detail with a restrained palette and textured like aged parchment.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/06_711-1492-2.jpg"
+    },
+    {
+      "title": "History of Spain Timeline - Globelink Blog",
+      "fact": "Unification and the Spanish Empire/Golden Age (late 15th – 17th century) are backed by the fact that under Charles I (grandson of Isabella and Ferdinand) the Spanish, German and Austrian kingdoms were united, creating a brief period of imperial dominance and cultural flourishing.",
+      "description": "Unification and the Spanish Empire/Golden Age (late 15th – 17th century) are backed by the fact that under Charles I (grandson of Isabella and Ferdinand) the Spanish, German and Austrian kingdoms were united, creating a brief period of imperial dominance and cultural flourishing.",
+      "timeline": "late 15th – 17th century",
+      "image_prompt": "\"An aerial view of a majestic 16th-century Spanish port city, showcasing ornate architecture reflecting the Spanish Renaissance style, with ships in the harbor symbolizing trade and exploration, rolling hills in the background, and maps unfurling on parchment-like textures, all bathed in soft, cinematic light and a muted color palette.\"",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/07_late-15th-17th-century.jpg"
+    },
+    {
+      "title": "Spanish Civil War - Wikipedia",
+      "fact": "Bourbon Spain and the Enlightenment (18th century) are inferred from the timeline fact that the War of the Spanish Succession brought the Bourbon dynasty to power, leading to administrative reforms and Enlightenment‑inspired modernization.",
+      "description": "Bourbon Spain and the Enlightenment (18th century) are inferred from the timeline fact that the War of the Spanish Succession brought the Bourbon dynasty to power, leading to administrative reforms and Enlightenment‑inspired modernization.",
+      "timeline": "18th century",
+      "image_prompt": "Create a painterly illustration depicting an 18th-century Spanish landscape featuring a grand Bourbon-era palace amidst rolling hills, with intricate architecture showcasing Enlightenment-inspired design. Surround the palace with lush gardens and a tranquil river reflecting the sky, complemented by a backdrop of soft, misty mountains. Incorporate elements like a period ship sailing in the river and traditional textiles displayed nearby, all depicted in a restrained color palette with cinematic lighting, on a textured parchment background.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/08_18th-century.jpg"
+    },
+    {
+      "title": "History of Spain Timeline - Globelink Blog",
+      "fact": "Napoleonic invasion and 19th‑century turmoil (1808–1874) are corroborated by the fact that Napoleon defeated the Spanish army in 1808, replaced the king, and that after his defeat Ferdinand VII restored the throne, leading to political instability and loss of colonies.",
+      "description": "Napoleonic invasion and 19th‑century turmoil (1808–1874) are corroborated by the fact that Napoleon defeated the Spanish army in 1808, replaced the king, and that after his defeat Ferdinand VII restored the throne, leading to political instability and loss of colonies.",
+      "timeline": "1808–1874",
+      "image_prompt": "Create a historically respectful illustration depicting a tumultuous Spanish landscape during the 19th century, featuring the ruins of a once-grand castle representing the royal lineage, surrounded by a desolate countryside symbolizing the political instability of the period. Incorporate elements of military presence, such as a distant, crumbling fortress and ghostly outlines of ships on a hazy horizon, suggesting loss of colonies. Use painterly detail with cinematic lighting and a restrained color palette, over a parchment texture background, evoking the era's turmoil and transformation.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/09_1808-1874.jpg"
+    },
+    {
+      "title": "Spanish Civil War - Wikipedia",
+      "fact": "Restoration and the Second Republic (1874–1936) are reflected in the timeline fact that the Bourbon monarchy was restored in 1874 and that a Second Republic was proclaimed in 1931 with sweeping reforms.",
+      "description": "Restoration and the Second Republic (1874–1936) are reflected in the timeline fact that the Bourbon monarchy was restored in 1874 and that a Second Republic was proclaimed in 1931 with sweeping reforms.",
+      "timeline": "1874–1936",
+      "image_prompt": "Illustrate a historical scene capturing the architectural contrasts of Spain during the transition from the Bourbon monarchy to the Second Republic (1874–1936). Feature a blend of opulent monarchy structures alongside modernist elements symbolizing the sweeping reforms of the Republic. Include a dusky sunset casting cinematic light over the landscape, with a textured parchment background to evoke the period's atmosphere.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/10_1874-1936.jpg"
+    },
+    {
+      "title": "Spanish Civil War - Wikipedia",
+      "fact": "The Spanish Civil War (1936–1939) is listed in the comprehensive timeline fact, which includes the conflict between Republican and Nationalist forces.",
+      "description": "The Spanish Civil War (1936–1939) is listed in the comprehensive timeline fact, which includes the conflict between Republican and Nationalist forces.",
+      "timeline": "1936–1939",
+      "image_prompt": "Illustrate a dramatic landscape from the Spanish Civil War era (1936-1939), featuring a desolate battlefield with crumbling architecture reflecting both Republican and Nationalist influences. Include a weathered map overlay showing key regions, alongside scattered items such as tattered flags and old rifles. Use painterly detail and cinematic lighting to emphasize the somber mood, employing a restrained color palette against a parchment texture to evoke the historical period.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/11_1936-1939.jpg"
+    },
+    {
+      "title": "Spanish Civil War - Wikipedia",
+      "fact": "Franco's Spain (1939–1975) is also covered by the timeline fact that describes the authoritarian dictatorship under Francisco Franco after the civil war.",
+      "description": "Franco's Spain (1939–1975) is also covered by the timeline fact that describes the authoritarian dictatorship under Francisco Franco after the civil war.",
+      "timeline": "1939–1975",
+      "image_prompt": "An editorial illustration depicting a somber landscape of post-war Spain under Franco’s dictatorship, featuring stark architectural structures symbolizing authoritarianism, desolate streets reflecting the atmosphere of repression, and tattered flags fluttering in the wind. The scene should capture a muted color palette while conveying a sense of historical weight through painterly detail and cinematic lighting, overlaid on a parchment-textured background.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/12_1939-1975.jpg"
+    },
+    {
+      "title": "Spanish Civil War - Wikipedia",
+      "fact": "The transition to democracy and contemporary Spain (1975–present) is supported by the timeline fact noting the peaceful transition after Franco’s death, the 1978 constitution, EU membership in 1986, and modern democratic status.",
+      "description": "The transition to democracy and contemporary Spain (1975–present) is supported by the timeline fact noting the peaceful transition after Franco’s death, the 1978 constitution, EU membership in 1986, and modern democratic status.",
+      "timeline": "1975–present",
+      "image_prompt": "Illustrate a serene Spanish landscape depicting a blend of modern architectural elements and historical sites from the period following Franco’s death, with nods to democracy's emergence. Incorporate symbols of democratic transition like open doors or doves, set against a backdrop of the Spanish countryside, under dramatic cinematic lighting. Use a restrained palette reflecting the colors of the Spanish flag, with textures reminiscent of parchment, avoiding any identifiable figures or text.",
+      "image_file": "/Users/sm_aswin21/Desktop/calamari-project/data/photos/spain/13_1975-present.jpg"
+    }
+  ]
+}

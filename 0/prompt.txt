@@ -1,0 +1,1 @@
+Can you create the globe that renders on the homepage a complete globe? Like it should look like a completely rotatable earth globe with all the countries and all of them labelled with their country names. On hovering over a country there should be a small hover effect and the cursor should turn clickable.

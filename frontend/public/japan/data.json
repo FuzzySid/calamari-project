@@ -1,0 +1,31 @@
+{
+  "events": {
+    "1500": [
+      {
+        "title": "The Land That Fed the Wars",
+        "description": "Most people were farmers. Rice sustained the economy, paid taxes to the daimyō, and ultimately financed the armies fighting across Japan.",
+        "video_url": "videos/the-land-that-fed-the-wars.mp4"
+      },
+      {
+        "title": "War Builds a City",
+        "description": "As daimyō strengthened their domains, castle towns grew around their fortresses, drawing farmers, artisans and merchants into a new urban economy.",
+        "video_url": "videos/war-builds-a-city.mp4"
+      },
+      {
+        "title": "The Lower Rise",
+        "description": "Sengoku society was unusually fluid. Through military skill and political opportunity, men of humble origins could rise far beyond the status of their birth.",
+        "video_url": "videos/the-lower-rise.mp4"
+      },
+      {
+        "title": "The Gunpowder Revolution",
+        "description": "After Portuguese matchlocks arrived in 1543, Japanese armies adopted firearms rapidly, transforming battlefield tactics and even the armor worn by warriors.",
+        "video_url": "videos/the-gunpowder-revolution.mp4"
+      },
+      {
+        "title": "A New Place in the World",
+        "description": "In an age of gekokujō, birth did not always determine destiny. Military achievement could carry a man from the fields into the service of powerful lords.",
+        "video_url": "videos/a-new-place-in-the-world.mp4"
+      }
+    ]
+  }
+}

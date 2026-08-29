@@ -4,10 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import worldFeatures from "@/data/world-features.json";
-import { getCountryByCode } from "@/lib/data";
 import type { GlobeMethods } from "@/components/globe-canvas";
+import { japanPeriods } from "@/lib/japan-periods";
 import { PeriodSelector } from "@/components/period-selector";
-import { spainPeriods } from "@/lib/spain-periods";
+import { spainPeriods, type SpainPeriod } from "@/lib/spain-periods";
 
 type GeoCoordinate = [number, number];
 type PolygonCoordinates = GeoCoordinate[][];
@@ -46,7 +46,10 @@ type CountryEntry = {
 };
 
 const GlobeCanvas = dynamic(() => import("@/components/globe-canvas"), { ssr: false });
-const storyCountry = getCountryByCode("ESP");
+const periodsByCountry: Record<string, SpainPeriod[]> = {
+  ESP: spainPeriods,
+  JPN: japanPeriods
+};
 const countries = (
   "features" in worldFeatures ? worldFeatures.features : worldFeatures
 ) as unknown as CountryFeature[];
@@ -225,7 +228,8 @@ export function GlobeExperience() {
   const countryParam = searchParams.get("country")?.trim() ?? "";
 
   const drumHeight = Math.max(390, Math.min(702, viewport.height - 150));
-  const hasStory = selectedCode === storyCountry?.code;
+  const activePeriods = selectedCode ? periodsByCountry[selectedCode] : undefined;
+  const hasStory = Boolean(activePeriods?.length);
 
   const hoveredPaths = useMemo(
     () => (hoveredCode ? entryByCode.get(hoveredCode)?.rings ?? EMPTY_PATHS : EMPTY_PATHS),
@@ -403,12 +407,12 @@ export function GlobeExperience() {
 
   /** Fades the globe out, then hands over to the era's story. */
   function openPeriod(periodId: string, storyId: string) {
-    if (!storyCountry || departingRef.current) return;
+    if (!selectedCode || departingRef.current) return;
 
     departingRef.current = true;
     setDepartingMoment(periodId);
     window.setTimeout(() => {
-      router.push(`/story/${storyCountry.code}/period/${encodeURIComponent(storyId)}`);
+      router.push(`/story/${selectedCode}/period/${encodeURIComponent(storyId)}`);
     }, 700);
   }
 
@@ -533,23 +537,23 @@ export function GlobeExperience() {
             </button>
 
             <div className="flex min-h-0 flex-1 items-center pr-1">
-              {hasStory && storyCountry ? (
+              {hasStory && activePeriods ? (
                 <div className="w-full">
                   <PeriodSelector
                     theme="dusk"
                     height={drumHeight}
-                    periods={spainPeriods}
-                    defaultValue={spainPeriods[0]?.id}
+                    periods={activePeriods}
+                    defaultValue={activePeriods[0]?.id}
                     onActivate={(period) => {
                       // Only the eras with a generated story can be entered.
-                      const storyId = spainPeriods.find((era) => era.id === period.id)?.storyId;
+                      const storyId = activePeriods.find((era) => era.id === period.id)?.storyId;
                       if (storyId) openPeriod(period.id, storyId);
                     }}
                   />
                 </div>
               ) : (
                 <p className="max-w-xs font-mono text-[10px] uppercase leading-5 tracking-[0.24em] text-mist/40">
-                  No verified timeline for this country yet — Spain carries the complete story.
+                  No generated timeline for this country yet.
                 </p>
               )}
             </div>

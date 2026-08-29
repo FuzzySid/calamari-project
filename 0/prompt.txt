@@ -1,0 +1,117 @@
+<task-notification>
+<task-id>a6033c4cb3e38af63</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-sm-aswin21-Desktop-calamari-project/8526e5c0-93a2-4742-a081-61646d43594f/tasks/a6033c4cb3e38af63.output</output-file>
+<status>completed</status>
+<summary>Agent "Explore backend pipeline files" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>Here is a thorough report on the six requested files, how they connect, and what's in flight.
+
+## File-by-file summary
+
+### `backend/knowledge_search.py`
+Standalone CLI script, entry point of the pipeline. Calls Cala's remote MCP server (`https://api.cala.ai/mcp/`, hardcoded URL) via the `knowledge_search` tool over raw HTTP/JSON-RPC (handles both SSE and plain-JSON responses). Given a natural-language query (default: "What are the most relevant historical periods of Spain"), it walks Cala's explainability→context→origins provenance chain to resolve a source title for each fact, extracts a `(date range)` timeline via regex, and writes `{query, results: [{title, fact, description, timeline}, ...]}` to a JSON file (default `data/knowledge-search.json`). Requires `CALA_API_KEY` from a project-root `.env` (custom minimal dotenv loader, doesn't override already-set env vars). This is a fully separate script — it is **not imported** by generate_story.py/story_pipeline.py; it just produces the JSON file that `generate_story.py --input` later consumes. Country/topic is entirely determined by the free-text query argument — nothing about country is hardcoded here except the default query string mentioning Spain.
+
+### `backend/story_pipeline.py`
+Pure-logic module (no network calls, no argparse) — the "core" of the pipeline, imported by `generate_story.py` and directly unit-tested. Contains:
+- `timeline_year(timeline)` — regex-based parser converting strings like "1492", "3rd century", "50,000 BC" into a sortable integer year (handles centuries and BC/BCE negation).
+- `normalize_cala_records(document)` — turns the Cala `results` array into normalized candidate records with `source_index`, `event`, `timeline`, `title`, `source_url`, `entities`, `sort_year`; drops undated/unusable records; raises `ValueError` if nothing usable remains. Handles both "period" records (`fact` key) and "event" records (`event` key).
+- `story_schema(expected_count=6)` — JSON Schema (strict, `additionalProperties: False`) for OpenAI's structured output: requires `era_label`, `era_rationale`, and exactly 6 `events`, each with `source_indices`, `year`, `event_title`, `fact_text`, `narrative_copy`, `visual_brief`. **6 is hardcoded as a default parameter** everywhere (`expected_count=6`), though technically overridable.
+- `build_curator_input(country_name, candidates, expected_count=6)` — builds the GPT prompt text embedding all candidate source records as JSON lines, with curatorial instructions (source-grounded, cinematic-museum voice, no invented facts, avoid people/captions in visual briefs).
+- `validate_story(events, candidates, expected_count=6)` — strict validator: exact count, source_indices must reference known candidates, no reused sources across events, no duplicate titles, `year` must be an int matching one of the referenced sources' `sort_year`, and events must be strictly chronological (ascending). Raises `ValueError` with a descriptive message on any violation.
+- `event_id(order, title)` — slugifies title into a URL-safe id.
+- `deterministic_seed(country_code, event_identifier, profile_version)` — SHA-256-based deterministic Fal seed so reruns of the same country/event/style are reproducible.
+- `build_fal_prompt(event, profile)` — builds the base Fal image prompt from `visual_brief` + style profile `style`/`constraints`.
+- `build_frontend_story(country_code, country_name, curated, candidates, profile, asset_slug=None)` — assembles the final frontend JSON shape (`code`, `name`, `eraLabel`, `eraStartYear/EndYear`, `eraRationale`, `moments[]` with `id/year/orderIndex/factText/sourceRef/sourceIndices/narrativeCopy/visualBrief/imagePath/styleProfile`). `asset_slug` (new) defaults to `country_code.lower()` if not given, controlling the `imagePath` URL prefix.
+- `scrub_secrets(value)` / `append_fal_log(log_path, run)` — recursively strips a hardcoded `SENSITIVE_KEYS` set (`api_key, authorization, token, headers, fal_key, openai_api_key`) from any dict, then appends a timestamped run record to `data/fal.json` (creates `{"runs": []}` if missing).
+
+### `backend/generate_story.py`
+The orchestrator/CLI (`python3 -m backend.generate_story`). Order of operations in `run_pipeline`:
+1. `load_profile(profile_path)` — loads and validates the style JSON (required keys enforced explicitly).
+2. Resolve/verify the panorama reference image exists (`reference_image_path` from profile).
+3. Compute `country_slug` (from `--country-slug` arg, or auto-slugified from `country_name`).
+4. Load the knowledge-search JSON (`--input`) and call `story_pipeline.normalize_cala_records`.
+5. `curate_story()` — calls OpenAI's Responses API (`https://api.openai.com/v1/responses`, hardcoded URL) with model from `--openai-model` (default `gpt-5`, overridable via `OPENAI_MODEL` env var), using `story_pipeline.story_schema()` for strict structured JSON output; 300s timeout.
+6. `story_pipeline.build_frontend_story()` builds the frontend story object.
+7. For each of the 6 moments: compute a deterministic seed, build the Nano Banana prompt (`build_fal_prompt` + extra fixed instructions to preserve panorama composition/viewpoint but not copy people/flags/buildings), call Fal (`fal_image_url`, hardcoded `https://fal.run/{model}` URL) with the panorama sent as a base64 data-URI reference image, download the resulting JPEG into `frontend/public/moments/{country_slug}/`.
+8. Write the frontend story JSON to `frontend/data/{country_slug}.json`.
+9. Append a scrubbed run record to `data/fal.json` via `story_pipeline.append_fal_log`.
+
+CLI args: `--input` (default `data/knowledge-search-spain.json`), `--country-code` (default `ESP`), `--country-name` (default `Spain`), `--profile` (default `data/styles/museum-editorial-v1.json`), `--country-slug` (default `spain`), `--openai-model` (default from `OPENAI_MODEL` env or `gpt-5`). Credentials (`OPENAI_API_KEY`, `FAL_KEY`/`FAL_API_KEY`) come only from env/`.env`, never CLI flags — script raises `RuntimeError` if missing. Has its own tiny dotenv loader (duplicated from `knowledge_search.py`, not shared).
+
+### `backend/README.md`
+Short doc describing `generate_story.py`, credential setup via `.env`, and example invocation with the Spain dataset. States outputs land in `frontend/data/{slug}.json`, `frontend/public/moments/{slug}/`, and `data/fal.json`, with the style profile versioned at `data/styles/museum-editorial-v1.json`.
+
+### `tests/test_story_pipeline.py`
+`unittest`-based tests covering: `normalize_cala_records` handling both period/event record shapes and preserving `source_url`; `validate_story` rejecting non-chronological events; `build_fal_prompt` embedding visual brief + style + constraints; `append_fal_log` scrubbing `api_key`; and a full `run_pipeline` integration test that mocks `curate_story`, `fal_image_url`, and `download` (patched via `unittest.mock.patch` on `backend.generate_story.*`) to verify 6 Fal calls are made against `fal-ai/nano-banana-pro` with correct `aspect_ratio`/`resolution`/`output_format`/base64 `image_urls`, that 6 output images exist, that `frontend_path` resolves to `{project_root}/frontend/data/testland.json`, and that the appended `fal.json` run record contains `reference_version` and no `api_key`.
+
+### `data/styles/museum-editorial-v1.json`
+The style profile config: `version` ("museum-editorial-v1"), `reference_version` ("castle-panorama-v1"), `reference_image_path` (`frontend/public/panoramas/castle-panorama.jpg`), `generation_model` (`fal-ai/nano-banana-pro`), `aspect_ratio` (`16:9`), `resolution` (`2K`), `output_format` (`jpeg`), `style` (a prose description: "muted indigo and ochre palette..."), and `constraints` (an array of 7 rules: grounded objects/architecture/etc., avoid unsourced historical figures, no text/labels/watermark/modern objects/spectacle-sunset).
+
+## Pipeline connection (call graph)
+
+```
+knowledge_search.py (standalone, hits Cala MCP)
+        │  writes data/knowledge-search-&lt;x&gt;.json
+        ▼
+generate_story.py  --input data/knowledge-search-spain.json --country-code ESP --country-name Spain [--country-slug spain]
+   ├─ load_profile()               → reads data/styles/museum-editorial-v1.json
+   ├─ story_pipeline.normalize_cala_records()
+   ├─ curate_story()               → OpenAI Responses API (gpt-5), schema = story_pipeline.story_schema()
+   ├─ story_pipeline.build_frontend_story()  → validates via story_pipeline.validate_story()
+   ├─ per moment (x6):
+   │    story_pipeline.deterministic_seed()
+   │    build_nano_banana_prompt() → story_pipeline.build_fal_prompt()
+   │    fal_image_url()            → Fal (fal-ai/nano-banana-pro), reference = castle-panorama.jpg as base64
+   │    download()                 → frontend/public/moments/&lt;slug&gt;/NN-&lt;id&gt;.jpg
+   ├─ writes frontend/data/&lt;slug&gt;.json
+   └─ story_pipeline.append_fal_log() → data/fal.json (scrubbed of secrets)
+```
+
+`knowledge_search.py` is upstream and decoupled — nothing imports it; its only integration point is the JSON file it produces, which `generate_story.py --input` consumes. `story_pipeline.py` has zero I/O/network code and is the fully testable core; `generate_story.py` is the thin (well, 225-line) I/O/network glue + CLI. There is also `backend/knowledge_search_events.py`, `backend/generate_photos.py`, `backend/generate_nano_banana_trial.py`, and `backend/main.py` in the directory that were not requested but exist alongside — worth knowing about for architecture planning as likely related/adjacent scripts not yet examined.
+
+## Hardcoded vs configurable
+
+**Hardcoded (not exposed via CLI/config):**
+- Cala MCP URL (`https://api.cala.ai/mcp/`) in `knowledge_search.py`.
+- OpenAI Responses URL (`https://api.openai.com/v1/responses`) in `generate_story.py`.
+- Fal base URL (`https://fal.run/{model}`) in `generate_story.py` (model itself is configurable via profile).
+- Moment count: 6, baked in as default `expected_count=6` throughout `story_pipeline.py` (schema, curator prompt, validator) — technically overridable by passing a different value but no CLI flag surfaces it, and `generate_story.py` always calls with defaults.
+- `SENSITIVE_KEYS` set for secret scrubbing.
+- Fal request extras: `num_images: 1`, `safety_tolerance: "4"`, `limit_generations: True`.
+- The panorama-preservation instruction text appended in `build_nano_banana_prompt`.
+- `.env` file location/parsing logic (duplicated between `knowledge_search.py` and `generate_story.py`, not shared).
+
+**Configurable via CLI args (`generate_story.py`):** `--input`, `--country-code` (default `ESP`), `--country-name` (default `Spain`), `--profile` (default `data/styles/museum-editorial-v1.json`), `--country-slug` (default `spain`), `--openai-model` (default `gpt-5`, or `OPENAI_MODEL` env var).
+
+**Configurable via `knowledge_search.py` CLI:** free-text `query` (positional, default is a Spain-specific string), `-o/--output` path.
+
+**Configurable via style profile JSON** (`data/styles/museum-editorial-v1.json`, swappable via `--profile`): `version`, `reference_version`, `reference_image_path`, `generation_model`, `aspect_ratio`, `resolution`, `output_format`, `style` prose, `constraints` list. `load_profile` enforces these exact required keys are present.
+
+**Credentials (env-only, never CLI):** `CALA_API_KEY`, `OPENAI_API_KEY`, `FAL_KEY`/`FAL_API_KEY`, loaded from project-root `.env` (gitignored) or exported env vars.
+
+**Country-specific data currently on disk:** `data/knowledge-search-spain.json`, `data/knowledge-search-spain-2.json`, `data/knowledge-search-india.json` exist, but only `frontend/data/spain.json` and `frontend/public/moments/spain/` have been generated so far — India hasn't been run through `generate_story.py` yet based on directory listing.
+
+## What the git diff shows (uncommitted work in progress)
+
+This is a mid-refactor from a **two-stage Fal pipeline (base generation + anchor-based edit)** to a **single-stage Fal pipeline using a fixed panorama reference image**:
+
+1. **Removed entirely:** the "style anchor" review-gate workflow — `ANCHOR_PROMPT` constant, `upload_anchor()` (used `fal_client.upload_file`, required `backend/requirements.txt`/`fal-client` package), `promote_anchor()`, `create_anchor_candidates()`, and the `--create-anchor-candidates`/`--select-anchor` CLI flags. Previously you had to run `generate_story.py --create-anchor-candidates`, inspect 3 candidate images, then `--select-anchor N` to promote one into `data/styles/museum-editorial-v1/anchor.jpg` before the main story generation would even run (it hard-failed without an approved `anchor_version`). That whole approval gate is gone from the code, but the README's "Run the Spain pipeline after anchor approval" line is still present (stale reference to a workflow step that no longer exists in the diff — this may be worth cleaning up).
+
+2. **Two-call Fal generation → one-call:** previously each moment called `fal-ai/flux-2-pro` to generate a base image, then `fal-ai/flux-2-pro/edit` to apply the anchor style (2 Fal calls/event, 12 total for 6 events, per old test). Now each moment makes a single call to `fal-ai/nano-banana-pro`, passing the shared `castle-panorama.jpg` as a base64 data-URI reference image (`reference_data_uri()`, new function using `base64` import) directly in `image_urls`, with new params `aspect_ratio: "16:9"`, `resolution: "2K"`, `safety_tolerance: "4"`, `limit_generations: True`, and `num_images: 1`. This replaces `image_size: landscape_16_9` and `enable_safety_checker: True`.
+
+3. **Style profile schema changed:** `anchor_version`/`anchor_path`/`edit_model`/`image_size` fields removed; replaced with `reference_version`/`reference_image_path`/`aspect_ratio`/`resolution`. `generation_model` changed from `fal-ai/flux-2-pro` to `fal-ai/nano-banana-pro`.
+
+4. **New `--country-slug` parameter:** previously assets were always keyed by `country_code.lower()` (e.g., `esp`); now there's a separate, human-readable `country_slug` (default `spain`) used for `frontend/data/{slug}.json` and `frontend/public/moments/{slug}/`, decoupled from the ISO country code. `story_pipeline.build_frontend_story` gained an `asset_slug` parameter (falls back to `country_code.lower()` if not passed).
+
+5. **Timeout increased:** OpenAI curator call timeout went from 120s to 300s (likely due to gpt-5 latency).
+
+6. **Progress logging added:** `run_pipeline` now prints "Curating six source-linked moments with GPT-5..." and per-moment "Generating N/6: {id}..." status lines (previously silent).
+
+7. **README updated to match:** removed the "Install the Fal CDN uploader" (`fal-client` requirement) section and the anchor-candidates/select-anchor instructions; updated output paths from `frontend/data/esp.json` / `frontend/public/moments/esp/` to `frontend/data/spain.json` / `frontend/public/moments/spain/`, reflecting the new `country_slug`-based paths. Note: the phrase "Run the Spain pipeline after anchor approval" was left unchanged even though the anchor-approval step was deleted — likely leftover cruft.
+
+8. **Tests updated in lockstep:** `test_pipeline_uses_anchor_edit_for_every_event_and_writes_frontend_assets` renamed to `test_pipeline_uses_panorama_reference_for_every_nano_banana_event`; assertions changed from expecting 12 Fal calls (6 base + 6 edit, alternating models) with an uploaded/mocked anchor CDN URL, to expecting exactly 6 calls all to `fal-ai/nano-banana-pro` with base64 data-URI `image_urls`, plus new assertions on `aspect_ratio`, `resolution`, `output_format`, and that the logged run's `reference_version` is `castle-panorama-v1` and still has no leaked `api_key`. All 4 tests currently target the new (uncommitted) code — i.e. this is a completed, self-consistent refactor rather than a half-done one; nothing appears broken by mismatched expectations.
+
+**Note:** `backend/requirements.txt` (containing `fal-client&gt;=0.8.0`) still exists on disk but is no longer referenced by the diff's code path (it was only needed for `upload_anchor`'s `fal_client.upload_file` call, which has been deleted) — this is now dead/orphaned given the diff, worth flagging for cleanup. Also of note for architecture planning: `backend/main.py`, `backend/generate_photos.py`, `backend/generate_nano_banana_trial.py`, and `backend/knowledge_search_events.py` exist in the directory but weren't part of this read — they may also reference the now-removed anchor workflow or the old profile schema and are worth checking before finalizing plans.</result>
+<usage><subagent_tokens>47392</subagent_tokens><tool_uses>9</tool_uses><duration_ms>73354</duration_ms></usage>
+</task-notification>

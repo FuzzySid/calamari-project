@@ -1,0 +1,2 @@
+[http://localhost:3000/](http://localhost:3000/) -> is the homepage
+When someone clicks on a country, append query paramter on the homepage like country=\<name>

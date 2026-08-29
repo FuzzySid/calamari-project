@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import worldFeatures from "@/data/world-features.json";
 
@@ -42,7 +43,7 @@ const Globe = dynamic(() => import("react-globe.gl"), {
   ssr: false
 });
 
-const countries = worldFeatures as CountryFeature[];
+const countries = worldFeatures as unknown as CountryFeature[];
 
 function getRingArea(ring: GeoCoordinate[]) {
   let area = 0;
@@ -281,6 +282,13 @@ export function GlobeExperience() {
           to enter the story experience.
         </p>
       </div>
+
+      <Link
+        href="/panorama"
+        className="absolute right-4 top-4 z-20 rounded-full border border-white/15 bg-black/25 px-4 py-2 text-sm text-mist/85 backdrop-blur-md transition hover:bg-black/45 focus:outline-none focus:ring-2 focus:ring-gold/70 sm:right-8 sm:top-8"
+      >
+        Try 360° viewer
+      </Link>
 
       <div className="pointer-events-none absolute bottom-8 left-1/2 z-10 w-[min(92vw,28rem)] -translate-x-1/2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-center text-sm text-mist/80 backdrop-blur-md">
         {hoveredCountry

@@ -22,6 +22,8 @@ import argparse
 import json
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -99,9 +101,39 @@ MAX_ID_LENGTH = 60
 # Dropped from event ids so the length budget goes to distinguishing words.
 ID_STOPWORDS = {"the", "a", "an", "of", "and", "in", "to", "its", "is", "are", "with"}
 
+# Cala occasionally answers with a non-JSON body; a retry has always succeeded.
+CALA_ATTEMPTS = 3
+CALA_RETRY_BACKOFF_SECONDS = 2
 
-def call_cala(query, api_key):
-    """POST knowledge_search to Cala and unwrap the tool output.
+
+def call_cala(query, api_key, attempts=CALA_ATTEMPTS):
+    """POST knowledge_search to Cala, retrying a transient empty or truncated reply.
+
+    Cala intermittently returns a body that is not JSON at all, which surfaces as
+    "Expecting value: line 1 column 1". A retry has always succeeded. Retrying here matters
+    because this is the first stage of a ~15-minute paid run: failing the whole job on one
+    flaky response wastes the operator's time, not just a request.
+    """
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            return _call_cala_once(query, api_key)
+        except (ValueError, urllib.error.URLError, OSError) as error:
+            last_error = error
+            if attempt == attempts:
+                break
+            delay = CALA_RETRY_BACKOFF_SECONDS * attempt
+            print(
+                f"Cala attempt {attempt}/{attempts} failed ({error}); retrying in {delay}s",
+                file=sys.stderr,
+                flush=True,
+            )
+            time.sleep(delay)
+    raise RuntimeError(f"Cala knowledge_search failed after {attempts} attempts: {last_error}")
+
+
+def _call_cala_once(query, api_key):
+    """One knowledge_search call, unwrapped.
 
     Kept local rather than using `request_json` because this endpoint may answer
     as SSE, and the payload is buried three layers deep: SSE frame -> JSON-RPC

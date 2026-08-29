@@ -128,6 +128,7 @@ export function GlobeExperience() {
   const router = useRouter();
   const globeRef = useRef<GlobeMethods | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<CountryFeature | null>(null);
+  const [hoveredCountryCode, setHoveredCountryCode] = useState<string | null>(null);
   const [departingMoment, setDepartingMoment] = useState<string | null>(null);
   const [isGlobeReady, setIsGlobeReady] = useState(false);
   const [viewport, setViewport] = useState({ width: 1200, height: 800 });
@@ -157,6 +158,7 @@ export function GlobeExperience() {
     if (departingMoment) return;
 
     setSelectedCountry(target);
+    setHoveredCountryCode(null);
     const globe = globeRef.current;
     if (!globe) return;
 
@@ -168,6 +170,7 @@ export function GlobeExperience() {
   function resetGlobe() {
     setSelectedCountry(null);
     setDepartingMoment(null);
+    setHoveredCountryCode(null);
     const globe = globeRef.current;
     if (!globe) return;
 
@@ -192,10 +195,12 @@ export function GlobeExperience() {
     <main className="relative h-screen overflow-hidden bg-hero-radial">
       <div
         className={`absolute inset-0 transition-[transform,opacity] duration-700 ease-[cubic-bezier(.22,.8,.2,1)] motion-reduce:transition-none ${
+          hoveredCountryCode ? "[&_canvas]:!cursor-pointer" : "[&_canvas]:!cursor-grab"
+        } ${
           departingMoment
             ? "-translate-x-[35vw] opacity-0"
             : selectedCountry
-              ? "-translate-x-[18vw] scale-[1.03]"
+              ? "-translate-x-[46vw] scale-[1.06]"
               : "translate-x-0 scale-100"
         }`}
       >
@@ -206,25 +211,59 @@ export function GlobeExperience() {
             bumpImageUrl: "//unpkg.com/three-globe/example/img/earth-topology.png",
             backgroundColor: "rgba(0,0,0,0)",
             polygonsData: countries,
-            polygonAltitude: (feature: object) =>
-              getCountryCode(feature as CountryFeature) === selectedCode ? 0.025 : 0.002,
-            polygonCapColor: (feature: object) =>
-              getCountryCode(feature as CountryFeature) === selectedCode
-                ? "rgba(212, 177, 106, 0.55)"
-                : "rgba(255, 255, 255, 0.01)",
-            polygonSideColor: () => "rgba(212, 177, 106, 0.16)",
-            polygonStrokeColor: () => "rgba(255, 255, 255, 0.14)",
-            polygonsTransitionDuration: 500,
+            polygonAltitude: (feature: object) => {
+              const code = getCountryCode(feature as CountryFeature);
+              if (code === selectedCode) return 0.028;
+              if (code === hoveredCountryCode) return 0.016;
+              return 0.002;
+            },
+            polygonCapColor: (feature: object) => {
+              const code = getCountryCode(feature as CountryFeature);
+              if (code === selectedCode) return "rgba(224, 192, 119, 0.68)";
+              if (code === hoveredCountryCode) return "rgba(224, 192, 119, 0.38)";
+              return "rgba(255, 255, 255, 0.006)";
+            },
+            polygonSideColor: (feature: object) => {
+              const code = getCountryCode(feature as CountryFeature);
+              return code === selectedCode || code === hoveredCountryCode
+                ? "rgba(212, 177, 106, 0.28)"
+                : "rgba(255, 255, 255, 0.02)";
+            },
+            polygonStrokeColor: (feature: object) => {
+              const code = getCountryCode(feature as CountryFeature);
+              if (code === selectedCode) return "rgba(245, 220, 160, 0.95)";
+              if (code === hoveredCountryCode) return "rgba(245, 220, 160, 0.8)";
+              return "rgba(255, 255, 255, 0.08)";
+            },
+            polygonsTransitionDuration: 260,
             labelsData: countryLabels,
             labelLat: (label: object) => (label as CountryLabel).lat,
             labelLng: (label: object) => (label as CountryLabel).lng,
             labelText: (label: object) => (label as CountryLabel).name,
-            labelSize: (label: object) => (label as CountryLabel).size,
-            labelDotRadius: 0.18,
+            labelSize: (label: object) => {
+              const countryLabel = label as CountryLabel;
+              return countryLabel.size *
+                (countryLabel.iso_a3 === hoveredCountryCode || countryLabel.iso_a3 === selectedCode
+                  ? 1.12
+                  : 0.82);
+            },
+            labelDotRadius: (label: object) => {
+              const code = (label as CountryLabel).iso_a3;
+              return code === hoveredCountryCode || code === selectedCode ? 0.22 : 0.1;
+            },
             labelAltitude: 0.045,
-            labelColor: () => "rgba(255, 255, 255, 0.96)",
+            labelColor: (label: object) => {
+              const code = (label as CountryLabel).iso_a3;
+              return code === hoveredCountryCode || code === selectedCode
+                ? "rgba(255, 245, 220, 1)"
+                : "rgba(255, 255, 255, 0.42)";
+            },
             labelResolution: 4,
             onPolygonClick: (feature: object) => selectCountry(feature as CountryFeature),
+            onPolygonHover: (feature: object | null) =>
+              setHoveredCountryCode(
+                feature ? getCountryCode(feature as CountryFeature) : null
+              ),
             onLabelClick: (label: object) => {
               const countryLabel = label as CountryLabel;
               const target = countries.find(
@@ -232,6 +271,8 @@ export function GlobeExperience() {
               );
               if (target) selectCountry(target);
             },
+            onLabelHover: (label: object | null) =>
+              setHoveredCountryCode(label ? (label as CountryLabel).iso_a3 : null),
             onGlobeClick: stopRotation,
             onZoom: stopRotation,
             onGlobeReady: () => setIsGlobeReady(true),
@@ -290,43 +331,14 @@ export function GlobeExperience() {
               ← Back to globe
             </button>
 
-            <div className="mt-10 min-h-0 flex-1 overflow-y-auto pr-1">
-              <p className="text-xs uppercase tracking-[0.38em] text-gold/75">
-                {hasStory ? "A defining era" : "Atlas preview"}
-              </p>
-              <h2 className="mt-3 font-display text-5xl leading-none text-mist sm:text-6xl">
-                {getCountryName(selectedCountry)}
-              </h2>
-
-              {hasStory && storyCountry ? (
-                <>
-                  <div className="mt-5 flex items-center gap-4">
-                    <span className="font-display text-2xl text-gold">{storyCountry.eraLabel}</span>
-                    <span className="h-px flex-1 bg-gradient-to-r from-gold/50 to-transparent" />
-                  </div>
-                  <p className="mt-4 max-w-xl text-sm leading-6 text-mist/65">
-                    {storyCountry.eraRationale}
-                  </p>
-
+            <div className="flex min-h-0 flex-1 items-center pr-1">
+              {hasStory && storyCountry && (
+                <div className="w-full">
                   <TimelineWheel
                     countryName={storyCountry.name}
                     moments={storyCountry.moments}
                     onOpen={openMoment}
                   />
-                </>
-              ) : (
-                <div className="mt-8 max-w-lg rounded-[1.75rem] border border-white/12 bg-white/[0.04] p-6 sm:p-8">
-                  <p className="font-display text-2xl text-mist">This story is still being mapped.</p>
-                  <p className="mt-4 text-sm leading-7 text-mist/62">
-                    Spain is the complete demo journey. Other countries remain visible so the globe communicates the wider atlas without pretending their historical data is ready.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={resetGlobe}
-                    className="mt-6 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-[#e4c986] focus:outline-none focus:ring-2 focus:ring-gold/70 focus:ring-offset-2 focus:ring-offset-ink"
-                  >
-                    Choose another country
-                  </button>
                 </div>
               )}
             </div>

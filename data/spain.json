@@ -1,0 +1,70 @@
+{
+  "code": "ESP",
+  "name": "Spain",
+  "eraLabel": "1492–1588",
+  "eraStartYear": 1492,
+  "eraEndYear": 1588,
+  "eraRationale": "This span captures Spain's consolidation under Ferdinand and Isabella, its transatlantic expansion, and the imperial confidence that defined the Spanish Golden Age.",
+  "moments": [
+    {
+      "id": "granada-falls",
+      "year": 1492,
+      "orderIndex": 0,
+      "factText": "Granada surrendered to Ferdinand II and Isabella I in January 1492, ending the Nasrid kingdom in Iberia.",
+      "sourceRef": "Mock Cala: Granada timeline",
+      "narrativeCopy": "Spain's story shifted in 1492 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "imagePath": "/moments/spain/01.svg",
+      "imagePrompt": "Painterly illustrated scene for 1492: Granada surrendered to Ferdinand II and Isabella I in January 1492, ending the Nasrid kingdom in Iberia. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+    },
+    {
+      "id": "columbus-sails",
+      "year": 1492,
+      "orderIndex": 1,
+      "factText": "Christopher Columbus departed in August 1492 under the patronage of the Catholic Monarchs and reached the Caribbean that October.",
+      "sourceRef": "Mock Cala: First voyage dossier",
+      "narrativeCopy": "Spain's story shifted in 1492 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "imagePath": "/moments/spain/02.svg",
+      "imagePrompt": "Painterly illustrated scene for 1492: Christopher Columbus departed in August 1492 under the patronage of the Catholic Monarchs and reached the Caribbean that October. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+    },
+    {
+      "id": "tordesillas",
+      "year": 1494,
+      "orderIndex": 2,
+      "factText": "The Treaty of Tordesillas in 1494 divided newly claimed overseas territories between Spain and Portugal along an agreed meridian.",
+      "sourceRef": "Mock Cala: Treaty summary",
+      "narrativeCopy": "Spain's story shifted in 1494 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "imagePath": "/moments/spain/03.svg",
+      "imagePrompt": "Painterly illustrated scene for 1494: The Treaty of Tordesillas in 1494 divided newly claimed overseas territories between Spain and Portugal along an agreed meridian. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+    },
+    {
+      "id": "charles-v",
+      "year": 1519,
+      "orderIndex": 3,
+      "factText": "Charles I of Spain became Holy Roman Emperor Charles V in 1519, linking Spanish power to a wider European imperial network.",
+      "sourceRef": "Mock Cala: Imperial succession notes",
+      "narrativeCopy": "Spain's story shifted in 1519 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "imagePath": "/moments/spain/04.svg",
+      "imagePrompt": "Painterly illustrated scene for 1519: Charles I of Spain became Holy Roman Emperor Charles V in 1519, linking Spanish power to a wider European imperial network. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+    },
+    {
+      "id": "escorial-rises",
+      "year": 1563,
+      "orderIndex": 4,
+      "factText": "Construction of El Escorial began in 1563 under Philip II, symbolizing royal authority, piety, and administrative order.",
+      "sourceRef": "Mock Cala: Architecture brief",
+      "narrativeCopy": "Spain's story shifted in 1563 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "imagePath": "/moments/spain/05.svg",
+      "imagePrompt": "Painterly illustrated scene for 1563: Construction of El Escorial began in 1563 under Philip II, symbolizing royal authority, piety, and administrative order. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+    },
+    {
+      "id": "armada",
+      "year": 1588,
+      "orderIndex": 5,
+      "factText": "The Spanish Armada sailed against England in 1588 and was ultimately dispersed after battle, weather, and logistical strain.",
+      "sourceRef": "Mock Cala: Naval campaign log",
+      "narrativeCopy": "Spain's story shifted in 1588 as institutions, ambition, and empire converged around this moment. The fact stays fixed; the tone reframes it for a visual narrative.",
+      "imagePath": "/moments/spain/06.svg",
+      "imagePrompt": "Painterly illustrated scene for 1588: The Spanish Armada sailed against England in 1588 and was ultimately dispersed after battle, weather, and logistical strain. Avoid photoreal faces. Focus on setting, objects, architecture, atmosphere, parchment textures, and a coherent gold-blue palette."
+    }
+  ]
+}

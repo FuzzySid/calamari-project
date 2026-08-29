@@ -164,7 +164,7 @@ export function GlobeExperience() {
 
     globe.controls().autoRotate = false;
     const { lat, lng } = getCountryCenter(target);
-    globe.pointOfView({ lat, lng, altitude: 1.5 }, 1500);
+    globe.pointOfView({ lat, lng: lng - 18, altitude: 1.5 }, 1500);
   }
 
   function resetGlobe() {
@@ -200,7 +200,7 @@ export function GlobeExperience() {
           departingMoment
             ? "-translate-x-[35vw] opacity-0"
             : selectedCountry
-              ? "-translate-x-[46vw] scale-[1.06]"
+              ? "-translate-x-[42vw] scale-[1.06]"
               : "translate-x-0 scale-100"
         }`}
       >

@@ -1,0 +1,1 @@
+Can you add a small transition effect when I click on a country, it zooms in to that country and then opens the panorama URL so it looks like someone is looking from far and then they zoom in as if they're enterring earth from space into that country? You know what effect I'm talking about

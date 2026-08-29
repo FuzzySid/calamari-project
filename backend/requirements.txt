@@ -1,2 +1,11 @@
-# No third-party dependencies: the pipeline is standard library only (urllib.request).
+# The 4-stage pipeline (stage1..stage4, run_pipeline) is standard library only —
+# all HTTP is raw urllib.request. Nothing below is needed to run it from the CLI.
+#
+# These are only for the local API service in backend/api/ (see README.md):
+#   python3 -m uvicorn backend.api.app:app --host 127.0.0.1 --port 8000
+#
 # Python 3.8+.
+
+fastapi>=0.110,<1.0
+pydantic>=2.0,<3.0
+uvicorn>=0.27,<1.0

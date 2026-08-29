@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export type Period = {
   id: string;
   name: string;
-  /** Human-readable span shown under the name, e.g. "711 — 1492" */
+  /** Year shown in the left gutter, e.g. "711" or "218 BC" */
   label: string;
   note?: string;
   /** ids of periods that run at the same time as this one */
@@ -36,8 +36,8 @@ const DRAG_PX_PER_ROW = 62;
 /** Pointer travel before a press is treated as a drag rather than a click. */
 const DRAG_THRESHOLD_PX = 6;
 const ROW_LEFT = 34;
-/** Left column holding the year range. */
-const GUTTER = 126;
+/** Left column holding the era's anchor year. */
+const GUTTER = 86;
 /** Space between the gutter and the name, where the tick sits. */
 const TICK_GAP = 38;
 const TICK_WIDTH = 16;
@@ -47,15 +47,6 @@ const SERIF = "var(--font-instrument-serif), Georgia, serif";
 const MONO = "var(--font-plex-mono), ui-monospace, Menlo, monospace";
 const EDGE_FADE =
   "linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%)";
-
-/**
- * Splits "711 — 1492" into its headline start and its smaller tail. Labels
- * without a dash are treated as a start on their own.
- */
-function splitRange(label: string) {
-  const match = label.match(/^(.*?)\s*[—–-]\s*(.*)$/);
-  return match ? { start: match[1], end: match[2] } : { start: label, end: "" };
-}
 
 const THEMES = {
   paper: {
@@ -239,7 +230,6 @@ export function PeriodSelector({
           {periods.map((period, position) => {
             const distance = Math.abs(position - index);
             const selected = position === index;
-            const range = splitRange(period.label);
 
             return (
               <div
@@ -281,17 +271,13 @@ export function PeriodSelector({
                     width: GUTTER,
                     flex: "none",
                     textAlign: "right",
+                    font: `400 20px/1 ${MONO}`,
                     letterSpacing: "0.02em",
                     color: t.dim,
                     whiteSpace: "nowrap"
                   }}
                 >
-                  <span style={{ font: `400 20px/1 ${MONO}` }}>{range.start}</span>
-                  {range.end && (
-                    <span style={{ font: `400 11px/1 ${MONO}`, opacity: 0.7 }}>
-                      {` — ${range.end}`}
-                    </span>
-                  )}
+                  {period.label}
                 </div>
                 <div
                   style={{

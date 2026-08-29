@@ -6,8 +6,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 
+import stage1_facts  # noqa: E402
 from stage1_facts import (  # noqa: E402
     build_timeline,
+    call_cala,
     extract_timeline,
     resolve_sources,
     year_bounds,
@@ -91,6 +93,47 @@ class ProvenanceTests(unittest.TestCase):
 
     def test_unknown_reference_is_skipped(self):
         self.assertEqual(resolve_sources(["missing"], self.context()), [])
+
+
+class CalaRetryTests(unittest.TestCase):
+    """Cala intermittently returns a non-JSON body; this actually happened mid-run."""
+
+    def setUp(self):
+        self._real_once = stage1_facts._call_cala_once
+        self._real_backoff = stage1_facts.CALA_RETRY_BACKOFF_SECONDS
+        stage1_facts.CALA_RETRY_BACKOFF_SECONDS = 0
+        self.calls = []
+
+    def tearDown(self):
+        stage1_facts._call_cala_once = self._real_once
+        stage1_facts.CALA_RETRY_BACKOFF_SECONDS = self._real_backoff
+
+    def test_succeeds_on_a_later_attempt(self):
+        def flaky(query, api_key):
+            self.calls.append(query)
+            if len(self.calls) < 3:
+                raise ValueError("Expecting value: line 1 column 1 (char 0)")
+            return {"explainability": []}
+
+        stage1_facts._call_cala_once = flaky
+        self.assertEqual(call_cala("q", "key"), {"explainability": []})
+        self.assertEqual(len(self.calls), 3)
+
+    def test_does_not_retry_a_successful_call(self):
+        stage1_facts._call_cala_once = lambda query, api_key: self.calls.append(1) or {"ok": 1}
+        call_cala("q", "key")
+        self.assertEqual(len(self.calls), 1)
+
+    def test_gives_up_with_a_clear_error(self):
+        def always_fails(query, api_key):
+            self.calls.append(query)
+            raise ValueError("Expecting value: line 1 column 1 (char 0)")
+
+        stage1_facts._call_cala_once = always_fails
+        with self.assertRaises(RuntimeError) as caught:
+            call_cala("q", "key", attempts=3)
+        self.assertIn("after 3 attempts", str(caught.exception))
+        self.assertEqual(len(self.calls), 3)
 
 
 if __name__ == "__main__":

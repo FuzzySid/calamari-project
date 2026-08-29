@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { PanoramaViewer } from "@/components/panorama-viewer";
 
 type MediaType = "image" | "video";
@@ -18,8 +19,11 @@ const PANORAMAS: Record<MediaType, { src: string; label: string }> = {
 };
 
 export default function PanoramaPage() {
+  const searchParams = useSearchParams();
   const [mediaType, setMediaType] = useState<MediaType>("image");
   const panorama = PANORAMAS[mediaType];
+  const country = searchParams.get("country") ?? "Spain";
+  const countryLabel = country.trim() || "Spain";
 
   return (
     <main className="min-h-screen bg-ink px-4 py-4 text-mist sm:px-6 sm:py-6">
@@ -35,6 +39,7 @@ export default function PanoramaPage() {
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-gold/80">Experimental view</p>
               <h1 className="mt-1 font-display text-2xl sm:text-3xl">Step inside the moment</h1>
+              <p className="mt-2 text-sm text-mist/70">Country: {countryLabel}</p>
             </div>
           </div>
 

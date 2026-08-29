@@ -94,6 +94,75 @@
       "resolution": "2K",
       "images_per_event": 1,
       "events": []
+    },
+    {
+      "generated_at": "2026-08-29T15:24:04.559190+00:00",
+      "stage": "videos",
+      "country": "Spain",
+      "country_slug": "spain",
+      "model": "blackforestlabs/flux-3/image-to-video",
+      "duration_seconds": 10,
+      "resolution": "720p",
+      "aspect_ratio": "21:9",
+      "events": [
+        {
+          "event_id": "spanish_armada_1588",
+          "order": 3,
+          "variant": 1,
+          "seed": 2248025100,
+          "source_image": "backend/output/spain/images/03-spanish_armada_1588.jpeg",
+          "local_path": "backend/output/spain/videos/03-spanish_armada_1588-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        }
+      ]
+    },
+    {
+      "generated_at": "2026-08-29T15:34:39.247582+00:00",
+      "stage": "videos",
+      "country": "Spain",
+      "country_slug": "spain",
+      "model": "blackforestlabs/flux-3/image-to-video",
+      "duration_seconds": 10,
+      "resolution": "720p",
+      "aspect_ratio": "21:9",
+      "events": [
+        {
+          "event_id": "reconquista_701",
+          "order": 1,
+          "variant": 1,
+          "seed": 4121117856,
+          "source_image": "backend/output/spain/images/01-reconquista_701.jpeg",
+          "local_path": "backend/output/spain/videos/01-reconquista_701-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        },
+        {
+          "event_id": "columbus_s_voyage_age_exploration_1492",
+          "order": 2,
+          "variant": 1,
+          "seed": 3022634897,
+          "source_image": "backend/output/spain/images/02-columbus_s_voyage_age_exploration_1492.jpeg",
+          "local_path": "backend/output/spain/videos/02-columbus_s_voyage_age_exploration_1492-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        },
+        {
+          "event_id": "spanish_civil_war_1936",
+          "order": 4,
+          "variant": 1,
+          "seed": 3045351129,
+          "source_image": "backend/output/spain/images/04-spanish_civil_war_1936.jpeg",
+          "local_path": "backend/output/spain/videos/04-spanish_civil_war_1936-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        },
+        {
+          "event_id": "transition_democracy_1978_constitution_1975",
+          "order": 5,
+          "variant": 1,
+          "seed": 2241388040,
+          "source_image": "backend/output/spain/images/05-transition_democracy_1978_constitution_1975.jpeg",
+          "local_path": "backend/output/spain/videos/05-transition_democracy_1978_constitution_1975-10s.mp4",
+          "prompt": "Animate this historical panorama. The camera is completely static and locked on a\ntripod: no panning, no tilting, no zooming, no rotation, and no parallax.\n\nPreserve the framing, composition, palette and period detail of the supplied image\nexactly. Nothing may be added, removed, or restyled.\n\nOnly subtle ambient motion: smoke and dust drift slowly, water ripples, cloth and\nbanners stir in a light breeze, flames flicker, and any people move naturally and\nslowly within the scene. Everything else stays perfectly still. The result is slow,\ncalm and atmospheric."
+        }
+      ]
     }
   ]
 }

@@ -29,6 +29,7 @@ STAGES = (
     ("facts", "stage1_facts.py"),
     ("prompts", "stage2_prompts.py"),
     ("images", "stage3_images.py"),
+    ("videos", "stage4_videos.py"),
 )
 
 
@@ -41,8 +42,9 @@ def run_stage(script, country, extra_args):
 
 
 def run_country(country, output_root=None, limit=None, images_per_event=None,
-                openai_model=None, profile=None, force=False, dry_run=False):
-    """Run facts -> prompts -> images for a single country, in order."""
+                openai_model=None, profile=None, force=False, dry_run=False,
+                with_videos=False, motion=""):
+    """Run facts -> prompts -> images (-> videos) for a single country, in order."""
     shared = []
     if output_root:
         shared += ["--output-root", str(output_root)]
@@ -74,6 +76,12 @@ def run_country(country, output_root=None, limit=None, images_per_event=None,
                 extra += ["--profile", str(profile)]
             if images_per_event is not None:
                 extra += ["--images-per-event", str(images_per_event)]
+        elif name == "videos":
+            # Opt-in: video generation runs for minutes per event and costs the most.
+            if not with_videos:
+                continue
+            if motion:
+                extra += ["--motion", motion]
 
         print(f"\n=== {country}: stage {name} ===", flush=True)
         run_stage(script, country, extra)
@@ -91,6 +99,9 @@ def main():
     parser.add_argument("--openai-model", default=None)
     parser.add_argument("--profile", default=None, help="Style profile for stage 3.")
     parser.add_argument("--output-root", default=None)
+    parser.add_argument("--with-videos", action="store_true",
+                        help="Also run stage 4 (10s MP4 per image). Slow and the costliest stage.")
+    parser.add_argument("--motion", default="", help="Scene-specific gentle motion for stage 4.")
     parser.add_argument("--force", action="store_true", help="Regenerate prompts and images that already exist.")
     parser.add_argument("--dry-run", action="store_true", help="Stages 2 and 3 print their work without calling APIs.")
     args = parser.parse_args()
@@ -109,6 +120,8 @@ def main():
                 profile=args.profile,
                 force=args.force,
                 dry_run=args.dry_run,
+                with_videos=args.with_videos,
+                motion=args.motion,
             )
             succeeded.append(country)
         except (RuntimeError, OSError, ValueError) as error:

@@ -1,16 +1,17 @@
 # Country pipeline
 
-Three sequential stages, each writing its own JSON file so any stage can be re-run on its
+Four sequential stages, each writing its own JSON file so any stage can be re-run on its
 own. Everything derives from a single `--country` parameter — no country is hardcoded, so
 adding one is a command, not a code change.
 
 ```
 Stage 1  Cala    facts    -> output/<slug>/info.json
 Stage 2  OpenAI  prompts  -> output/<slug>/prompts_image.json
-Stage 3  Fal     images   -> output/<slug>/images.json + images/
+Stage 3  Fal     images   -> output/<slug>/images.json  + images/
+Stage 4  Fal     videos   -> output/<slug>/videos.json  + videos/
 ```
 
-Per country: **5 events, 1 image per event**.
+Per country: **5 events, 1 image per event, 1 ten-second MP4 per image**.
 
 ## Running
 
@@ -18,10 +19,14 @@ Per country: **5 events, 1 image per event**.
 python3 backend/stage1_facts.py   --country Spain
 python3 backend/stage2_prompts.py --country Spain
 python3 backend/stage3_images.py  --country Spain
+python3 backend/stage4_videos.py  --country Spain
 
-# or all three, for one or many countries
+# or the whole chain, for one or many countries
 python3 backend/run_pipeline.py --country Spain
 python3 backend/run_pipeline.py --countries Spain Japan Brazil
+
+# stage 4 is opt-in: it runs for minutes per event and is the costliest stage
+python3 backend/run_pipeline.py --country Spain --with-videos
 ```
 
 Standard library only — no `pip install` needed. Python 3.8+.
@@ -34,6 +39,8 @@ backend/output/<country-slug>/
     prompts_image.json  # one image prompt per event, keyed by event id
     images.json         # manifest: seed, final prompt, local path
     images/             # 01-<event_id>.jpeg ...
+    videos.json         # manifest: seed, prompt, source image, local path
+    videos/             # 01-<event_id>-10s.mp4 ...
     run_log.json        # append-only Fal run log
 ```
 
@@ -47,7 +54,7 @@ Put these in a `.env` at the repo root:
 
 - `CALA_API_KEY` — Stage 1
 - `OPENAI_API_KEY` — Stage 2 (`OPENAI_MODEL` optional, defaults to `gpt-5`)
-- `FAL_API_KEY` or `FAL_KEY` — Stage 3 (either spelling works)
+- `FAL_API_KEY` or `FAL_KEY` — Stages 3 and 4 (either spelling works)
 
 Exported shell variables always win over the `.env` file.
 
@@ -64,13 +71,32 @@ regenerating — Fal calls in particular are never repeated silently.
 Stage 1 has no `--dry-run`: its Cala call is the one step that cannot be simulated. The
 batch runner skips Stage 1 entirely when `info.json` already exists.
 
+## Stage 4 notes
+
+`blackforestlabs/flux-3/image-to-video`, 10s, 720p, no audio. Output is 1440×608
+(ratio 2.368), matching the source stills so nothing is squashed or cropped.
+
+The queue API is used rather than the synchronous endpoint: a generation runs ~2 minutes,
+far past any single HTTP timeout. Each job is submitted, polled every 5s, then downloaded.
+Images are uploaded to Fal's CDN first (initiate + PUT) rather than inlined as base64 data
+URIs, which the docs discourage above a few KB — these panoramas are ~1.5–2 MB.
+
+The prompt asks for a locked-off camera and ambient motion only (drifting smoke, rippling
+water, stirring cloth), since the goal is to animate the still rather than reinterpret it.
+Use `--motion` to add one scene-specific movement.
+
 ## Known limits
 
 - **Not true 360.** `fal-ai/nano-banana-pro` rejects the 2:1 aspect ratio an equirectangular
   projection needs — it allows only `auto`, `21:9`, `16:9`, `3:2`, `4:3`, `5:4`, `1:1` and
   portrait ratios. The profile therefore uses `21:9` (3168×1344, ratio 2.357) and the output
   is an ultra-wide panorama, **not** sphere-wrappable. Real 360 would need a second
-  image-to-image pass through something like `fal-ai/hunyuan_world`.
+  image-to-image pass through something like `fal-ai/hunyuan_world`. The same applies to the
+  videos: FLUX 3 *does* accept `2:1`, but feeding it 2.357:1 stills would distort them, so
+  Stage 4 defaults to `21:9` to match the source. Override with `--aspect-ratio 2:1` if you
+  later produce genuinely equirectangular stills.
+- **Video seeds are not deterministic.** Unlike the image stage, FLUX 3 assigns its own seed,
+  recorded in `videos.json`. A `--force` re-run produces a *different* video.
 - **Dates drive selection.** Events Cala returns without a parseable date are dropped, since
   the story is chronological. Date parsing handles year ranges, BC magnitudes (`50,000 BC`)
   and century forms (`8th–15th centuries`), but it is tuned on Western conventions — other

@@ -31,6 +31,49 @@ python3 backend/run_pipeline.py --country Spain --with-videos
 
 Standard library only — no `pip install` needed. Python 3.8+.
 
+## Local API
+
+A FastAPI service queues generation so a UI never blocks on a ~15-minute run. Two processes:
+
+```bash
+python3 -m uvicorn backend.api.app:app --host 127.0.0.1 --port 8000
+python3 -m backend.api.worker
+```
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/health` | liveness |
+| `GET /api/countries` | every known country and its status |
+| `POST /api/countries/{iso3}/generate` | body `{"name": "Portugal"}`; queues one job, returns `202` |
+| `GET /api/jobs/{job_id}` | status, stage and message, for polling |
+| `GET /api/countries/{iso3}/media` | images and videos, reported separately |
+| `GET /media/<slug>/...` | read-only static mount over `backend/output/` |
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/countries/PRT/generate \
+  -H 'Content-Type: application/json' -d '{"name":"Portugal"}'
+```
+
+**Repeated requests are safe.** A country that is already `ready`, queued or running returns
+its existing job rather than starting a second paid run. Only a `failed` country gets a new
+job on the next request.
+
+**Countries generated from the CLI are adopted, not regenerated.** On start the API scans
+`backend/output/` and marks any country with both images and videos as `ready` — which is why
+Spain needs no special case.
+
+`/api/countries/{iso3}/media` reports images and videos independently
+(`images_ready` → `ready`), because stage 3 finishes roughly ten minutes before stage 4. A
+client can show the stills while the videos are still rendering.
+
+`-99` is rejected with 422: Natural Earth uses it for France, Norway, Kosovo, Northern Cyprus
+and Somaliland, and it would otherwise create a `backend/output/-99/` directory.
+
+State lives in `backend/state/` (gitignored) as plain JSON, guarded by a lock file. A job left
+`running` by a killed worker is marked `failed` on the next worker start, so it can be retried.
+
+Bound to `127.0.0.1` with CORS for `localhost:3000` only. No auth — local development only.
+
 ## Output layout
 
 ```

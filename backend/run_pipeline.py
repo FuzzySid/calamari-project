@@ -43,8 +43,12 @@ def run_stage(script, country, extra_args):
 
 def run_country(country, output_root=None, limit=None, images_per_event=None,
                 openai_model=None, profile=None, force=False, dry_run=False,
-                with_videos=False, motion=""):
-    """Run facts -> prompts -> images (-> videos) for a single country, in order."""
+                with_videos=False, motion="", on_stage=None):
+    """Run facts -> prompts -> images (-> videos) for a single country, in order.
+
+    `on_stage(name)` is called just before each stage that actually runs, so a caller such as
+    the API worker can report progress through a run that takes ~15 minutes.
+    """
     shared = []
     if output_root:
         shared += ["--output-root", str(output_root)]
@@ -84,6 +88,8 @@ def run_country(country, output_root=None, limit=None, images_per_event=None,
                 extra += ["--motion", motion]
 
         print(f"\n=== {country}: stage {name} ===", flush=True)
+        if on_stage:
+            on_stage(name)
         run_stage(script, country, extra)
 
     return paths

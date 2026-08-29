@@ -1,0 +1,31 @@
+{
+  "events": {
+    "-250": [
+      {
+        "title": "Behind the Walls",
+        "description": "A child grows up inside a fortified Iberian hilltop town, surrounded by farmers, craftsmen and walls built to protect the community.",
+        "video_url": "videos/behind-the-walls.mp4"
+      },
+      {
+        "title": "The Market at Emporion",
+        "description": "At the coast, Iberians encounter a wider Mediterranean world through Greek ships, pottery, wine, metals and grain.",
+        "video_url": "videos/the-market-at-emporion.mp4"
+      },
+      {
+        "title": "The Falcata",
+        "description": "As an adult, he joins the warriors whose speed, curved swords and small shields made Iberian fighters famous.",
+        "video_url": "videos/the-falcata.mp4"
+      },
+      {
+        "title": "At the Gate",
+        "description": "The walls were more than scenery: they shaped a community that lived with the possibility of conflict.",
+        "video_url": "videos/at-the-gate.mp4"
+      },
+      {
+        "title": "The Offering",
+        "description": "Years later, he leaves a small bronze figure at a sanctuary—a human life transformed into an object that can survive for millennia.",
+        "video_url": "videos/the-offering.mp4"
+      }
+    ]
+  }
+}

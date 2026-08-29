@@ -1,0 +1,1 @@
+I now want the user to be able to click anywhere and then the panorama url should open with the query paramter for that country

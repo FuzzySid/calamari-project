@@ -1,0 +1,1 @@
+On the [http://localhost:3000/?country=Spain](http://localhost:3000/?country=Spain) page, there are certain events listed, when one clicks on an event, they should go to the `/panorama` page with query paramters as the country and another query paramter as the event=\<date>

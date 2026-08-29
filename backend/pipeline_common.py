@@ -105,6 +105,8 @@ def read_json(path):
 
 def write_json(path, payload):
     """Write JSON atomically so an interrupted run cannot leave a truncated file."""
+    if ".." in str(path):
+        raise Exception("Invalid file path")
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")

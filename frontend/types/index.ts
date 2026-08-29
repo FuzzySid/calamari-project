@@ -4,9 +4,12 @@ export type Moment = {
   orderIndex: number;
   factText: string;
   sourceRef: string;
+  sourceIndices?: number[];
   narrativeCopy: string;
+  visualBrief?: string;
   imagePath: string;
-  imagePrompt: string;
+  imagePrompt?: string;
+  styleProfile?: string;
 };
 
 export type Country = {

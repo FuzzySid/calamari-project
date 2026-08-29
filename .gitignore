@@ -1,8 +1,11 @@
 .next
 node_modules
+.env
 .env.local
+__pycache__/
 dist
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+.DS_Store

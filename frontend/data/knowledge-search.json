@@ -1,0 +1,70 @@
+{
+  "query": "What are the most relevant historical periods of Spain",
+  "results": [
+    {
+      "fact": "Prehistoric Iberia (c. 50,000 BC – 1,100 BC) is supported by the fact that the oldest findings in Spain date to about 30,000‑50,000 BC and include cave sites such as Cova Negra and Pinar, with Iberian peoples arriving from North Africa.",
+      "description": "Prehistoric Iberia (c. 50,000 BC – 1,100 BC) is supported by the fact that the oldest findings in Spain date to about 30,000‑50,000 BC and include cave sites such as Cova Negra and Pinar, with Iberian peoples arriving from North Africa.",
+      "timeline": "c. 50,000 BC – 1,100 BC"
+    },
+    {
+      "fact": "The Pre‑Roman and Carthaginian period (c. 1,100 – 206 BC) is described in the same source, which notes Phoenician, Greek and Carthaginian colonisation of the Iberian coast before Roman conquest.",
+      "description": "The Pre‑Roman and Carthaginian period (c. 1,100 – 206 BC) is described in the same source, which notes Phoenician, Greek and Carthaginian colonisation of the Iberian coast before Roman conquest.",
+      "timeline": "c. 1,100 – 206 BC"
+    },
+    {
+      "fact": "Roman Hispania (206 BC – 5th century AD) is documented by the fact that Rome conquered the peninsula, Romanised it, introduced Latin, law, infrastructure and Christianity.",
+      "description": "Roman Hispania (206 BC – 5th century AD) is documented by the fact that Rome conquered the peninsula, Romanised it, introduced Latin, law, infrastructure and Christianity.",
+      "timeline": "206 BC – 5th century AD"
+    },
+    {
+      "fact": "The Visigothic Kingdom (418–711) is confirmed by the fact that Gothic dominance lasted until 711 when Muslims crossed the Strait of Gibraltar and defeated the last Visigoth king.",
+      "description": "The Visigothic Kingdom (418–711) is confirmed by the fact that Gothic dominance lasted until 711 when Muslims crossed the Strait of Gibraltar and defeated the last Visigoth king.",
+      "timeline": "418–711"
+    },
+    {
+      "fact": "Al‑Andalus – Muslim Spain (711–1492) and its three sub‑periods (Emirate, Caliphate, Taifa kingdoms) are directly taken from the fact that the Muslim period lasted more than 700 years and was divided into those three phases.",
+      "description": "Al‑Andalus – Muslim Spain (711–1492) and its three sub‑periods (Emirate, Caliphate, Taifa kingdoms) are directly taken from the fact that the Muslim period lasted more than 700 years and was divided into those three phases.",
+      "timeline": "711–1492"
+    },
+    {
+      "fact": "The Reconquista (711–1492) is supported by the same source, which describes the Christian campaign to reclaim the peninsula from Muslim rule.",
+      "description": "The Reconquista (711–1492) is supported by the same source, which describes the Christian campaign to reclaim the peninsula from Muslim rule.",
+      "timeline": "711–1492"
+    },
+    {
+      "fact": "Unification and the Spanish Empire/Golden Age (late 15th – 17th century) are backed by the fact that under Charles I (grandson of Isabella and Ferdinand) the Spanish, German and Austrian kingdoms were united, creating a brief period of imperial dominance and cultural flourishing.",
+      "description": "Unification and the Spanish Empire/Golden Age (late 15th – 17th century) are backed by the fact that under Charles I (grandson of Isabella and Ferdinand) the Spanish, German and Austrian kingdoms were united, creating a brief period of imperial dominance and cultural flourishing.",
+      "timeline": "late 15th – 17th century"
+    },
+    {
+      "fact": "Bourbon Spain and the Enlightenment (18th century) are inferred from the timeline fact that the War of the Spanish Succession brought the Bourbon dynasty to power, leading to administrative reforms and Enlightenment‑inspired modernization.",
+      "description": "Bourbon Spain and the Enlightenment (18th century) are inferred from the timeline fact that the War of the Spanish Succession brought the Bourbon dynasty to power, leading to administrative reforms and Enlightenment‑inspired modernization.",
+      "timeline": "18th century"
+    },
+    {
+      "fact": "Napoleonic invasion and 19th‑century turmoil (1808–1874) are corroborated by the fact that Napoleon defeated the Spanish army in 1808, replaced the king, and that after his defeat Ferdinand VII restored the throne, leading to political instability and loss of colonies.",
+      "description": "Napoleonic invasion and 19th‑century turmoil (1808–1874) are corroborated by the fact that Napoleon defeated the Spanish army in 1808, replaced the king, and that after his defeat Ferdinand VII restored the throne, leading to political instability and loss of colonies.",
+      "timeline": "1808–1874"
+    },
+    {
+      "fact": "Restoration and the Second Republic (1874–1936) are reflected in the timeline fact that the Bourbon monarchy was restored in 1874 and that a Second Republic was proclaimed in 1931 with sweeping reforms.",
+      "description": "Restoration and the Second Republic (1874–1936) are reflected in the timeline fact that the Bourbon monarchy was restored in 1874 and that a Second Republic was proclaimed in 1931 with sweeping reforms.",
+      "timeline": "1874–1936"
+    },
+    {
+      "fact": "The Spanish Civil War (1936–1939) is listed in the comprehensive timeline fact, which includes the conflict between Republican and Nationalist forces.",
+      "description": "The Spanish Civil War (1936–1939) is listed in the comprehensive timeline fact, which includes the conflict between Republican and Nationalist forces.",
+      "timeline": "1936–1939"
+    },
+    {
+      "fact": "Franco's Spain (1939–1975) is also covered by the timeline fact that describes the authoritarian dictatorship under Francisco Franco after the civil war.",
+      "description": "Franco's Spain (1939–1975) is also covered by the timeline fact that describes the authoritarian dictatorship under Francisco Franco after the civil war.",
+      "timeline": "1939–1975"
+    },
+    {
+      "fact": "The transition to democracy and contemporary Spain (1975–present) is supported by the timeline fact noting the peaceful transition after Franco’s death, the 1978 constitution, EU membership in 1986, and modern democratic status.",
+      "description": "The transition to democracy and contemporary Spain (1975–present) is supported by the timeline fact noting the peaceful transition after Franco’s death, the 1978 constitution, EU membership in 1986, and modern democratic status.",
+      "timeline": "1975–present"
+    }
+  ]
+}

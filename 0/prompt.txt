@@ -1,0 +1,1 @@
+Can the timeline with horizontal scrolling still render each image in 3D?

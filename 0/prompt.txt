@@ -1,0 +1,1 @@
+On the [http://localhost:3000/panorama](http://localhost:3000/panorama), the back button should take back to the exact URL from the browser back history and then there should be another small button to take back to the homepage [http://localhost:3000/](http://localhost:3000/) like the main globe page

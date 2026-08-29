@@ -28,6 +28,12 @@ type PanoramaTimelineProps = {
 type DragMode = "strip" | "rail" | null;
 
 const SAMPLE_IMAGE_PATH = "/panoramas/castle-panorama.jpg";
+const SPAIN_PANORAMA_IMAGES = [
+  "/panoramas/spain/1.png",
+  "/panoramas/spain/2.png",
+  "/panoramas/spain/sandbox-fal.png",
+  "/panoramas/spain/4.png"
+];
 const OVERLAP_RATIO = 0.08;
 const END_PANEL_RATIO = 0.72;
 const MIN_END_PANEL_WIDTH = 320;
@@ -39,9 +45,9 @@ const SPAIN_TIMELINE: TimelineData = {
   country: spainData.name,
   eraLabel: spainData.eraLabel,
   eraRationale: spainData.eraRationale,
-  entries: spainData.moments.slice(0, 6).map((moment) => ({
+  entries: spainData.moments.slice(0, SPAIN_PANORAMA_IMAGES.length).map((moment, index) => ({
     id: moment.id,
-    imagePath: SAMPLE_IMAGE_PATH,
+    imagePath: SPAIN_PANORAMA_IMAGES[index],
     year: moment.year,
     fact: moment.factText,
     narrative: moment.narrativeCopy

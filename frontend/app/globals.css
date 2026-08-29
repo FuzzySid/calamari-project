@@ -68,6 +68,15 @@ body {
   animation: map-pulse 2.6s ease-out infinite;
 }
 
+.timeline-wheel {
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.timeline-wheel::-webkit-scrollbar {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

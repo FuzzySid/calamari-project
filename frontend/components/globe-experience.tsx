@@ -7,6 +7,7 @@ import worldFeatures from "@/data/world-features.json";
 import { getCountryByCode } from "@/lib/data";
 import type { Moment } from "@/types";
 import type { GlobeMethods } from "@/components/globe-canvas";
+import { TimelineWheel } from "@/components/timeline-wheel";
 
 type GeoCoordinate = [number, number];
 type PolygonCoordinates = GeoCoordinate[][];
@@ -307,32 +308,11 @@ export function GlobeExperience() {
                     {storyCountry.eraRationale}
                   </p>
 
-                  <ol className="relative mt-8 space-y-1 border-l border-white/15 pl-6 sm:mt-10 sm:pl-8">
-                    {storyCountry.moments.map((moment, index) => (
-                      <li
-                        key={moment.id}
-                        className="timeline-reveal relative"
-                        style={{ animationDelay: `${180 + index * 90}ms` }}
-                      >
-                        <span className="absolute -left-[1.73rem] top-6 h-2.5 w-2.5 rounded-full border border-gold bg-ink shadow-[0_0_18px_rgba(212,177,106,.55)] sm:-left-[2.23rem]" />
-                        <button
-                          type="button"
-                          onClick={() => openMoment(moment)}
-                          className="group w-full rounded-2xl px-4 py-3 text-left transition hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-gold/70 sm:px-5"
-                        >
-                          <span className="flex items-baseline gap-4">
-                            <span className="w-12 shrink-0 font-display text-xl text-gold">{moment.year}</span>
-                            <span className="font-display text-lg text-mist transition group-hover:translate-x-1 group-hover:text-white sm:text-xl">
-                              {moment.title ?? moment.factText}
-                            </span>
-                          </span>
-                          <span className="mt-1 block pl-16 text-xs leading-5 text-mist/48 sm:text-sm">
-                            {moment.location ?? storyCountry.name}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ol>
+                  <TimelineWheel
+                    countryName={storyCountry.name}
+                    moments={storyCountry.moments}
+                    onOpen={openMoment}
+                  />
                 </>
               ) : (
                 <div className="mt-8 max-w-lg rounded-[1.75rem] border border-white/12 bg-white/[0.04] p-6 sm:p-8">

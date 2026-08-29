@@ -1,0 +1,1 @@
+use the github mcp and only commit the change of python file and the saved JSON data and then pull the main remote changes

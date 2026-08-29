@@ -1,0 +1,40 @@
+and when you write the plan include these ideas as well - 1. Single input parameter
+```
+country = "Spain"  # or "Japan", "Brazil", etc.
+```
+Everything else derives from this: slug it (spain, japan) for filenames.
+2. Stage 1 query becomes a template
+```python
+f"five most notable events in {country} history"
+```
+Same knowledge_search call, same parsing logic — just swap the string.
+3. File naming becomes a pattern
+```
+{country_slug}_info.json
+{country_slug}_prompts_image.json
+{country_slug}_images.json
+```
+Instead of hardcoded spain_info.json etc.
+4. Output folder per country
+```
+/output/{country_slug}/
+    info.json
+    prompts_image.json
+    images.json
+    images/  (downloaded files)
+```
+Cleaner than prefixing every filename once you're running this for 10+ countries — avoids clutter and makes batch runs easier to script.
+5. Batch runner
+python
+```python
+countries = ["Spain", "Japan", "Brazil", "Australia", "India"]
+for country in countries:
+    run_pipeline(country)
+```
+Each stage stays idempotent per-country, so a failure on country 5 doesn't touch 1–4's outputs. Worth adding a --country CLI flag too, so you can run one at a time while testing.
+6. Nothing else needs to change
+- Prompt-generation system prompt (Stage 2) is already generic ("vivid, historically grounded")
+- The panorama instruction line (Stage 3) is country-agnostic already
+- 4-images-per-event logic is unaffected
+
+and save every image under a structured format directory insdie the backend folder

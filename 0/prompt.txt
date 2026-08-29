@@ -1,0 +1,1 @@
+ok now when you fetch from cala api - can you also get a title for the facts and information you collected and add that as an attribute? use the cala agent skills and plan this stage well

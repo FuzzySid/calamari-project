@@ -1,0 +1,8 @@
+Based on the project repo, create an architecture diagram image and include all icons/images for tech stack used:
+
+- Entire for reading skills, development cycle
+- Aikidio for security and vulnerability scanning
+- three.js for frontend video rendering
+- Cala for data layer for events
+- OpenAI for generating image and video generation prompts
+- Fal AI for video/image generation

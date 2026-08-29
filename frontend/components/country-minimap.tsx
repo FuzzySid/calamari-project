@@ -4,10 +4,12 @@ type CountryMinimapProps = {
   data: MinimapData;
   /** Index of the emphasized point; its marker glides between scenes. */
   activeIndex: number;
+  /** Makes the scene dots clickable. */
+  onSelect?: (index: number) => void;
   className?: string;
 };
 
-export function CountryMinimap({ data, activeIndex, className }: CountryMinimapProps) {
+export function CountryMinimap({ data, activeIndex, onSelect, className }: CountryMinimapProps) {
   const [activeX, activeY] = data.points[activeIndex] ?? data.points[0];
 
   return (
@@ -22,9 +24,10 @@ export function CountryMinimap({ data, activeIndex, className }: CountryMinimapP
         <path
           key={i}
           d={d}
-          fill="rgba(244,234,213,0.07)"
-          stroke="rgba(244,234,213,0.75)"
-          strokeWidth="1"
+          fill="rgba(0,0,0,0.4)"
+          stroke="rgba(244,234,213,0.95)"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
         />
       ))}
 
@@ -39,7 +42,17 @@ export function CountryMinimap({ data, activeIndex, className }: CountryMinimapP
       )}
 
       {data.points.map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="2.5" fill="rgba(212,177,106,0.4)" />
+        <g
+          key={i}
+          onClick={onSelect ? () => onSelect(i) : undefined}
+          style={onSelect ? { cursor: "pointer", pointerEvents: "auto" } : undefined}
+          role={onSelect ? "button" : undefined}
+          aria-label={onSelect ? `Go to scene ${i + 1}` : undefined}
+        >
+          {/* Invisible, larger hit area so small dots are easy to tap. */}
+          {onSelect && <circle cx={x} cy={y} r="9" fill="transparent" />}
+          <circle cx={x} cy={y} r="2.5" fill="rgba(212,177,106,0.4)" />
+        </g>
       ))}
 
       <g

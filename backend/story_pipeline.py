@@ -154,10 +154,11 @@ def build_fal_prompt(event, profile):
     )
 
 
-def build_frontend_story(country_code, country_name, curated, candidates, profile):
+def build_frontend_story(country_code, country_name, curated, candidates, profile, asset_slug=None):
     candidates_by_index = {record["source_index"]: record for record in candidates}
     events = validate_story(curated["events"], candidates)
     moments = []
+    asset_slug = asset_slug or country_code.lower()
     for order, event in enumerate(events, start=1):
         identifier = event_id(order, event["event_title"])
         sources = [candidates_by_index[index] for index in event["source_indices"]]
@@ -170,7 +171,7 @@ def build_frontend_story(country_code, country_name, curated, candidates, profil
             "sourceIndices": event["source_indices"],
             "narrativeCopy": event["narrative_copy"],
             "visualBrief": event["visual_brief"],
-            "imagePath": f"/moments/{country_code.lower()}/{order:02d}-{identifier}.jpg",
+            "imagePath": f"/moments/{asset_slug}/{order:02d}-{identifier}.jpg",
             "styleProfile": profile["version"],
         })
     return {

@@ -1,0 +1,68 @@
+<h2>How should the encyclopedia surface people &amp; places?</h2>
+<p class="subtitle">Real data from our Spain pipeline — Granada (rich profile), Francisco Franco (rich profile), Ferdinand II of Aragon (thin profile, degrades gracefully). Which direction feels right?</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">Option A — Prose-style encyclopedia card</div>
+    <div class="mockup-body">
+      <div style="background:#12161c;border:1px solid #2a3038;border-radius:16px;padding:20px;font-family:Georgia,serif;color:#e8e4d8;">
+        <div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#c9a24a;margin-bottom:8px;">Location · Andalusia</div>
+        <h3 style="margin:0 0 10px;font-size:22px;">Granada</h3>
+        <p style="margin:0 0 12px;line-height:1.6;font-size:14px;">A city in the Andalusian region of southern Spain. Site of the Alhambra and the final stronghold of Al-Andalus, surrendered in 1492 ending the Reconquista.</p>
+        <div style="font-size:12px;color:#9aa0a8;border-top:1px solid #2a3038;padding-top:10px;">Mentioned in: <em>The Fall of Granada (1492)</em></div>
+      </div>
+      <div style="background:#12161c;border:1px solid #2a3038;border-radius:16px;padding:20px;font-family:Georgia,serif;color:#e8e4d8;margin-top:14px;">
+        <div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#c9a24a;margin-bottom:8px;">Person</div>
+        <h3 style="margin:0 0 10px;font-size:22px;">Ferdinand II of Aragon</h3>
+        <p style="margin:0 0 12px;line-height:1.6;font-size:14px;">King of Aragon who jointly ruled a unified Spain with Queen Isabella in the late 15th century.</p>
+        <div style="font-size:12px;color:#9aa0a8;border-top:1px solid #2a3038;padding-top:10px;">Limited information available from Cala for this figure.</div>
+      </div>
+    </div>
+  </div>
+  <div class="mockup">
+    <div class="mockup-header">Option B — Linked graph view</div>
+    <div class="mockup-body">
+      <svg width="100%" height="320" viewBox="0 0 400 320" style="background:#12161c;border:1px solid #2a3038;border-radius:16px;">
+        <line x1="200" y1="160" x2="90" y2="80" stroke="#3a4250" stroke-width="1.5"/>
+        <line x1="200" y1="160" x2="310" y2="80" stroke="#3a4250" stroke-width="1.5"/>
+        <line x1="200" y1="160" x2="90" y2="240" stroke="#3a4250" stroke-width="1.5"/>
+        <line x1="200" y1="160" x2="310" y2="240" stroke="#3a4250" stroke-width="1.5"/>
+        <circle cx="200" cy="160" r="34" fill="#c9a24a" opacity="0.9"/>
+        <text x="200" y="164" text-anchor="middle" font-size="11" fill="#12161c" font-family="sans-serif" font-weight="600">Franco</text>
+        <circle cx="90" cy="80" r="26" fill="#3a4250"/>
+        <text x="90" y="84" text-anchor="middle" font-size="9" fill="#e8e4d8" font-family="sans-serif">Granada</text>
+        <circle cx="310" cy="80" r="26" fill="#3a4250"/>
+        <text x="310" y="84" text-anchor="middle" font-size="9" fill="#e8e4d8" font-family="sans-serif">FET y JONS</text>
+        <circle cx="90" cy="240" r="26" fill="#3a4250"/>
+        <text x="90" y="244" text-anchor="middle" font-size="9" fill="#e8e4d8" font-family="sans-serif">Spain</text>
+        <circle cx="310" cy="240" r="26" fill="#3a4250"/>
+        <text x="310" y="244" text-anchor="middle" font-size="9" fill="#e8e4d8" font-family="sans-serif">Civil War</text>
+      </svg>
+      <p style="font-size:12px;color:#9aa0a8;margin-top:10px;">Click a node to recenter the graph on it. Breaks down for thin entities like Ferdinand II — no edges to draw.</p>
+    </div>
+  </div>
+</div>
+
+<div class="options" style="margin-top:20px;">
+  <div class="option" data-choice="prose" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Prose-style cards</h3>
+      <p>Matches "encyclopedia" framing directly. Degrades gracefully for thin entities. Simpler to build and ship.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="graph" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Linked graph view</h3>
+      <p>More literally "knowledge graph." Visually striking when data is rich, but ~half our real entities (like Ferdinand II) have zero relationships to draw.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="both" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Both — cards first, graph later</h3>
+      <p>Ship prose cards now (matches all our real data today); keep the graph as a stretch goal if entities turn out richer than expected.</p>
+    </div>
+  </div>
+</div>

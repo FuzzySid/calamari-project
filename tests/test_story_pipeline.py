@@ -72,7 +72,7 @@ class StoryPipelineTests(unittest.TestCase):
             self.assertEqual(payload["runs"][0]["country"], "Spain")
             self.assertNotIn("api_key", json.dumps(payload))
 
-    def test_pipeline_uses_anchor_edit_for_every_event_and_writes_frontend_assets(self):
+    def test_pipeline_uses_panorama_reference_for_every_nano_banana_event(self):
         records = [
             {"fact": f"Event {year} happened.", "timeline": str(year), "title": f"Source {year}", "source_url": "https://example.test"}
             for year in (100, 200, 300, 400, 500, 600)
@@ -86,16 +86,16 @@ class StoryPipelineTests(unittest.TestCase):
             ],
         }
         profile = {
-            "version": "museum-editorial-v1", "anchor_version": "museum-editorial-v1-anchor-1",
-            "anchor_path": "", "generation_model": "fal-ai/flux-2-pro", "edit_model": "fal-ai/flux-2-pro/edit",
-            "image_size": "landscape_16_9", "output_format": "jpeg", "style": "muted indigo and ochre palette",
+            "version": "museum-editorial-v1", "reference_version": "castle-panorama-v1",
+            "reference_image_path": "", "generation_model": "fal-ai/nano-banana-pro",
+            "aspect_ratio": "16:9", "resolution": "2K", "output_format": "jpeg", "style": "muted indigo and ochre palette",
             "constraints": ["no text", "no watermark"],
         }
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            anchor = root / "anchor.jpg"
-            anchor.write_bytes(b"anchor")
-            profile["anchor_path"] = str(anchor)
+            panorama = root / "castle-panorama.jpg"
+            panorama.write_bytes(b"panorama")
+            profile["reference_image_path"] = str(panorama)
             profile_path = root / "profile.json"
             profile_path.write_text(json.dumps(profile))
             input_path = root / "knowledge.json"
@@ -110,17 +110,22 @@ class StoryPipelineTests(unittest.TestCase):
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 destination.write_bytes(b"jpeg")
 
-            with patch("backend.generate_story.curate_story", return_value=curated), patch("backend.generate_story.upload_anchor", return_value="https://cdn.example.test/anchor.jpg"), patch("backend.generate_story.fal_image_url", side_effect=fake_fal), patch("backend.generate_story.download", side_effect=fake_download):
-                frontend_path, events = run_pipeline(input_path, "TST", "Testland", profile_path, "openai", "fal", "gpt-5", project_root=root)
+            with patch("backend.generate_story.curate_story", return_value=curated), patch("backend.generate_story.fal_image_url", side_effect=fake_fal), patch("backend.generate_story.download", side_effect=fake_download):
+                frontend_path, events = run_pipeline(input_path, "TST", "Testland", profile_path, "openai", "fal", "gpt-5", country_slug="testland", project_root=root)
 
             self.assertEqual(len(events), 6)
-            self.assertEqual(len(calls), 12)
-            self.assertTrue(all(calls[index][0] == "fal-ai/flux-2-pro" for index in range(0, 12, 2)))
-            self.assertTrue(all(calls[index][0] == "fal-ai/flux-2-pro/edit" for index in range(1, 12, 2)))
-            self.assertTrue(all(calls[index][1]["image_urls"][1] == "https://cdn.example.test/anchor.jpg" for index in range(1, 12, 2)))
+            self.assertEqual(len(calls), 6)
+            self.assertTrue(all(model == "fal-ai/nano-banana-pro" for model, _arguments in calls))
+            self.assertTrue(all(arguments["aspect_ratio"] == "16:9" for _model, arguments in calls))
+            self.assertTrue(all(arguments["resolution"] == "2K" for _model, arguments in calls))
+            self.assertTrue(all(arguments["output_format"] == "jpeg" for _model, arguments in calls))
+            self.assertTrue(all(arguments["image_urls"][0].startswith("data:image/jpeg;base64,") for _model, arguments in calls))
             self.assertTrue(all((root / event["output_image_path"]).exists() for event in events))
+            self.assertEqual(frontend_path, root / "frontend" / "data" / "testland.json")
             self.assertEqual(len(json.loads(frontend_path.read_text())["moments"]), 6)
-            self.assertEqual(len(json.loads((root / "data" / "fal.json").read_text())["runs"]), 1)
+            run = json.loads((root / "data" / "fal.json").read_text())["runs"][0]
+            self.assertEqual(run["reference_version"], "castle-panorama-v1")
+            self.assertNotIn("api_key", json.dumps(run))
 
 
 if __name__ == "__main__":

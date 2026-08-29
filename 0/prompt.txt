@@ -1,0 +1,1 @@
+All the names of the countries are not appearing on the globe. Debug this issue and fix it

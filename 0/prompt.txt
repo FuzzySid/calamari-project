@@ -1,0 +1,4 @@
+use the fal mcp and add it here - claude mcp add --transport http fal-ai \
+  https://mcp.fal.ai/mcp \
+  --header "Authorization: Bearer 85f89eb0-8373-4a4a-993b-b0c1fcb68845:218a91346612e32c57de5a31fe7adeb9
+"

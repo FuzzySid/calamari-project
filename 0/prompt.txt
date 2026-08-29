@@ -1,0 +1,24 @@
+Pipeline
+
+Three sequential stages, each writing a JSON file so you can re-run any stage independently.
+
+Stage 1 — Facts (Cala)
+
+knowledge_search: "five most notable events in Spanish history"
+Parse content + explainability + context into 5 records. Keep sources (URL + publisher + date) per event — the skill requires provenance passthrough.
+If the narrative output is hard to parse reliably, do a second pass: feed the markdown to a small LLM call with a strict JSON schema.
+Write spain_info.json.
+json
+[{"id":"reconquista_1492","title":"...","description":"...","timeline":{"start":"711","end":"1492","display":"711–1492"},"sources":[{"publisher":"...","url":"...","date":"..."}]}]
+
+Stage 2 — Prompt generation (OpenAI)
+
+One call per event. System prompt: "You write vivid, historically grounded image-generation prompts. Return prompt text only, no preamble."
+User content: title + description (+ timeline for period accuracy).
+Write spain_prompts_image.json keyed by event id, storing the generated prompt and the source title/description.
+
+Stage 3 — Images (Fal, nano banana pro)
+
+Final prompt = "Build an equirectangular 360 degree panorama image depicting this event" + "\n" + <OpenAI prompt>
+4 images per event → 20 total. Use 4 separate calls with different seeds rather than num_images, so a single failure doesn't lose a batch.
+Write spain_images.json mapping event id → 4 URLs/local paths. Download the files; Fal URLs expire.

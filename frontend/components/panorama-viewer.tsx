@@ -10,6 +10,9 @@ export type PanoramaViewerProps = {
   title?: string;
   initialYaw?: number;
   initialPitch?: number;
+  /** Clamp horizontal look direction, e.g. to keep the equirectangular seam (yaw 0/360) out of view. */
+  minYaw?: number;
+  maxYaw?: number;
   minimal?: boolean;
 };
 
@@ -41,6 +44,8 @@ export function PanoramaViewer({
   title = "360 degree panorama",
   initialYaw = 0,
   initialPitch = 0,
+  minYaw,
+  maxYaw,
   minimal = false
 }: PanoramaViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -56,6 +61,14 @@ export function PanoramaViewer({
   const [duration, setDuration] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const clampYaw = useCallback(
+    (yaw: number) =>
+      minYaw !== undefined && maxYaw !== undefined
+        ? THREE.MathUtils.clamp(yaw, minYaw, maxYaw)
+        : yaw,
+    [minYaw, maxYaw]
+  );
+
   const updateFov = useCallback((nextFov: number) => {
     const fov = THREE.MathUtils.clamp(nextFov, MIN_FOV, MAX_FOV);
     viewRef.current.fov = fov;
@@ -67,10 +80,10 @@ export function PanoramaViewer({
   }, []);
 
   const resetView = useCallback(() => {
-    viewRef.current.yaw = initialYaw;
+    viewRef.current.yaw = clampYaw(initialYaw);
     viewRef.current.pitch = initialPitch;
     updateFov(75);
-  }, [initialPitch, initialYaw, updateFov]);
+  }, [clampYaw, initialPitch, initialYaw, updateFov]);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -83,7 +96,7 @@ export function PanoramaViewer({
     setCurrentTime(0);
     setDuration(0);
     setIsPlaying(false);
-    viewRef.current = { yaw: initialYaw, pitch: initialPitch, fov: 75 };
+    viewRef.current = { yaw: clampYaw(initialYaw), pitch: initialPitch, fov: 75 };
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1100);
@@ -223,7 +236,7 @@ export function PanoramaViewer({
       }
 
       if (pointers.size === 1 && dragStart) {
-        viewRef.current.yaw = dragStart.yaw + (dragStart.x - event.clientX) * 0.12;
+        viewRef.current.yaw = clampYaw(dragStart.yaw + (dragStart.x - event.clientX) * 0.12);
         viewRef.current.pitch = THREE.MathUtils.clamp(
           dragStart.pitch + (event.clientY - dragStart.y) * 0.12,
           -85,
@@ -309,7 +322,7 @@ export function PanoramaViewer({
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [initialPitch, initialYaw, mediaType, src, title, updateFov]);
+  }, [clampYaw, initialPitch, initialYaw, mediaType, src, title, updateFov]);
 
   useEffect(() => {
     function handleFullscreenChange() {
@@ -371,10 +384,10 @@ export function PanoramaViewer({
 
     switch (event.key) {
       case "ArrowLeft":
-        viewRef.current.yaw -= step;
+        viewRef.current.yaw = clampYaw(viewRef.current.yaw - step);
         break;
       case "ArrowRight":
-        viewRef.current.yaw += step;
+        viewRef.current.yaw = clampYaw(viewRef.current.yaw + step);
         break;
       case "ArrowUp":
         viewRef.current.pitch = Math.min(85, viewRef.current.pitch + step);

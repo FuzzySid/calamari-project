@@ -233,7 +233,6 @@ export function GlobeExperience() {
   const drumHeight = Math.max(390, Math.min(702, viewport.height - 150));
   const activePeriods = selectedCode ? periodsByCountry[selectedCode] : undefined;
   const hasStory = Boolean(activePeriods?.length);
-  const revealedPeriod = activePeriods?.find((period) => period.id === revealedPeriodId);
 
   const hoveredPaths = useMemo(
     () => (hoveredCode ? entryByCode.get(hoveredCode)?.rings ?? EMPTY_PATHS : EMPTY_PATHS),
@@ -546,15 +545,10 @@ export function GlobeExperience() {
             />
           </div>
 
-          <div className="mt-2 max-w-xs text-center [text-shadow:0_2px_18px_rgba(0,0,0,.75)]">
-            <p className="font-display text-xl text-mist">{revealedPeriod?.name}</p>
-            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-mist/45">
-              {revealedPeriod?.note}
-            </p>
-            <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-gold/55">
-              Drag to turn · choose the era again to enter
-            </p>
-          </div>
+          {/* The era names itself in the timeline; only the way in is captioned. */}
+          <p className="mt-4 max-w-xs text-center font-mono text-[10px] uppercase tracking-[0.24em] text-gold/55 [text-shadow:0_2px_18px_rgba(0,0,0,.75)]">
+            Drag to turn · choose the era again to enter
+          </p>
         </div>
       )}
 

@@ -8,3 +8,15 @@ export function getCountryByCode(code: string): Country | null {
 
   return null;
 }
+
+export function getMomentById(code: string, momentId: string) {
+  const country = getCountryByCode(code);
+
+  if (!country) {
+    return null;
+  }
+
+  const moment = country.moments.find((item) => item.id === momentId);
+
+  return moment ? { country, moment } : null;
+}

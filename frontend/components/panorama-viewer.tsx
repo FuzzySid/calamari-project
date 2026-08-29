@@ -10,6 +10,7 @@ export type PanoramaViewerProps = {
   title?: string;
   initialYaw?: number;
   initialPitch?: number;
+  minimal?: boolean;
 };
 
 type ViewState = {
@@ -39,7 +40,8 @@ export function PanoramaViewer({
   src,
   title = "360 degree panorama",
   initialYaw = 0,
-  initialPitch = 0
+  initialPitch = 0,
+  minimal = false
 }: PanoramaViewerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -413,7 +415,9 @@ export function PanoramaViewer({
     >
       <div ref={mountRef} className="absolute inset-0" />
 
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/55" />
+      {!minimal && (
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/55" />
+      )}
 
       {isLoading && !error && (
         <div className="absolute inset-0 grid place-items-center bg-ink/80 text-center">
@@ -435,11 +439,13 @@ export function PanoramaViewer({
         </div>
       )}
 
-      <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-black/35 px-4 py-2 text-xs uppercase tracking-[0.22em] text-mist/80 backdrop-blur-md">
-        Drag to explore · Scroll to zoom
-      </div>
+      {!minimal && (
+        <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-black/35 px-4 py-2 text-xs uppercase tracking-[0.22em] text-mist/80 backdrop-blur-md">
+          Drag to explore · Scroll to zoom
+        </div>
+      )}
 
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center gap-2">
+      {!minimal && <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center gap-2">
         {mediaType === "video" && (
           <>
             <button type="button" onClick={togglePlayback} className={controlClass}>
@@ -470,7 +476,7 @@ export function PanoramaViewer({
         <button type="button" onClick={toggleFullscreen} className={controlClass}>
           {isFullscreen ? "Exit fullscreen" : "Fullscreen"}
         </button>
-      </div>
+      </div>}
     </div>
   );
 }

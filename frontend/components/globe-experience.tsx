@@ -136,17 +136,14 @@ function getCountryCenter(feature: CountryFeature) {
 const countryLabels: CountryLabel[] = countries.map((feature) => {
   const { lat, lng } = getCountryCenter(feature);
   const name = getCountryName(feature);
-  const iso_a3 = getCountryCode(feature);
   const nameLength = name.length;
-  const size =
-    nameLength > 18 ? 0.54 : nameLength > 12 ? 0.68 : nameLength > 8 ? 0.8 : 0.92;
 
   return {
     lat,
     lng,
     name,
-    iso_a3,
-    size
+    iso_a3: getCountryCode(feature),
+    size: nameLength > 18 ? 0.54 : nameLength > 12 ? 0.68 : nameLength > 8 ? 0.8 : 0.92
   };
 });
 
@@ -175,6 +172,7 @@ export function GlobeExperience() {
 
   useEffect(() => {
     const globe = globeRef.current;
+
     if (!globe) {
       return;
     }
@@ -214,6 +212,7 @@ export function GlobeExperience() {
 
   function handleInteraction() {
     const controls = globeRef.current?.controls();
+
     if (controls?.autoRotate) {
       controls.autoRotate = false;
     }
@@ -276,9 +275,6 @@ export function GlobeExperience() {
             : "translate-y-[-44%] opacity-0"
         }`}
       >
-        {/* <p className="text-xs uppercase tracking-[0.45em] text-mist/60">
-          Descending Through Atmosphere
-        </p> */}
         <h2 className="mt-4 font-display text-3xl text-mist sm:text-5xl">
           {transitionCountry}
         </h2>

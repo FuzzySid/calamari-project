@@ -1,0 +1,1 @@
+Everytime the homepage renders it should check if there are any query paramters. For example if it's [http://localhost:3000/?country=Spain](http://localhost:3000/?country=Spain), it should open exactly that state where it shows that country and the events on the right side

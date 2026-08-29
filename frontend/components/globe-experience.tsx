@@ -7,7 +7,7 @@ import worldFeatures from "@/data/world-features.json";
 import { getCountryByCode } from "@/lib/data";
 import type { Moment } from "@/types";
 import type { GlobeMethods } from "@/components/globe-canvas";
-import { TimelineWheel } from "@/components/timeline-wheel";
+import { PeriodSelector, type Period } from "@/components/period-selector";
 
 type GeoCoordinate = [number, number];
 type PolygonCoordinates = GeoCoordinate[][];
@@ -38,6 +38,14 @@ type CountryLabel = {
 const GlobeCanvas = dynamic(() => import("@/components/globe-canvas"), { ssr: false });
 const storyCountry = getCountryByCode("ESP");
 const getHoverPathColor = () => "#f5dca0";
+const storyPeriods: Period[] =
+  storyCountry?.moments.map((moment) => ({
+    id: moment.id,
+    name: moment.title ?? moment.factText,
+    label: String(moment.year),
+    marker: String(moment.year),
+    note: moment.location ?? storyCountry.name
+  })) ?? [];
 const countries = (
   "features" in worldFeatures ? worldFeatures.features : worldFeatures
 ) as unknown as CountryFeature[];
@@ -135,6 +143,7 @@ export function GlobeExperience() {
   const [viewport, setViewport] = useState({ width: 1200, height: 800 });
 
   const selectedCode = selectedCountry ? getCountryCode(selectedCountry) : null;
+  const drumHeight = Math.max(390, Math.min(546, viewport.height - 280));
   const hasStory = selectedCode === storyCountry?.code;
   const hoveredBoundary = useMemo(() => {
     const feature = countries.find(
@@ -303,8 +312,8 @@ export function GlobeExperience() {
         />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_38%,rgba(5,10,19,0.82)_100%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-[#050a13]/85 via-[#050a13]/35 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_46%,rgba(13,22,38,0.58)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-[#0d1626]/80 via-[#0d1626]/30 to-transparent" />
       <p
         className={`pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 translate-y-36 text-[10px] uppercase tracking-[0.3em] text-mist/40 transition-opacity duration-500 ${
           isGlobeReady ? "opacity-0" : "opacity-100"
@@ -313,7 +322,7 @@ export function GlobeExperience() {
         Loading globe
       </p>
       <div
-        className={`pointer-events-none absolute right-0 top-0 z-10 h-full w-full bg-gradient-to-l from-[#050a13]/70 via-[#050a13]/25 to-transparent transition-opacity duration-700 md:w-[58%] ${
+        className={`pointer-events-none absolute right-0 top-0 z-10 h-full w-full bg-gradient-to-l from-[#0d1626]/92 via-[#0d1626]/45 to-transparent transition-opacity duration-700 md:w-[58%] ${
           selectedCountry && !departingMoment ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -352,14 +361,38 @@ export function GlobeExperience() {
             </button>
 
             <div className="flex min-h-0 flex-1 items-center pr-1">
-              {hasStory && storyCountry && (
+              {hasStory && storyCountry ? (
                 <div className="w-full">
-                  <TimelineWheel
-                    countryName={storyCountry.name}
-                    moments={storyCountry.moments}
-                    onOpen={openMoment}
+                  <div className="mb-4 flex items-baseline gap-3 px-[34px]">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-mist/45">
+                      {storyCountry.name}
+                    </span>
+                    <span className="h-px flex-1 bg-white/10" />
+                    <span className="font-mono text-[10px] tracking-[0.2em] text-gold/70">
+                      {storyCountry.eraLabel}
+                    </span>
+                  </div>
+
+                  <PeriodSelector
+                    theme="dusk"
+                    height={drumHeight}
+                    showNote
+                    periods={storyPeriods}
+                    defaultValue={storyPeriods[0]?.id}
+                    onActivate={(period) => {
+                      const moment = storyCountry.moments.find((item) => item.id === period.id);
+                      if (moment) openMoment(moment);
+                    }}
                   />
+
+                  <p className="mt-3 px-[34px] font-mono text-[9px] uppercase tracking-[0.24em] text-mist/30">
+                    Scroll or ↑↓ · select again to enter
+                  </p>
                 </div>
+              ) : (
+                <p className="max-w-xs font-mono text-[10px] uppercase leading-5 tracking-[0.24em] text-mist/40">
+                  No verified timeline for this country yet — Spain carries the complete story.
+                </p>
               )}
             </div>
           </>
@@ -373,7 +406,7 @@ export function GlobeExperience() {
       )}
 
       <div
-        className={`pointer-events-none absolute inset-0 z-40 bg-ink transition-opacity duration-700 ${
+        className={`pointer-events-none absolute inset-0 z-40 bg-dusk transition-opacity duration-700 ${
           departingMoment ? "opacity-100" : "opacity-0"
         }`}
       />

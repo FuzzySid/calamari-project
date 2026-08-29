@@ -1,0 +1,1 @@
+Remove the Spain highlighting and the hover effect on the complete globe, it doesnt look that good. Also add labels for country names on all the countries on the globe

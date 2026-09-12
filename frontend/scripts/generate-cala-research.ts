@@ -91,13 +91,13 @@ function sourcesForClaim(claim: Record<string, unknown>, contexts: Map<string, R
   return sources;
 }
 
-function timelineFromFacts(facts: string[], fallback: string): string {
-  const datePattern = /\b(?:c\.?\s*)?(?:\d{1,4}(?:\s*[–-]\s*\d{1,4})?\s*(?:BC|BCE|AD|CE)|\d{1,2}(?:st|nd|rd|th)(?:\s*[–-]\s*\d{1,2}(?:st|nd|rd|th))?\s+centur(?:y|ies)|\d{3,4}(?:\s*[–-]\s*\d{3,4})?)/i;
+export function sourceBackedTimelineFromFacts(facts: string[]): string | undefined {
+  const datePattern = /\b(?:c\.?\s*)?(?:\d{1,4}(?:\s*[–-]\s*\d{1,4})?\s*(?:BC|BCE|AD|CE)|(?:\d{1,2}(?:st|nd|rd|th)\s*(?:[–-]|and|to)\s*)?\d{1,2}(?:st|nd|rd|th)\s+centur(?:y|ies)\s*(?:BC|BCE|AD|CE)?|\d{3,4}(?:\s*[–-]\s*\d{3,4})?)/i;
   for (const fact of facts) {
     const match = fact.match(datePattern);
     if (match) return match[0].trim();
   }
-  return fallback;
+  return undefined;
 }
 
 const ENTITY_STOPWORDS = new Set([
@@ -133,7 +133,7 @@ function entitiesForFacts(response: Record<string, unknown>, facts: string[]): C
   return entities.length > 0 ? entities : inferredEntitiesFromFacts(facts);
 }
 
-function recordFromResponse(response: Record<string, unknown>, fallbackTimeline: string): CalaResearchRecord {
+export function recordFromResponse(response: Record<string, unknown>): CalaResearchRecord {
   const contexts = new Map(
     ((response.context as Array<Record<string, unknown>> | undefined) ?? [])
       .filter((context): context is Record<string, unknown> & { id: string } => typeof context.id === "string")
@@ -162,11 +162,16 @@ function recordFromResponse(response: Record<string, unknown>, fallbackTimeline:
   if (entities.length === 0) {
     throw new Error("Cala returned no entities that could be attached to source-backed facts for a scene");
   }
-  return { timeline: timelineFromFacts(facts, fallbackTimeline), facts, entities, sources };
+  const timeline = sourceBackedTimelineFromFacts(facts);
+  if (!timeline) {
+    throw new Error("Cala returned no source-backed date metadata for a scene");
+  }
+  return { timeline, facts, entities, sources };
 }
 
-function normalizeExistingRecord(record: CalaResearchRecord, fallbackTimeline: string): CalaResearchRecord {
-  const timeline = timelineFromFacts(record.facts, record.timeline?.trim() || fallbackTimeline);
+function normalizeExistingRecord(record: CalaResearchRecord): CalaResearchRecord | undefined {
+  const timeline = sourceBackedTimelineFromFacts(record.facts);
+  if (!timeline) return undefined;
   const entities = record.entities?.filter((entity) => entity.name?.trim()) ?? inferredEntitiesFromFacts(record.facts);
   return { ...record, timeline, entities };
 }
@@ -202,7 +207,7 @@ async function main(): Promise<void> {
     : {};
   const output = Object.fromEntries(scenes.map((scene) => {
     const record = existing[scene.key];
-    return [scene.key, record ? normalizeExistingRecord(record, scene.story.eraLabel) : undefined];
+    return [scene.key, record ? normalizeExistingRecord(record) : undefined];
   }).filter(([, record]) => record)) as CalaResearchByScene;
   writeResearch(outputPath, output);
 
@@ -215,8 +220,7 @@ async function main(): Promise<void> {
     try {
       console.log(`Requesting Cala research for ${scene.key} (timeout ${CALA_REQUEST_TIMEOUT_MS / 1000}s)`);
       output[scene.key] = recordFromResponse(
-        await callCala(query, apiKey, scene.key),
-        scene.story.eraLabel
+        await callCala(query, apiKey, scene.key)
       );
       writeResearch(outputPath, output);
       console.log(`Researched ${scene.key}`);

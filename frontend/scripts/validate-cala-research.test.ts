@@ -17,6 +17,21 @@ test("reports missing active Spain scenes without invalidating included research
   );
 });
 
+test("reports present falsey scene records as malformed", () => {
+  const malformedKeys = ["period:null", "period:zero", "period:false"];
+  assert.deepEqual(
+    validateCalaResearch(
+      { "period:null": null, "period:zero": 0, "period:false": false },
+      malformedKeys
+    ),
+    [
+      "period:null must be an object",
+      "period:zero must be an object",
+      "period:false must be an object"
+    ]
+  );
+});
+
 test("accepts source-backed research with three facts and an HTTPS source", () => {
   assert.deepEqual(
     validateCalaResearch(

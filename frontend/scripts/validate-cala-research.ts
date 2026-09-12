@@ -48,7 +48,7 @@ export function validateCalaResearch(
 
   for (const key of expectedKeys) {
     const record = research[key];
-    if (!record) continue;
+    if (record === undefined) continue;
     if (!isObject(record)) {
       errors.push(`${key} must be an object`);
       continue;

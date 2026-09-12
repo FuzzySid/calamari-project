@@ -52,7 +52,7 @@ export function CalaResearchTooltip({ momentId, research }: CalaResearchTooltipP
         <aside
           id={panelId}
           aria-label="Cala research notes"
-          className="fixed inset-x-4 bottom-[7.25rem] z-30 max-h-[min(56dvh,30rem)] overflow-y-auto pr-1 sm:inset-x-auto sm:right-6 sm:top-20 sm:bottom-28 sm:w-[22rem] sm:max-h-none"
+          className="pointer-events-auto fixed inset-x-4 bottom-[7.25rem] z-30 max-h-[min(56dvh,30rem)] overflow-y-auto pr-1 sm:inset-x-auto sm:right-6 sm:top-52 sm:bottom-28 sm:w-[22rem] sm:max-h-none"
         >
           <section className="relative border border-[#c7ad78] bg-[#f3e6bd] p-5 pb-4 text-[#1c2630] shadow-[0_16px_44px_rgba(0,0,0,.5)]">
             <span aria-hidden="true" className="absolute -top-1.5 left-7 h-3 w-7 rounded-b-sm bg-[#a55a35] shadow-sm" />

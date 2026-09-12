@@ -19,6 +19,15 @@ export function ResearchBookIcon() {
   );
 }
 
+export function isSafeResearchUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
 type ResearchFactsNoteProps = {
   momentId: string;
   research: CalaResearchRecord;
@@ -45,6 +54,42 @@ export function ResearchFactsNote({ momentId, research }: ResearchFactsNoteProps
           ))}
         </div>
       )}
+    </section>
+  );
+}
+
+type ResearchSourcesNoteProps = {
+  research: CalaResearchRecord;
+};
+
+export function ResearchSourcesNote({ research }: ResearchSourcesNoteProps) {
+  return (
+    <section className="relative flex min-h-0 flex-[0.8] flex-col overflow-hidden border border-[#b89564] bg-[#e7d09a] p-4 text-[#1c2630] shadow-[0_12px_32px_rgba(0,0,0,.48)] sm:ml-4">
+      <span aria-hidden="true" className="absolute -top-1.5 right-7 h-3 w-7 rounded-b-sm bg-[#2d6f73] shadow-sm" />
+      <p className="font-mono text-[8px] uppercase tracking-[0.19em] text-[#835330]">Cala Sources</p>
+      <ul className="mt-2.5 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 text-[11px] leading-4">
+        {research.sources.map((source, index) => {
+          const safeUrl = isSafeResearchUrl(source.url);
+          const label = source.date ? `${source.publisher} · ${source.date}` : source.publisher;
+
+          return (
+            <li key={`${source.publisher}-${index}`}>
+              {safeUrl ? (
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-[#6f3924] underline decoration-[#a55a35]/70 underline-offset-2 transition hover:text-[#3f241a] focus:outline-none focus:ring-2 focus:ring-[#a55a35] focus:ring-offset-2 focus:ring-offset-[#e7d09a] motion-reduce:transition-none"
+                >
+                  {label} <span aria-hidden="true">↗</span>
+                </a>
+              ) : (
+                <span>{label}</span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }
@@ -83,9 +128,10 @@ export function CalaResearchTooltip({ momentId, research }: CalaResearchTooltipP
         <aside
           id={panelId}
           aria-label="Story facts"
-          className="pointer-events-auto fixed inset-x-4 bottom-[7.25rem] z-30 flex max-h-[min(60dvh,32rem)] flex-col overflow-hidden sm:inset-x-auto sm:right-6 sm:top-52 sm:bottom-28 sm:w-[23rem] sm:max-h-none"
+          className="pointer-events-auto fixed inset-x-4 bottom-[7.25rem] z-30 flex max-h-[min(60dvh,32rem)] flex-col gap-3 overflow-hidden sm:inset-x-auto sm:right-6 sm:top-52 sm:bottom-28 sm:w-[23rem] sm:max-h-none"
         >
           <ResearchFactsNote momentId={momentId} research={research} />
+          <ResearchSourcesNote research={research} />
         </aside>
       )}
     </>

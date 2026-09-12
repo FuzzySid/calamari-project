@@ -5,7 +5,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 import type { CalaResearchRecord } from "@/types";
 import {
   ResearchBookIcon,
-  ResearchFactsNote
+  ResearchFactsNote,
+  ResearchSourcesNote,
+  isSafeResearchUrl
 } from "./cala-research-tooltip";
 
 const research: CalaResearchRecord = {
@@ -24,4 +26,14 @@ test("renders a label-free facts note and a compact book icon trigger", () => {
   assert.doesNotMatch(note, /Story by Cala|Cala provenance|sources|Example archive/i);
   assert.match(icon, /<svg/);
   assert.match(icon, /<path/);
+});
+
+test("renders source links under the Cala Sources label without provenance wording", () => {
+  const sources = renderToStaticMarkup(createElement(ResearchSourcesNote, { research }));
+
+  assert.match(sources, /Cala Sources/);
+  assert.match(sources, /Example archive/);
+  assert.doesNotMatch(sources, /Cala provenance/i);
+  assert.equal(isSafeResearchUrl("https://example.org"), true);
+  assert.equal(isSafeResearchUrl("javascript:alert(1)"), false);
 });

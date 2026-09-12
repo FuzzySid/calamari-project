@@ -35,15 +35,17 @@ type ResearchFactsNoteProps = {
 
 export function ResearchFactsNote({ momentId, research }: ResearchFactsNoteProps) {
   return (
-    <section className="relative flex min-h-0 flex-[1.2] flex-col overflow-hidden border border-[#c7ad78] bg-[#f3e6bd] p-5 pb-4 text-[#1c2630] shadow-[0_16px_44px_rgba(0,0,0,.52)] sm:p-6 sm:pb-5">
+    <section className="relative flex min-h-0 flex-[1.35] flex-col overflow-hidden border border-[#c7ad78] bg-[#f3e6bd] p-5 pb-4 text-left text-[#1c2630] shadow-[0_16px_44px_rgba(0,0,0,.52)] sm:p-6 sm:pb-5">
       <span aria-hidden="true" className="absolute -top-1.5 left-7 h-3 w-7 rounded-b-sm bg-[#a55a35] shadow-sm" />
-      <h2 className="font-display text-2xl leading-none sm:text-3xl">{research.timeline}</h2>
-      <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-2">
-        <ul className="space-y-2.5 text-sm leading-5 marker:text-[#a55a35] sm:text-[15px] sm:leading-6">
+      <h2 className="font-display text-2xl leading-none sm:text-[2rem]">{research.timeline}</h2>
+      <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-3">
+        <div className="space-y-4 text-[15px] leading-6 sm:text-base sm:leading-7">
           {research.facts.slice(0, 5).map((fact, index) => (
-            <li key={`${momentId}-fact-${index}`} className="ml-4 pl-1">{fact}</li>
+            <p key={`${momentId}-fact-${index}`} className="border-l-2 border-[#c2915a]/70 pl-3">
+              {fact}
+            </p>
           ))}
-        </ul>
+        </div>
       </div>
       {research.entities.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-1.5" aria-label="Related entities">
@@ -64,7 +66,7 @@ type ResearchSourcesNoteProps = {
 
 export function ResearchSourcesNote({ research }: ResearchSourcesNoteProps) {
   return (
-    <section className="relative flex min-h-0 flex-[0.8] flex-col overflow-hidden border border-[#b89564] bg-[#e7d09a] p-4 text-[#1c2630] shadow-[0_12px_32px_rgba(0,0,0,.48)]">
+    <section className="relative flex min-h-0 flex-[0.65] flex-col overflow-hidden border border-[#b89564] bg-[#e7d09a] p-4 text-[#1c2630] shadow-[0_12px_32px_rgba(0,0,0,.48)]">
       <span aria-hidden="true" className="absolute -top-1.5 right-7 h-3 w-7 rounded-b-sm bg-[#2d6f73] shadow-sm" />
       <p className="font-mono text-[8px] uppercase tracking-[0.19em] text-[#835330]">Cala Sources</p>
       <ul className="mt-2.5 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 text-[11px] leading-4">
@@ -128,7 +130,7 @@ export function CalaResearchTooltip({ momentId, research }: CalaResearchTooltipP
         <aside
           id={panelId}
           aria-label="Story facts"
-          className="pointer-events-auto fixed inset-x-4 bottom-[7.25rem] z-30 flex max-h-[min(66dvh,34rem)] flex-col gap-3 overflow-hidden sm:inset-x-auto sm:right-6 sm:top-52 sm:bottom-28 sm:w-[20rem] sm:max-h-none"
+          className="pointer-events-auto fixed inset-x-4 bottom-[7.25rem] z-30 flex max-h-[min(68dvh,36rem)] flex-col gap-3 overflow-hidden sm:inset-x-auto sm:right-6 sm:top-52 sm:bottom-28 sm:w-[20rem] sm:max-h-none"
         >
           <ResearchFactsNote momentId={momentId} research={research} />
           <ResearchSourcesNote research={research} />

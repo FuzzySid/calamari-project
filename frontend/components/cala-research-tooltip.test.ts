@@ -23,6 +23,7 @@ test("renders a label-free facts note and a compact book icon trigger", () => {
 
   assert.match(note, /575 BC/);
   assert.match(note, /Emporion became a key trading settlement/);
+  assert.match(note, /<p[^>]*>Emporion became a key trading settlement/);
   assert.doesNotMatch(note, /Story by Cala|Cala provenance|sources|Example archive/i);
   assert.match(icon, /<svg/);
   assert.match(icon, /<path/);

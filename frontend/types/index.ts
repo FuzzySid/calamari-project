@@ -42,6 +42,27 @@ export type StoryMoment = {
   imagePrompt: string;
   /** 360° equirectangular video for the immersive viewer; falls back to imagePath. */
   videoPath?: string;
+  research?: CalaResearchRecord;
+};
+
+export type CalaSource = {
+  publisher: string;
+  url: string;
+  date?: string;
+};
+
+export type CalaEntity = {
+  name: string;
+  type?: string;
+};
+
+export type CalaResearchRecord = {
+  /** A source-backed date or period extracted from the Cala result. */
+  timeline: string;
+  facts: string[];
+  /** Cala entities, or names extracted directly from source-backed facts. */
+  entities: CalaEntity[];
+  sources: CalaSource[];
 };
 
 export type PeriodStory = {

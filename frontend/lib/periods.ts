@@ -1,7 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import preRomanIberia from "@/data/spain-preroman.json";
-import type { PeriodStory } from "@/types";
+import spainCalaResearch from "@/data/spain-cala-research.json";
+import type { CalaResearchRecord, PeriodStory } from "@/types";
+
+type CalaResearchByScene = Record<string, CalaResearchRecord>;
+
+const researchByScene = spainCalaResearch as CalaResearchByScene;
+
+function researchFor(periodId: string, momentId: string): CalaResearchRecord | undefined {
+  return researchByScene[`${periodId}:${momentId}`];
+}
 
 type PublicEvent = {
   title: string;
@@ -66,11 +75,13 @@ function buildPreRomanStory(): PeriodStory {
   const moments = story.moments.map((moment, index) => {
     const event = events[index];
 
+    const research = researchFor(story.periodId, moment.id);
     return {
       ...moment,
       title: event.title,
       narrativeCopy: event.description,
-      videoPath: resolveVideoPath("spain", event.video_url)
+      videoPath: resolveVideoPath("spain", event.video_url),
+      ...(research ? { research } : {})
     };
   });
 
@@ -102,18 +113,23 @@ function buildPublicStory(definition: PublicStoryDefinition): PeriodStory {
     eraRationale: definition.eraRationale,
     storyTagline: "Stand inside a turning point in history.",
     stylePrefix: "Photorealistic 360-degree historical reconstruction.",
-    moments: events.map((event, index) => ({
-      id: `${definition.periodId}-${slugify(event.title)}`,
-      orderIndex: index,
-      title: event.title,
-      location: definition.locations[index] ?? fallbackLocation,
-      narrativeCopy: event.description,
-      factText: event.description,
-      sourceRef: "Provided historical brief",
-      videoPath: resolveVideoPath(definition.country, event.video_url),
-      imagePath: "/og.png",
-      imagePrompt: ""
-    }))
+    moments: events.map((event, index) => {
+      const id = `${definition.periodId}-${slugify(event.title)}`;
+      const research = definition.code === "ESP" ? researchFor(definition.periodId, id) : undefined;
+      return {
+        id,
+        orderIndex: index,
+        title: event.title,
+        location: definition.locations[index] ?? fallbackLocation,
+        narrativeCopy: event.description,
+        factText: event.description,
+        sourceRef: "Provided historical brief",
+        videoPath: resolveVideoPath(definition.country, event.video_url),
+        imagePath: "/og.png",
+        imagePrompt: "",
+        ...(research ? { research } : {})
+      };
+    })
   };
 }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CalaResearchTooltip } from "@/components/cala-research-tooltip";
 import { CountryMinimap } from "@/components/country-minimap";
 import { PanoramaViewer } from "@/components/panorama-viewer";
 import type { MinimapData } from "@/lib/minimap";
@@ -64,6 +65,9 @@ export function PeriodStoryPlayer({ story, minimap }: PeriodStoryPlayerProps) {
             <p className="mt-2 max-w-xl text-sm leading-6 text-mist/90 [text-shadow:0_1px_8px_rgba(0,0,0,.85)] sm:text-base">
               {moment.narrativeCopy}
             </p>
+            {moment.research && (
+              <CalaResearchTooltip key={moment.id} momentId={moment.id} research={moment.research} />
+            )}
           </div>
 
           <div className="pointer-events-auto flex shrink-0 items-center gap-2 pb-1">

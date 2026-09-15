@@ -20,6 +20,7 @@ const EXTENSIONS = ["glb", "gltf", "fbx", "obj"] as const;
 
 /** ISO3 → the public/ folder that country's assets live in. */
 const COUNTRY_FOLDERS: Record<string, string> = {
+  DNK: "denmark",
   ESP: "spain",
   JPN: "japan"
 };

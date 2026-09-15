@@ -1,0 +1,98 @@
+{
+  "viking-age:viking-age-defenders-drill-at-aggersborg": {
+    "timeline": "c. 970–980",
+    "facts": [
+      "Aggersborg, Fyrkat, Nonnebakken, Trelleborg and Borgring were constructed around 970–980 during the reign of Harald Bluetooth.",
+      "The fortresses shared a precise geometric design with circular earth-and-turf ramparts, four cardinal gateways and timber-paved axial streets.",
+      "Rows of large wooden longhouses were arranged in the quadrants formed by the crossing streets.",
+      "The coordinated fortress network demonstrates the centralisation of power under the Danish Jelling Dynasty."
+    ],
+    "entities": [
+      { "name": "Aggersborg", "type": "Fortress" },
+      { "name": "Harald Bluetooth", "type": "Person" },
+      { "name": "Jelling Dynasty", "type": "Dynasty" }
+    ],
+    "sources": [
+      {
+        "publisher": "UNESCO World Heritage Centre",
+        "url": "https://whc.unesco.org/en/list/1660"
+      },
+      {
+        "publisher": "Viking-Age Ring Fortress Aggersborg",
+        "url": "https://aggersborg.com/en/the-ring-fortress"
+      }
+    ]
+  },
+  "viking-age:viking-age-harvest-beyond-the-longhouses": {
+    "timeline": "c. 800–1050",
+    "facts": [
+      "Open agricultural land was a dominant feature of Viking Age Denmark, where farmers cultivated cereals and grains and kept livestock.",
+      "Danish villages and farmsteads often occupied territories that had been inhabited and worked for centuries.",
+      "Managed mixed woodland, meadows and wetlands remained beside the cultivated lowlands and supplied grazing, timber and fuel.",
+      "Longhouses and farmstead sizes varied substantially, providing archaeological evidence of wealth differences within rural communities."
+    ],
+    "entities": [
+      { "name": "Jutland", "type": "Region" },
+      { "name": "Nørre Snede", "type": "Archaeological site" },
+      { "name": "Viking Age agriculture", "type": "Activity" }
+    ],
+    "sources": [
+      {
+        "publisher": "Persée",
+        "url": "https://www.persee.fr/doc/rbph_0035-0818_2012_num_90_2_8333"
+      },
+      {
+        "publisher": "Danish Architecture Center",
+        "url": "https://dac.dk/en/magazine/the-viking-age"
+      }
+    ]
+  },
+  "viking-age:viking-age-warriors-on-skuldelev-waters": {
+    "timeline": "c. 1030",
+    "facts": [
+      "Skuldelev 5 was built in Denmark as a warship around 1030 and later became part of a defensive barrier in Roskilde Fjord.",
+      "Viking warships were long, narrow and swift vessels equipped with many oars and a single square sail.",
+      "Different Viking ship types were specialised for warfare, long-distance cargo, coastal trade and fishing.",
+      "The Skuldelev finds preserve evidence of Danish boat-building practice, fleet organisation and maritime culture."
+    ],
+    "entities": [
+      { "name": "Skuldelev 5", "type": "Ship" },
+      { "name": "Roskilde Fjord", "type": "Waterway" },
+      { "name": "Viking longship", "type": "Vessel" }
+    ],
+    "sources": [
+      {
+        "publisher": "Viking Ship Museum in Roskilde",
+        "url": "https://www.vikingeskibsmuseet.dk/en/professions/boatyard/previous-projects/the-vikinge-ship-skuldelev-5"
+      },
+      {
+        "publisher": "Viking Ship Museum in Roskilde",
+        "url": "https://www.vikingeskibsmuseet.dk/en/news/exploring-the-mysteries-of-the-viking-age-warship-skuldelev-5"
+      }
+    ]
+  },
+  "viking-age:viking-age-warship-under-sail": {
+    "timeline": "c. 1030",
+    "facts": [
+      "Danish shipbuilders produced long, narrow warships designed to move warriors efficiently under oars and a single square sail.",
+      "Skuldelev 5 was built in Denmark around 1030 using both new and reused timbers.",
+      "The Skuldelev ship finds include warships, cargo vessels, coastal traders and smaller fishing or cargo craft.",
+      "Coasts, fjords and narrow waterways were essential corridors for communication, trade and military movement in Viking Age Denmark."
+    ],
+    "entities": [
+      { "name": "Skuldelev ships", "type": "Archaeological find" },
+      { "name": "Roskilde Fjord", "type": "Waterway" },
+      { "name": "Denmark", "type": "Country" }
+    ],
+    "sources": [
+      {
+        "publisher": "Viking Ship Museum in Roskilde",
+        "url": "https://www.vikingeskibsmuseet.dk/en/professions/boatyard/previous-projects/the-vikinge-ship-skuldelev-5"
+      },
+      {
+        "publisher": "Viking Ship Museum in Roskilde",
+        "url": "https://vikingeskibsmuseet.dk/en/professions/education/the-viking-age-geography/vikingetiden-i-skandinavien"
+      }
+    ]
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "story": "From an ordered royal fortress, the journey crosses productive Jutland fields before following Danish crews onto Roskilde Fjord. Together, the scenes show how Viking maritime reach rested on agriculture, organized communities and skilled seafaring.",
+  "events": {
+    "793": [
+      {
+        "title": "Defenders Drill at Aggersborg",
+        "description": "Around 970–980, defenders practise coordinated movement within a geometrically planned Danish ring fortress. Their discipline reflects the organisation and centralised authority of Harald Bluetooth’s reign.",
+        "fact_text": "Denmark’s five geometrically planned ring fortresses were built around 970–980 under Harald Bluetooth, with circular ramparts, cardinal gates, timber-paved streets and ordered rows of longhouses.",
+        "source_ref": "Cala: Streets and buildings in Viking Age Denmark",
+        "image_prompt": "Around 970–980, village defenders conduct a non-lethal shield-and-spear formation drill on open ground beside the longhouses of a Danish ring fortress, with a timber-paved axial street, timber-clad earth-and-turf rampart, and one cardinal gateway clearly visible. Every defender wears a belted knee-length wool tunic over a linen underlayer, wool trousers with leg coverings, a wool cloak fastened at the shoulder or folded beside the practice ground, and soled hide shoes; combed red or reddish hair is tied back where long, beards are groomed, and knives and purses hang from belts. The front rank braces shields while the rear rank levels blunted practice spears under the direction of an experienced warrior dressed in the same layers and carrying a shield and spear; no weapon strikes a person, and rows of wooden longhouses reinforce the ordered military setting.",
+        "motion_description": "The formation raises its shields together while the instructor slowly lowers his practice spear.",
+        "image_url": "images/defenders-drill-aggersborg.png",
+        "video_url": "videos/defenders-drill-aggersborg.mp4",
+        "mediaflow": {
+          "run_id": "082a2cdd-cdf0-46b8-a3c7-fbd6dbb367c2",
+          "scene": 3,
+          "variant": 1
+        }
+      },
+      {
+        "title": "Harvest Beyond the Longhouses",
+        "description": "Beyond the settlement, shared agricultural labour supplies the grain and livestock on which every voyage, workshop and fortress depends. The cultivated lowland shows Viking Denmark as a worked landscape.",
+        "fact_text": "Open agricultural land dominated Viking Age Denmark: farmers cultivated cereals and grains, kept livestock and lived in long-established villages and farmsteads across the lowlands.",
+        "source_ref": "Cala: Landscapes and buildings in Viking Age Denmark",
+        "image_prompt": "During the late Viking Age, c. 800–1050, villagers work open cereal fields surrounding centuries-old Jutland farmsteads of curved-walled wooden longhouses, with grazing ground, wet meadow, and patches of managed oak, hazel, birch, and alder woodland nearby. Male farmers gather cut grain with hand tools and load bundles onto a crude working carriage drawn by oxen, wearing linen underlayers, belted wool tunics, trousers with leg coverings, soled hide shoes, and combed uncovered hair and beards; female farmers bind and carry cereal bundles in linen undergarments beneath ankle-length wool dresses, strapped outer dresses fastened by oval brooches, belts, soled hide footwear, and neatly tied or uncovered red or reddish hair; herders in belted wool tunics or long dresses, leg coverings or skirts, hide shoes, and simple wool cloaks guide livestock along the field edge.",
+        "motion_description": "Cereal heads sway gently while the oxen walk slowly beside the loaded carriage.",
+        "image_url": "images/harvest-jutland.png",
+        "video_url": "videos/harvest-jutland.mp4",
+        "mediaflow": {
+          "run_id": "485bd88d-ff30-475f-b64f-e97a1a1e1d37",
+          "scene": 4,
+          "variant": 1
+        }
+      },
+      {
+        "title": "Warriors on Skuldelev Waters",
+        "description": "Around 1030, Danish warriors sail a swift warship through Roskilde Fjord. Their vessel embodies the maritime expeditions that carried Danish power, trade and cultural exchange overseas.",
+        "fact_text": "Skuldelev 5 was a Danish-built warship from around 1030; Viking warships were long, narrow and swift, with many oars and a single square sail for carrying warriors.",
+        "source_ref": "Cala: Vehicles and historical moments in Viking Age Denmark",
+        "image_prompt": "Around 1030, a Danish-built, clinker-built war-longship like Skuldelev 5 crosses the open water of Roskilde Fjord, its long narrow wooden hull, single square sail, rope rigging, many oars, and shields forming the central scene. The sailing warriors wear knee-length dyed or undyed wool tunics over linen undergarments, belted at the waist with knives and purses suspended from the belts, wool cloaks fastened at one shoulder, close-fitting wool trousers with leg coverings, and soled hide shoes; their red or reddish hair and beards are combed, and their weapons remain sheathed or secured while they haul rigging, brace an oar, and steer. Low Danish shores, patches of managed mixed woodland, and the deeply indented fjord surround the vessel, with no other craft or structure competing for attention.",
+        "motion_description": "The square sail billows gently while the longship rises and settles on the water.",
+        "image_url": "images/warriors-skuldelev.png",
+        "video_url": "videos/warriors-skuldelev.mp4",
+        "mediaflow": {
+          "run_id": "082a2cdd-cdf0-46b8-a3c7-fbd6dbb367c2",
+          "scene": 1,
+          "variant": 1
+        }
+      },
+      {
+        "title": "Warship Under Sail",
+        "description": "Around 1030, a Danish crew drives a clinker-built warship across Roskilde Fjord. Sail, oars and coordinated work reveal the maritime technology behind Danish expeditions.",
+        "fact_text": "Danish Viking shipbuilders produced specialised war-longships whose narrow hulls, many oars and square sails enabled the rapid movement of warriors through coastal and fjord waters.",
+        "source_ref": "Cala: Vehicles in Viking Age Denmark",
+        "image_prompt": "Around 1030, a Danish-built war-longship like Skuldelev 5 sails through the open water of Roskilde Fjord, its long, narrow clinker-built hull, many oarports, raised oars, taut rigging, and single square sail clearly visible above low waves. The sailing warriors wear knee-length wool tunics over linen layers, belts carrying knives and purses, wool trousers with close leg coverings, and soled hide shoes; their groomed, often reddish hair and trimmed beards are uncovered, while shields line the vessel and each crew member works a rope, oar, or steering position rather than fighting.",
+        "motion_description": "The square sail swells gently while the longship rises and settles on the waves.",
+        "image_url": "images/warship-roskilde.png",
+        "video_url": "videos/warship-roskilde.mp4",
+        "mediaflow": {
+          "run_id": "45856160-cb66-4994-84d8-c24a80c7c840",
+          "scene": 1,
+          "variant": 1
+        }
+      }
+    ]
+  }
+}

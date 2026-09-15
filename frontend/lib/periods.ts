@@ -1,12 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
+import denmarkVikingResearch from "@/data/denmark-viking-research.json";
 import preRomanIberia from "@/data/spain-preroman.json";
 import spainCalaResearch from "@/data/spain-cala-research.json";
 import type { CalaResearchRecord, PeriodStory } from "@/types";
 
 type CalaResearchByScene = Record<string, CalaResearchRecord>;
 
-const researchByScene = spainCalaResearch as CalaResearchByScene;
+const researchByScene: CalaResearchByScene = {
+  ...(spainCalaResearch as CalaResearchByScene),
+  ...(denmarkVikingResearch as CalaResearchByScene)
+};
 
 function researchFor(periodId: string, momentId: string): CalaResearchRecord | undefined {
   return researchByScene[`${periodId}:${momentId}`];
@@ -16,6 +20,10 @@ type PublicEvent = {
   title: string;
   description: string;
   video_url: string;
+  image_url?: string;
+  fact_text?: string;
+  source_ref?: string;
+  image_prompt?: string;
 };
 
 type PublicCountryData = {
@@ -36,6 +44,7 @@ type PublicStoryDefinition = {
   year: string;
   eraLabel: string;
   eraRationale: string;
+  storyTagline?: string;
   locations: StoryLocation[];
 };
 
@@ -60,6 +69,19 @@ function resolveVideoPath(country: string, videoUrl: string): string {
   }
 
   return videoPath;
+}
+
+function resolveImagePath(country: string, imageUrl?: string): string {
+  if (!imageUrl) return "/og.png";
+
+  const imagePath = `/${country}/${imageUrl.replace(/^\//, "")}`;
+  const absoluteImagePath = path.join(process.cwd(), "public", imagePath.replace(/^\//, ""));
+
+  if (!fs.existsSync(absoluteImagePath)) {
+    throw new Error(`${country} event image does not exist: ${absoluteImagePath}`);
+  }
+
+  return imagePath;
 }
 
 function buildPreRomanStory(): PeriodStory {
@@ -111,22 +133,22 @@ function buildPublicStory(definition: PublicStoryDefinition): PeriodStory {
     periodId: definition.periodId,
     eraLabel: definition.eraLabel,
     eraRationale: definition.eraRationale,
-    storyTagline: "Stand inside a turning point in history.",
+    storyTagline: definition.storyTagline ?? "Stand inside a turning point in history.",
     stylePrefix: "Photorealistic 360-degree historical reconstruction.",
     moments: events.map((event, index) => {
       const id = `${definition.periodId}-${slugify(event.title)}`;
-      const research = definition.code === "ESP" ? researchFor(definition.periodId, id) : undefined;
+      const research = researchFor(definition.periodId, id);
       return {
         id,
         orderIndex: index,
         title: event.title,
         location: definition.locations[index] ?? fallbackLocation,
         narrativeCopy: event.description,
-        factText: event.description,
-        sourceRef: "Provided historical brief",
+        factText: event.fact_text ?? event.description,
+        sourceRef: event.source_ref ?? "Provided historical brief",
         videoPath: resolveVideoPath(definition.country, event.video_url),
-        imagePath: "/og.png",
-        imagePrompt: "",
+        imagePath: resolveImagePath(definition.country, event.image_url),
+        imagePrompt: event.image_prompt ?? "",
         ...(research ? { research } : {})
       };
     })
@@ -228,6 +250,24 @@ const publicStoryDefinitions: PublicStoryDefinition[] = [
       { label: "Daimyō army mustering ground", lat: 35.4, lng: 137.0 },
       { label: "Sengoku battlefield", lat: 35.1, lng: 137.1 },
       { label: "Daimyō residence", lat: 35.4, lng: 136.8 }
+    ]
+  },
+  {
+    country: "denmark",
+    code: "DNK",
+    name: "Denmark",
+    periodId: "viking-age",
+    year: "793",
+    eraLabel: "The Viking Age (c. 793–c. 1050)",
+    eraRationale:
+      "From royal fortresses and productive farmland to the fjords, Viking Age Denmark joined agricultural wealth, organized power and maritime reach.",
+    storyTagline:
+      "Follow the people and places that carried Denmark from field and fortress to the sea.",
+    locations: [
+      { label: "Aggersborg ring fortress", lat: 56.999, lng: 9.254 },
+      { label: "Central Jutland farmland", lat: 55.964, lng: 9.392 },
+      { label: "Skuldelev, Roskilde Fjord", lat: 55.783, lng: 12.017 },
+      { label: "Open Danish waters", lat: 56.45, lng: 11.45 }
     ]
   }
 ];

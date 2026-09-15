@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import worldFeatures from "@/data/world-features.json";
 import type { GlobeMethods } from "@/components/globe-canvas";
+import { denmarkPeriods } from "@/lib/denmark-periods";
 import { japanPeriods } from "@/lib/japan-periods";
 import { PeriodSelector } from "@/components/period-selector";
 import { spainPeriods, type SpainPeriod } from "@/lib/spain-periods";
@@ -49,6 +50,7 @@ const GlobeCanvas = dynamic(() => import("@/components/globe-canvas"), { ssr: fa
 const PeriodFigure = dynamic(() => import("@/components/period-figure"), { ssr: false });
 const periodsByCountry: Record<string, SpainPeriod[]> = {
   ESP: spainPeriods,
+  DNK: denmarkPeriods,
   JPN: japanPeriods
 };
 const countries = (

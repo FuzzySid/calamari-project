@@ -41,32 +41,6 @@ async function loadModel(url: string) {
   throw new Error(`Unsupported model format: ${url}`);
 }
 
-/** Stand-in used until a real model is dropped into `public/models/`. */
-function buildPlaceholder() {
-  const group = new THREE.Group();
-  const material = new THREE.MeshStandardMaterial({
-    color: 0x8a6c34,
-    roughness: 0.62,
-    metalness: 0.3
-  });
-
-  const parts: Array<[THREE.BufferGeometry, number]> = [
-    [new THREE.SphereGeometry(0.17, 32, 24), 1.5],
-    [new THREE.CylinderGeometry(0.06, 0.06, 0.12, 20), 1.29],
-    [new THREE.CylinderGeometry(0.2, 0.27, 0.66, 28), 0.9],
-    [new THREE.CylinderGeometry(0.27, 0.38, 0.62, 28), 0.31],
-    [new THREE.CylinderGeometry(0.44, 0.44, 0.03, 40), 0.01]
-  ];
-
-  for (const [geometry, y] of parts) {
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.y = y;
-    group.add(mesh);
-  }
-
-  return group;
-}
-
 /** Frees every geometry and material under an object before it is dropped. */
 function disposeObject(object: THREE.Object3D) {
   object.traverse((child) => {
@@ -247,23 +221,15 @@ export default function PeriodFigure({ code, periodId, className }: PeriodFigure
       setIsLoaded(true);
     }
 
+    // The stage is only opened for eras that have a model, so a miss here just
+    // leaves it empty rather than falling back to a stand-in.
     resolveFigureSource(code, periodId)
       .then(async (source) => {
-        if (cancelled) return;
-        if (!source) {
-          mount(buildPlaceholder(), null);
-          return;
-        }
-
-        try {
-          mount(await loadModel(source.url), source);
-        } catch (error) {
-          console.error(`Could not load figure for ${code}:${periodId}`, error);
-          if (!cancelled) mount(buildPlaceholder(), null);
-        }
+        if (cancelled || !source) return;
+        mount(await loadModel(source.url), source);
       })
-      .catch(() => {
-        if (!cancelled) mount(buildPlaceholder(), null);
+      .catch((error) => {
+        console.error(`Could not load figure for ${code}:${periodId}`, error);
       });
 
     return () => {

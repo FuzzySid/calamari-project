@@ -11,8 +11,8 @@
  * works. Anything that breaks the convention — a shared model, a name that
  * cannot be changed — goes in `figureOverrides`.
  *
- * Periods with no model fall back to a stylised placeholder figure, so the
- * reveal still plays before the models land.
+ * Periods with no model return `null`, so callers can skip the figure stage
+ * instead of presenting a stand-in as if it were a real era asset.
  */
 
 /** Probed in order; the first file that exists wins. */

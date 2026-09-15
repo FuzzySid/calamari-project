@@ -8,6 +8,7 @@ import type { GlobeMethods } from "@/components/globe-canvas";
 import { denmarkPeriods } from "@/lib/denmark-periods";
 import { japanPeriods } from "@/lib/japan-periods";
 import { PeriodSelector } from "@/components/period-selector";
+import { resolveFigureSource } from "@/lib/period-figures";
 import { spainPeriods, type SpainPeriod } from "@/lib/spain-periods";
 
 type GeoCoordinate = [number, number];
@@ -223,6 +224,8 @@ export function GlobeExperience() {
   const polygonHoverRef = useRef<string | null>(null);
   const labelHoverRef = useRef<string | null>(null);
   const departingRef = useRef(false);
+  /** Guards against a slow figure lookup landing after the era moved on. */
+  const stageRequestRef = useRef(0);
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [hoveredCode, setHoveredCode] = useState<string | null>(null);
   const [departingMoment, setDepartingMoment] = useState<string | null>(null);
@@ -297,6 +300,16 @@ export function GlobeExperience() {
     return () => window.removeEventListener("resize", syncViewport);
   }, []);
 
+  /** Stages the era's figure, or clears the stage when it has no model. */
+  const stageFigure = useCallback(async (code: string, periodId: string) => {
+    const request = (stageRequestRef.current += 1);
+    const source = await resolveFigureSource(code, periodId);
+    if (stageRequestRef.current !== request) return false;
+
+    setRevealedPeriodId(source ? periodId : null);
+    return Boolean(source);
+  }, []);
+
   const handleGlobeReady = useCallback((globe: GlobeMethods) => {
     globeRef.current = globe;
     globe.pointOfView({ lat: 18, lng: 10, altitude: 2.25 }, 0);
@@ -335,6 +348,7 @@ export function GlobeExperience() {
     if (!entry || departingRef.current) return;
 
     setSelectedCode(entry.code);
+    stageRequestRef.current += 1;
     setRevealedPeriodId(null);
     if (syncUrl) {
       router.replace(`/?country=${encodeURIComponent(entry.name)}`, { scroll: false });
@@ -368,6 +382,7 @@ export function GlobeExperience() {
   const clearSelection = useCallback((syncUrl = true) => {
     setSelectedCode(null);
     setDepartingMoment(null);
+    stageRequestRef.current += 1;
     setRevealedPeriodId(null);
     departingRef.current = false;
     if (syncUrl) {
@@ -582,17 +597,27 @@ export function GlobeExperience() {
                     height={drumHeight}
                     periods={activePeriods}
                     defaultValue={activePeriods[0]?.id}
-                    onChange={(period) => setRevealedPeriodId(period.id)}
+                    onChange={(period) => {
+                      void stageFigure(selectedCode, period.id);
+                    }}
                     onActivate={(period) => {
-                      // First activation summons the era's figure; only once it
-                      // is standing does a second one enter the story.
-                      if (revealedPeriodId !== period.id) {
-                        setRevealedPeriodId(period.id);
-                        return;
-                      }
                       // Only the eras with a generated story can be entered.
                       const storyId = activePeriods.find((era) => era.id === period.id)?.storyId;
-                      if (storyId) openPeriod(period.id, storyId);
+                      const enter = () => {
+                        if (storyId) openPeriod(period.id, storyId);
+                      };
+
+                      // The figure is a stop on the way in: the first activation
+                      // summons it and only the next one enters the story. Eras
+                      // with no model have nothing to stop for.
+                      if (revealedPeriodId === period.id) {
+                        enter();
+                        return;
+                      }
+
+                      void stageFigure(selectedCode, period.id).then((staged) => {
+                        if (!staged) enter();
+                      });
                     }}
                   />
                 </div>

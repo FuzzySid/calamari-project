@@ -68,7 +68,7 @@ export function ResearchSourcesNote({ research }: ResearchSourcesNoteProps) {
   return (
     <section className="relative flex min-h-0 flex-1 flex-col overflow-hidden border border-[#b89564] bg-[#e7d09a] p-4 text-[#1c2630] shadow-[0_12px_32px_rgba(0,0,0,.48)]">
       <span aria-hidden="true" className="absolute -top-1.5 right-7 h-3 w-7 rounded-b-sm bg-[#2d6f73] shadow-sm" />
-      <p className="font-mono text-[8px] uppercase tracking-[0.19em] text-[#835330]">Cala Sources</p>
+      <p className="font-mono text-[8px] uppercase tracking-[0.19em] text-[#835330]">Sources</p>
       <ul className="mt-2.5 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 text-[11px] leading-4">
         {research.sources.map((source, index) => {
           const safeUrl = isSafeResearchUrl(source.url);

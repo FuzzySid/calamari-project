@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import japanSengokuResearch from "@/data/japan-sengoku-research.json";
 import { getAllPeriodStories } from "@/lib/periods";
 import { calaResearchCoverage, duplicateTopLevelJsonKeys, validateCalaResearch } from "./validate-cala-research";
 import { parseCalaEnvelope, recordFromResponse, sourceBackedTimelineFromFacts } from "./generate-cala-research";
@@ -161,6 +162,26 @@ test("attaches available research and leaves a missing scene research-free", () 
     scenes.find((moment) => moment.id === "modern-spain-a-country-opens")?.research,
     undefined
   );
+});
+
+test("validates and attaches research to every Japan Sengoku scene", () => {
+  const story = getAllPeriodStories().find(
+    (candidate) => candidate.code === "JPN" && candidate.periodId === "sengoku-period"
+  );
+  assert.ok(story);
+
+  const japanExpectedKeys = story.moments.map(
+    (moment) => `${story.periodId}:${moment.id}`
+  );
+  assert.deepEqual(
+    validateCalaResearch(japanSengokuResearch, japanExpectedKeys),
+    []
+  );
+  assert.deepEqual(
+    calaResearchCoverage(japanSengokuResearch, japanExpectedKeys),
+    { covered: 5, expected: 5, missing: [] }
+  );
+  assert.equal(story.moments.filter((moment) => moment.research).length, 5);
 });
 
 test("uses the JSON-RPC result frame when Cala appends an SSE ping", () => {

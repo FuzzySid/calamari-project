@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import denmarkVikingResearch from "@/data/denmark-viking-research.json";
+import japanSengokuResearch from "@/data/japan-sengoku-research.json";
 import preRomanIberia from "@/data/spain-preroman.json";
 import spainCalaResearch from "@/data/spain-cala-research.json";
 import type { CalaResearchRecord, PeriodStory } from "@/types";
@@ -9,7 +10,8 @@ type CalaResearchByScene = Record<string, CalaResearchRecord>;
 
 const researchByScene: CalaResearchByScene = {
   ...(spainCalaResearch as CalaResearchByScene),
-  ...(denmarkVikingResearch as CalaResearchByScene)
+  ...(denmarkVikingResearch as CalaResearchByScene),
+  ...(japanSengokuResearch as CalaResearchByScene)
 };
 
 function researchFor(periodId: string, momentId: string): CalaResearchRecord | undefined {

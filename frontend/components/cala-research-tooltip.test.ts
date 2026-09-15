@@ -29,10 +29,11 @@ test("renders a label-free facts note and a compact book icon trigger", () => {
   assert.match(icon, /<path/);
 });
 
-test("renders source links under the Cala Sources label without provenance wording", () => {
+test("renders source links under the generic Sources label without provenance wording", () => {
   const sources = renderToStaticMarkup(createElement(ResearchSourcesNote, { research }));
 
-  assert.match(sources, /Cala Sources/);
+  assert.match(sources, />Sources</);
+  assert.doesNotMatch(sources, /Cala Sources/);
   assert.match(sources, /Example archive/);
   assert.doesNotMatch(sources, /Cala provenance/i);
   assert.equal(isSafeResearchUrl("https://example.org"), true);

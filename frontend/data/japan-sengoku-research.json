@@ -1,0 +1,122 @@
+{
+  "sengoku-period:sengoku-period-the-land-that-fed-the-wars": {
+    "timeline": "Late 15th–late 16th century",
+    "facts": [
+      "Rice was not only food during the Sengoku period; it was a military supply that sustained prolonged warfare.",
+      "Control of highly productive land translated directly into economic, military and political power for regional rulers.",
+      "By the end of the period, land and harvest surveys increasingly expressed productive capacity in koku of rice and connected village output to taxation.",
+      "The rice-centred assessment of domains was formalised under the rulers who reunified Japan at the close of the Sengoku age."
+    ],
+    "entities": [
+      { "name": "Rice cultivation", "type": "Agriculture" },
+      { "name": "Koku", "type": "Unit of yield" },
+      { "name": "Daimyō", "type": "Regional rulers" }
+    ],
+    "sources": [
+      {
+        "publisher": "Cabinet Office, Government of Japan — Highlighting Japan",
+        "url": "https://www.gov-online.go.jp/pdf/hlj/20201101/20201101all.pdf"
+      },
+      {
+        "publisher": "Japan International Cooperation Agency",
+        "url": "https://www.jica.go.jp/domestic/tsukuba/activities/agricul/__icsFiles/afieldfile/2026/03/23/E1-3.pdf"
+      }
+    ]
+  },
+  "sengoku-period:sengoku-period-war-builds-a-city": {
+    "timeline": "c. 1467–1600",
+    "facts": [
+      "Sengoku daimyō built fortified castles as military and administrative centres of their domains.",
+      "They drew their warrior retainers out of the countryside and into settlements around those castles, where they could serve in standing forces.",
+      "Around ninety new castle towns appeared between 1572 and 1590 alone.",
+      "Constructing and supplying these towns attracted labourers, artisans, merchants and service workers, turning military headquarters into urban economies."
+    ],
+    "entities": [
+      { "name": "Jōkamachi", "type": "Castle town" },
+      { "name": "Daimyō", "type": "Regional rulers" },
+      { "name": "Samurai retainers", "type": "Warrior class" }
+    ],
+    "sources": [
+      {
+        "publisher": "Columbia University — Asia for Educators",
+        "url": "https://www.columbia.edu/itc/eacp/japanworks/at/md_japan/mj08.html"
+      },
+      {
+        "publisher": "University of Colorado Boulder — Program for Teaching East Asia",
+        "url": "https://www.colorado.edu/ptea-curriculum/imaging-japanese-history-6"
+      }
+    ]
+  },
+  "sengoku-period:sengoku-period-the-lower-rise": {
+    "timeline": "c. 1467–1600",
+    "facts": [
+      "Political fragmentation and nearly continuous competition among regional lords disrupted older hierarchies during the Sengoku period.",
+      "The expression gekokujō, often rendered as ‘the lower overcoming the higher,’ describes the era’s reversals of rank and authority.",
+      "People of low status who demonstrated unusual ability in warfare or government could sometimes advance through a lord’s service.",
+      "Such advancement was possible but exceptional rather than a general disappearance of social rank."
+    ],
+    "entities": [
+      { "name": "Gekokujō", "type": "Social phenomenon" },
+      { "name": "Sengoku period", "type": "Historical period" },
+      { "name": "Daimyō", "type": "Regional rulers" }
+    ],
+    "sources": [
+      {
+        "publisher": "Brigham Young University — Japanese 302",
+        "url": "https://nihongo.byu.edu/JAPAN302/lesson8b.html"
+      },
+      {
+        "publisher": "British Museum — Samurai exhibition guide",
+        "url": "https://www.britishmuseum.org/exhibitions/samurai/samurai-large-print-guide"
+      }
+    ]
+  },
+  "sengoku-period:sengoku-period-the-gunpowder-revolution": {
+    "timeline": "1543 onward",
+    "facts": [
+      "Portuguese travellers introduced matchlock firearms to Japan on Tanegashima in 1543.",
+      "The island’s lord, Tanegashima Tokitaka, acquired two guns and directed local craftspeople to reproduce them.",
+      "Japanese workshops copied and manufactured the weapon rapidly; matchlocks consequently became known as tanegashima.",
+      "Their large-scale adoption made firearms an important factor in the battles of the later Warring States period."
+    ],
+    "entities": [
+      { "name": "Tanegashima", "type": "Island and firearm name" },
+      { "name": "Tanegashima Tokitaka", "type": "Daimyō" },
+      { "name": "Matchlock", "type": "Weapon" }
+    ],
+    "sources": [
+      {
+        "publisher": "Japan Ministry of Land, Infrastructure, Transport and Tourism",
+        "url": "https://www.qsr.mlit.go.jp/suishin/story2019/english/03_8.html"
+      },
+      {
+        "publisher": "Brigham Young University — Harold B. Lee Library",
+        "url": "https://exhibits.lib.byu.edu/guns-scrolls-swords/"
+      }
+    ]
+  },
+  "sengoku-period:sengoku-period-a-new-place-in-the-world": {
+    "timeline": "1537–1598",
+    "facts": [
+      "Toyotomi Hideyoshi rose from humble origins in Owari Province to become one of Japan’s three great unifiers.",
+      "After entering Oda Nobunaga’s service, Hideyoshi advanced through administrative and military assignments.",
+      "In 1573, meritorious service brought him three districts in northern Ōmi Province and the status of daimyō.",
+      "After Nobunaga’s death in 1582, Hideyoshi defeated Akechi Mitsuhide, succeeded to national leadership and continued the reunification of Japan."
+    ],
+    "entities": [
+      { "name": "Toyotomi Hideyoshi", "type": "Unifier of Japan" },
+      { "name": "Oda Nobunaga", "type": "Daimyō" },
+      { "name": "Owari Province", "type": "Region" }
+    ],
+    "sources": [
+      {
+        "publisher": "Japan Search — National Diet Library and Tokyo National Museum",
+        "url": "https://jpsearch.go.jp/en/gallery/ndl-AE4jD0DKdrZ"
+      },
+      {
+        "publisher": "The Metropolitan Museum of Art — Momoyama Period",
+        "url": "https://www.metmuseum.org/essays/momoyama-period-1573-1615"
+      }
+    ]
+  }
+}
